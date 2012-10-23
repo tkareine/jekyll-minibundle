@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% minibundle css %}
+    src_dir: _assets/styles
+    assets:
+      - reset
+      - common
+    {% endminibundle %}
+    {% minibundle js %}
+    src_dir: _assets/scripts
+    assets:
+      - ga.min
+      - modernizr
+    {% endminibundle %}
+  </head>
+  <body>
+    {{ content }}
+
+    {% minibundle js %}
+    src_dir: _assets/scripts
+    assets:
+      - vendor/jquery
+      - site
+    {% endminibundle %}
+  </body>
+</html>
