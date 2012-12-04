@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% minibundle css %}
-    src_dir: _assets/styles
-    assets:
-      - reset
-      - common
-    {% endminibundle %}
+    <link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
     {% minibundle js %}
-    src_dir: _assets/scripts
+    source_dir: _assets/scripts
+    destination_path: assets/site
     assets:
       - ga.min
       - modernizr

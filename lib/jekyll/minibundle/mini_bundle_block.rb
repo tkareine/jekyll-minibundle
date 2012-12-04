@@ -1,8 +1,9 @@
 # encoding: utf-8
 
 require 'yaml'
+require 'jekyll/minibundle/asset_bundle'
 
-module Jekyll::MiniBundle
+module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
     def initialize(tag_name, type, _tokens)
       super
@@ -17,4 +18,4 @@ module Jekyll::MiniBundle
   end
 end
 
-Liquid::Template.register_tag('minibundle', Jekyll::MiniBundle::MiniBundleBlock)
+Liquid::Template.register_tag('minibundle', Jekyll::Minibundle::MiniBundleBlock)

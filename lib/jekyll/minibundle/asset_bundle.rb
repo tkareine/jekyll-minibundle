@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Jekyll::MiniBundle
+module Jekyll::Minibundle
   module AssetBundle
     def self.for(type, *args)
       case type

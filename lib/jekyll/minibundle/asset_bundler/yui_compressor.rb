@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require 'jekyll/mini_bundle/asset_bundler/base_asset_bundler'
+require 'jekyll/minibundle/asset_bundler/base_asset_bundler'
 
-module Jekyll::MiniBundle::AssetBundler
+module Jekyll::Minibundle::AssetBundler
   class YUICompressor < BaseAssetBundler
     def markup
       Tempfile.open('jekyll-mini_bundle') do |tempfile|

@@ -1,4 +1,4 @@
-module Jekyll::MiniBundle
+module Jekyll::Minibundle
   class MultiIO
     def initialize(files)
       @current_file = files.first

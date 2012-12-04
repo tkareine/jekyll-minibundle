@@ -5,7 +5,7 @@ require 'fileutils'
 require 'pathname'
 require 'tempfile'
 
-module Jekyll::MiniBundle::AssetBundler
+module Jekyll::Minibundle::AssetBundler
   class BaseAssetBundler
     attr_reader :type
     attr_reader :site_config
