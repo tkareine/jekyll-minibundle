@@ -8,5 +8,5 @@ task :test do
   tests = Dir["#{test_dir}/#{test_glob}"].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  sh %{ruby -I#{includes} -e 'ARGV.each { |f| require f }' #{tests}}
+  sh %{bundle exec ruby -I#{includes} -e 'ARGV.each { |f| require f }' #{tests}}
 end
