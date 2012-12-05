@@ -5,8 +5,6 @@ module Jekyll::Minibundle
   class StampFile
     @@mtimes = Hash.new
 
-    attr_reader :asset
-
     def initialize(source_path, destination_path)
       @source_path = source_path
       @destination_dir = File.dirname destination_path
