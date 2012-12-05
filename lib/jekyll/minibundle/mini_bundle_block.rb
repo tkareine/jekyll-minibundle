@@ -1,7 +1,5 @@
-# encoding: utf-8
-
 require 'yaml'
-require 'jekyll/minibundle/asset_bundle'
+require 'jekyll/minibundle/bundle_file'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -11,9 +9,22 @@ module Jekyll::Minibundle
     end
 
     def render(context)
-      site_config = context.registers[:site].config
-      bundle_config = YAML.load super
-      AssetBundle.for(@type, site_config, bundle_config).markup
+      current_config = YAML.load super
+      site = context.registers[:site]
+      config = default_config.
+        merge(current_config).
+        merge({ 'type' => @type, 'site_source' => site.source})
+      file = BundleFile.new config
+      file.static_file! site
+      file.markup
+    end
+
+    def default_config
+      {
+        'source_dir'        => '_assets',
+        'destination_path'  => 'assets/site',
+        'assets'            => []
+      }
     end
   end
 end

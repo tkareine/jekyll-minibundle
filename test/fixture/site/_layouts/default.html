@@ -2,22 +2,16 @@
 <html>
   <head>
     <link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site
-    assets:
-      - ga.min
-      - modernizr
-    {% endminibundle %}
   </head>
   <body>
     {{ content }}
 
     {% minibundle js %}
-    src_dir: _assets/scripts
+    source_dir: _assets/scripts
+    destination_path: assets/site
     assets:
-      - vendor/jquery
-      - site
+      - dependency
+      - app
     {% endminibundle %}
   </body>
 </html>

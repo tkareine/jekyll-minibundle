@@ -16,6 +16,10 @@ module Jekyll::Minibundle::Test
       File.join(_gensite_dir, *args)
     end
 
+    def read_from_gensite(*args)
+      File.read gensite_path(*args)
+    end
+
     private
 
     def _gensite_dir(&block)

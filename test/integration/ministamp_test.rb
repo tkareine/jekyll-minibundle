@@ -6,7 +6,7 @@ module Jekyll::Minibundle::Test
     EXPECTED_ASSET_PATH = 'assets/site-390be921ee0eff063817bb5ef2954300.css'
 
     def test_asset_path_has_stamp
-      actual = Nokogiri::HTML(index_contents).css('head link').first['href']
+      actual = Nokogiri::HTML(read_from_gensite('index.html')).css('head link').first['href']
       assert_equal EXPECTED_ASSET_PATH, actual
     end
 
@@ -18,12 +18,6 @@ module Jekyll::Minibundle::Test
       source_contents = File.read fixture_path('_tmp/site.css')
       destination_contents = File.read gensite_path(EXPECTED_ASSET_PATH)
       assert_equal source_contents, destination_contents
-    end
-
-    private
-
-    def index_contents
-      File.read gensite_path('index.html')
     end
   end
 end
