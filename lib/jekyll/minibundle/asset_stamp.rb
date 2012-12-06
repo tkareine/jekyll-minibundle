@@ -2,7 +2,7 @@ require 'digest/md5'
 
 module Jekyll::Minibundle
   module AssetStamp
-    def self.for(path)
+    def self.from_file(path)
       Digest::MD5.hexdigest File.read(path)
     end
   end

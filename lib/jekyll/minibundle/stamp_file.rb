@@ -57,7 +57,7 @@ module Jekyll::Minibundle
     end
 
     def asset_stamp
-      @asset_stamp ||= AssetStamp.for(path)
+      @asset_stamp ||= AssetStamp.from_file(path)
     end
 
     def clear_asset_stamp
