@@ -1,8 +1,10 @@
-require 'fileutils'
+require 'jekyll/minibundle/asset_file_support'
 require 'jekyll/minibundle/asset_stamp'
 
 module Jekyll::Minibundle
   class StampFile
+    include AssetFileSupport
+
     @@mtimes = Hash.new
 
     def initialize(source_path, destination_path)
@@ -46,10 +48,6 @@ module Jekyll::Minibundle
       true
     end
 
-    def static_file!(site)
-      site.static_files << self unless site.static_files.include? self
-    end
-
     private
 
     def destination_basename
@@ -66,12 +64,6 @@ module Jekyll::Minibundle
 
     def update_mtime
       @@mtimes[path] = mtime
-    end
-
-    def write_destination(gensite_dir)
-      destination_path = destination gensite_dir
-      FileUtils.mkdir_p File.dirname(destination_path)
-      FileUtils.cp path, destination_path
     end
   end
 end

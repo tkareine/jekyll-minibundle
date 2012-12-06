@@ -1,8 +1,10 @@
-require 'fileutils'
 require 'jekyll/minibundle/asset_bundle'
+require 'jekyll/minibundle/asset_file_support'
 
 module Jekyll::Minibundle
   class BundleFile
+    include AssetFileSupport
+
     @@mtimes = Hash.new
 
     def initialize(config)
@@ -45,10 +47,6 @@ module Jekyll::Minibundle
       true
     end
 
-    def static_file!(site)
-      site.static_files << self unless site.static_files.include? self
-    end
-
     def markup
       %{<script type="text/javascript" src="#{asset_path}"></script>}
     end
@@ -70,12 +68,6 @@ module Jekyll::Minibundle
 
     def update_mtime
       @@mtimes[path] = mtime
-    end
-
-    def write_destination(gensite_dir)
-      destination_path = destination gensite_dir
-      FileUtils.mkdir_p File.dirname(destination_path)
-      FileUtils.cp path, destination_path
     end
   end
 end
