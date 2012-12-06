@@ -14,3 +14,5 @@ task :test do
 end
 
 CLEAN.include 'test/fixture/site/_site'
+
+task :default => :test
