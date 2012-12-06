@@ -35,7 +35,7 @@ module Jekyll::Minibundle
     end
 
     def write(gensite_dir)
-      clear_stamp if modified?
+      clear_asset_stamp if modified?
       destination_path = destination gensite_dir
 
       return false if File.exist?(destination_path) and !modified?
@@ -53,15 +53,15 @@ module Jekyll::Minibundle
     private
 
     def destination_basename
-      "#{@destination_base_prefix}-#{stamp}#{@destination_extension}"
+      "#{@destination_base_prefix}-#{asset_stamp}#{@destination_extension}"
     end
 
-    def stamp
-      @stamp ||= AssetStamp.for(path)
+    def asset_stamp
+      @asset_stamp ||= AssetStamp.for(path)
     end
 
-    def clear_stamp
-      @stamp = nil
+    def clear_asset_stamp
+      @asset_stamp = nil
     end
 
     def update_mtime
