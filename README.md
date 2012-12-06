@@ -72,6 +72,4 @@ See the contents of `test/fixture/site` directory.
 
 # TODO
 
-* Guardfile for the project (setup Compass and autotest with it).
-* Test how the plugin works in Jekyll's `--auto` mode.
 * Increase test coverage.
