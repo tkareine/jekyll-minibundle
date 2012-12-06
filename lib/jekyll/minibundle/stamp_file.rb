@@ -34,11 +34,11 @@ module Jekyll::Minibundle
     end
 
     def write(gensite_dir)
+      clear_stamp if modified?
       destination_path = destination gensite_dir
 
       return false if File.exist?(destination_path) and !modified?
 
-      clear_stamp
       update_mtime
       write_destination gensite_dir
 
