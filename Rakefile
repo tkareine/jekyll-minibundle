@@ -1,3 +1,4 @@
+require 'rake/clean'
 require 'shellwords'
 
 desc 'Run tests'
@@ -11,3 +12,5 @@ task :test do
     shelljoin
   sh({'JEKYLL_MINIBUNDLE_CMD_JS' => uglifyjs_cmd }, %{bundle exec ruby -I#{includes} -e 'ARGV.each { |f| require f }' #{tests}})
 end
+
+CLEAN.include 'test/fixture/site/_site'
