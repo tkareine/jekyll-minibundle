@@ -46,8 +46,7 @@ module Jekyll::Minibundle
     end
 
     def static_file!(site)
-      site.static_files.reject! { |f| f.path == path }
-      site.static_files << self
+      site.static_files << self unless site.static_files.include? self
     end
 
     private
