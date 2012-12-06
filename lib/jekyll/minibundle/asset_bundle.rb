@@ -15,6 +15,7 @@ module Jekyll::Minibundle
     def make_bundle
       rd, wr = IO.pipe
       pid = spawn bundling_cmd, out: @temp_file.path, in: rd
+      puts "Bundling #{@type} assets:"
       @assets.each do |asset|
         puts "  #{asset}"
         IO.foreach(asset) { |line| wr.write line }
