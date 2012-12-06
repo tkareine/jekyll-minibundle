@@ -1,3 +1,19 @@
 ---
-layout: default
+layout: nil
 ---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="{% ministamp _tmp/site.css assets/screen.css %}" rel="stylesheet" media="screen, projection">
+  </head>
+  <body>
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+    {% endminibundle %}
+  </body>
+</html>
