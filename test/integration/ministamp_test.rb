@@ -3,7 +3,7 @@ require 'nokogiri'
 
 module Jekyll::Minibundle::Test
   class MiniStampTest < TestCase
-    EXPECTED_ASSET_PATH = 'assets/site-390be921ee0eff063817bb5ef2954300.css'
+    EXPECTED_ASSET_PATH = 'assets/screen-390be921ee0eff063817bb5ef2954300.css'
 
     def test_asset_path_has_stamp
       actual = Nokogiri::HTML(read_from_gensite('index.html')).css('head link').first['href']

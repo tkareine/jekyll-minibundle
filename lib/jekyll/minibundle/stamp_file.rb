@@ -10,7 +10,7 @@ module Jekyll::Minibundle
       @destination_dir = File.dirname destination_path
       @destination_extension = File.extname destination_path
       base = File.basename destination_path
-      @destination_base_prefix = base[0, @destination_extension.size]
+      @destination_base_prefix = base[0 .. -(@destination_extension.size + 1)]
       update_mtime
     end
 
