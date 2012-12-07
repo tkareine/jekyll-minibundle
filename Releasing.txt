@@ -5,7 +5,7 @@ $EDITOR History.md                        # describe a summary of changes since 
 git diff                                  # review the changes
 rake gem:build                            # check that tests pass
 git add -p
-git commit -m 'Bump to release-<version>'
-git tag release-<version>
+git commit -m 'Release <version>'
+git tag <version>
 git push --tags origin master
 gem push jekyll-minibundle-<version>.gem
