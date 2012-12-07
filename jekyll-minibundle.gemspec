@@ -3,17 +3,16 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'lib/jekyll/minibundl
 Gem::Specification.new do |s|
   s.name        = 'jekyll-minibundle'
   s.version     = Jekyll::Minibundle::VERSION
-  s.summary     = 'Straightforward asset bundling plugin for Jekyll'
+  s.summary     = 'A minimalistic asset bundling plugin for Jekyll'
   s.authors     = ['Tuomas Kareinen']
   s.email       = 'tkareine@gmail.com'
   s.homepage    = 'https://github.com/tkareine/jekyll-minibundle'
   s.licenses    = %w{MIT}
 
   s.description = <<-END
-Provides 'minibundle' block for bundling multiple assets, 'ministamp'
-tag for stamping a single asset.
-
-No other dependencies than the asset bundler of your choice.
+A minimalistic asset bundling plugin for Jekyll, requiring only your
+bundling tool of choice (not other dependencies, not even other gems).
+Provides asset bundling and filename stamping with MD5 digest.
   END
 
   s.files = %w{
