@@ -51,11 +51,13 @@ bundled file has MD5 digest in the filename:
     assets:
       - dependency
       - app
+    attributes:
+      id: my-scripts
     {% endminibundle %}
 
 Output:
 
-    <script type="text/javascript" src="assets/site-8e764372a0dbd296033cb2a416f064b5.js"></script>
+    <script type="text/javascript" src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" id="my-scripts"></script>
 
 For this to work, specify your favorite bundling tool in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable. For example, when

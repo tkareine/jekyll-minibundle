@@ -5,9 +5,15 @@ module Jekyll::Minibundle::Test
     EXPECTED_CSS_ASSET_PATH = 'assets/site-b2e0ecc1c100effc2c7353caad20c327.css'
     EXPECTED_JS_ASSET_PATH = 'assets/site-f78e0c4497343c33e9282df5d684540e.js'
 
-    def test_css_asset_bundle_has_configured_attribute
-      actual = find_html_element_from_index(%{head link[href="#{EXPECTED_CSS_ASSET_PATH}"]}).first['media']
-      assert_equal 'projection', actual
+    def test_css_asset_bundle_has_configured_attributes
+      element = find_html_element_from_index(%{head link[href="#{EXPECTED_CSS_ASSET_PATH}"]}).first
+      assert_equal 'my-styles', element['id']
+      assert_equal 'projection', element['media']
+    end
+
+    def test_js_asset_bundle_has_configured_attributes
+      element = find_html_element_from_index(%{body script[src="#{EXPECTED_JS_ASSET_PATH}"]}).first
+      assert_equal 'my-scripts', element['id']
     end
 
     def test_css_asset_bundle_has_stamp
