@@ -13,17 +13,14 @@ module Jekyll::Minibundle
     end
 
     def make_bundle
-      rd, wr = IO.pipe
-      pid = spawn bundling_cmd, out: @temp_file.path, in: rd
-      puts "Bundling #{@type} assets:"
-      @assets.each do |asset|
-        puts "  #{asset}"
-        IO.foreach(asset) { |line| wr.write line }
+      pipe_bundling_to_temp_file bundling_cmd do |wr|
+        puts "Bundling #{@type} assets:"
+        @assets.each do |asset|
+          puts "  #{asset}"
+          IO.foreach(asset) { |line| wr.write line }
+        end
       end
-      Process.waitpid2 pid
       self
-    ensure
-      wr.close
     end
 
     private
@@ -33,6 +30,16 @@ module Jekyll::Minibundle
       cmd = ENV[key]
       raise "You need to set bundling command in $#{key}" if !cmd
       cmd
+    end
+
+    def pipe_bundling_to_temp_file(cmd)
+      rd, wr = IO.pipe
+      pid = spawn cmd, out: [@temp_file.path, 'w'], in: rd
+      yield wr
+      wr.close
+      Process.waitpid2 pid
+    ensure
+      wr.close unless wr.closed?
     end
   end
 end
