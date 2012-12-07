@@ -32,7 +32,7 @@ task :test do
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
   test_cmd = %{bundle exec ruby -I#{includes} -e 'ARGV.each { |f| require f }' #{tests}}
-  bundle_cmd = File.join(File.dirname(__FILE__), test_dir, 'fixture/site/_bin/remove_comments')
+  bundle_cmd = File.expand_path(File.join(File.dirname(__FILE__), test_dir, 'fixture/site/_bin/remove_comments'))
   env = {
     'JEKYLL_MINIBUNDLE_CMD_JS' => bundle_cmd,
     'JEKYLL_MINIBUNDLE_CMD_CSS' => bundle_cmd
