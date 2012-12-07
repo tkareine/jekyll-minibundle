@@ -1,5 +1,6 @@
 require 'jekyll/minibundle/asset_bundle'
 require 'jekyll/minibundle/asset_file_support'
+require 'jekyll/minibundle/bundle_markup'
 
 module Jekyll::Minibundle
   class BundleFile
@@ -12,6 +13,7 @@ module Jekyll::Minibundle
       source_dir = File.join config['site_source'], config['source_dir']
       @destination_path = config['destination_path']
       @assets = config['assets'].map { |asset_path| File.join source_dir, "#{asset_path}.#{@type}" }
+      @attributes = config['attributes']
       update_mtime
     end
 
@@ -48,7 +50,7 @@ module Jekyll::Minibundle
     end
 
     def markup
-      %{<script type="text/javascript" src="#{asset_path}"></script>}
+      BundleMarkup.make_markup @type, asset_path, @attributes
     end
 
     private

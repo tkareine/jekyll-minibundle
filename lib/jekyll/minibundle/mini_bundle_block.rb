@@ -23,7 +23,8 @@ module Jekyll::Minibundle
       {
         'source_dir'        => '_assets',
         'destination_path'  => 'assets/site',
-        'assets'            => []
+        'assets'            => [],
+        'attributes'        => {}
       }
     end
   end

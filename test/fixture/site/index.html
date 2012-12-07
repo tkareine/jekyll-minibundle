@@ -5,7 +5,16 @@ layout: nil
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="{% ministamp _tmp/site.css assets/screen.css %}" rel="stylesheet" media="screen, projection">
+    <link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">
+    {% minibundle css %}
+    source_dir: _assets/styles
+    destination_path: assets/site
+    assets:
+      - reset
+      - common
+    attributes:
+      media: projection
+    {% endminibundle %}
   </head>
   <body>
     {% minibundle js %}
