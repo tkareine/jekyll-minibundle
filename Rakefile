@@ -1,6 +1,28 @@
 require 'rake/clean'
 require 'shellwords'
 
+require_relative 'lib/jekyll/minibundle/version'
+gem_name = 'jekyll-minibundle'
+
+namespace :gem do
+  CLOBBER.include "#{gem_name}-*.gem"
+
+  desc 'Package the software as a gem'
+  task :build => :test do
+    sh %{gem build #{gem_name}.gemspec}
+  end
+
+  desc 'Install the software as a gem'
+  task :install => :build do
+    sh %{gem install #{gem_name}-#{Jekyll::Minibudle::VERSION}}
+  end
+
+  desc 'Uninstall the gem'
+  task :uninstall => :clean do
+    sh %{gem uninstall #{gem_name}}
+  end
+end
+
 desc 'Run tests'
 task :test do
   test_dir = 'test'
