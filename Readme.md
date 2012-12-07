@@ -96,7 +96,7 @@ You can pass custom attributes to the generated markup with
 
 Output:
 
-    <script type="text/javascript" src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" id="my-scripts"></script>
+    <script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
 
 For bundling CSS assets, you use `css` as the argument to `minibundle` block:
 
