@@ -10,6 +10,8 @@ environment variable.
 
 Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
+[![Build Status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.png)](http://travis-ci.org/tkareine/jekyll-minibundle)
+
 # Features
 
 There are two features: asset stamping with MD5 digest over the
