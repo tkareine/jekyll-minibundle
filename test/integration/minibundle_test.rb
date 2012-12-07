@@ -3,7 +3,7 @@ require 'nokogiri'
 
 module Jekyll::Minibundle::Test
   class MiniBundleTest < TestCase
-    EXPECTED_ASSET_PATH = 'assets/site-8e764372a0dbd296033cb2a416f064b5.js'
+    EXPECTED_ASSET_PATH = 'assets/site-f78e0c4497343c33e9282df5d684540e.js'
 
     def test_asset_bundle_has_stamp
       actual = Nokogiri::HTML(read_from_gensite('index.html')).css('body script').first['src']
@@ -25,7 +25,7 @@ module Jekyll::Minibundle::Test
 
     def test_asset_bundle_is_concatened_in_configured_order
       bundle = File.read(gensite_path(EXPECTED_ASSET_PATH))
-      assert bundle.index('root.dependency={};') < bundle.index('root.app={};')
+      assert bundle.index('root.dependency = {};') < bundle.index('root.app = {};')
     end
   end
 end
