@@ -5,7 +5,7 @@ module Jekyll::Minibundle
     def initialize(type, assets)
       @type, @assets = type, assets
       @temp_file = Tempfile.new "jekyll-minibundle-#{@type}-"
-      at_exit { @temp_file.unlink if @temp_file }
+      at_exit { @temp_file.close! }
     end
 
     def path
