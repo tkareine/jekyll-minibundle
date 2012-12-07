@@ -13,7 +13,7 @@ module Jekyll::Minibundle
       site = context.registers[:site]
       config = default_config.
         merge(current_config).
-        merge({ 'type' => @type, 'site_source' => site.source})
+        merge({ 'type' => @type, 'site_dir' => site.source})
       file = BundleFile.new config
       file.static_file! site
       file.markup

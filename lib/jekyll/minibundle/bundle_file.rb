@@ -10,7 +10,8 @@ module Jekyll::Minibundle
 
     def initialize(config)
       @type = config['type']
-      source_dir = File.join config['site_source'], config['source_dir']
+      @site_dir = config['site_dir']
+      source_dir = File.join @site_dir, config['source_dir']
       @destination_path = config['destination_path']
       @assets = config['assets'].map { |asset_path| File.join source_dir, "#{asset_path}.#{@type}" }
       @attributes = config['attributes']
@@ -60,7 +61,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @asset_bundle ||= AssetBundle.new(@type, @assets).make_bundle
+      @asset_bundle ||= AssetBundle.new(@type, @assets, @site_dir).make_bundle
     end
 
     def rebundle_assets

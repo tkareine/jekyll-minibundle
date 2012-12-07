@@ -2,8 +2,8 @@ require 'tempfile'
 
 module Jekyll::Minibundle
   class AssetBundle
-    def initialize(type, assets)
-      @type, @assets = type, assets
+    def initialize(type, assets, site_dir)
+      @type, @assets, @site_dir = type, assets, site_dir
       @temp_file = Tempfile.new "jekyll-minibundle-#{@type}-"
       at_exit { @temp_file.close! }
     end
@@ -33,8 +33,11 @@ module Jekyll::Minibundle
     end
 
     def pipe_bundling_to_temp_file(cmd)
+      pid = nil
       rd, wr = IO.pipe
-      pid = spawn cmd, out: [@temp_file.path, 'w'], in: rd
+      Dir.chdir @site_dir do
+        pid = spawn cmd, out: [@temp_file.path, 'w'], in: rd
+      end
       yield wr
       wr.close
       Process.waitpid2 pid
