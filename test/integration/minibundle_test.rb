@@ -1,12 +1,11 @@
 require 'support/test_case'
-require 'nokogiri'
 
 module Jekyll::Minibundle::Test
   class MiniBundleTest < TestCase
     EXPECTED_ASSET_PATH = 'assets/site-f78e0c4497343c33e9282df5d684540e.js'
 
     def test_asset_bundle_has_stamp
-      actual = Nokogiri::HTML(read_from_gensite('index.html')).css('body script').first['src']
+      actual = find_html_element(read_from_gensite('index.html'), 'body script').first['src']
       assert_equal EXPECTED_ASSET_PATH, actual
     end
 

@@ -1,12 +1,11 @@
 require 'support/test_case'
-require 'nokogiri'
 
 module Jekyll::Minibundle::Test
   class MiniStampTest < TestCase
     EXPECTED_ASSET_PATH = 'assets/screen-390be921ee0eff063817bb5ef2954300.css'
 
     def test_asset_path_has_stamp
-      actual = Nokogiri::HTML(read_from_gensite('index.html')).css('head link').first['href']
+      actual = find_html_element(read_from_gensite('index.html'), 'head link').first['href']
       assert_equal EXPECTED_ASSET_PATH, actual
     end
 

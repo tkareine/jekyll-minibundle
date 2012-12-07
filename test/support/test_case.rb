@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'tempfile'
 require 'minitest/autorun'
+require 'nokogiri'
 require 'jekyll'
 require 'jekyll/minibundle'
 
@@ -18,6 +19,10 @@ module Jekyll::Minibundle::Test
 
     def read_from_gensite(*args)
       File.read gensite_path(*args)
+    end
+
+    def find_html_element(file, css)
+      Nokogiri::HTML(file).css(css)
     end
 
     private
