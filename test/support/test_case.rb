@@ -29,7 +29,7 @@ module Jekyll::Minibundle::Test
 
     def _gensite_dir(&block)
       @@_gensite_dir ||= begin
-        dir = Dir.mktmpdir
+        dir = Dir.mktmpdir('jekyll-minibundle-test-')
         at_exit do
           FileUtils.rm_rf dir
           puts "Cleaned generated site for tests: #{dir}"
