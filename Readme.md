@@ -4,9 +4,9 @@ A minimalistic plugin for bundling assets to
 [Jekyll](https://github.com/mojombo/jekyll)'s site generation
 directory.
 
-In addition to the plugin, you need your asset bundling tool of choice
-only. The plugin needs no other configuration than setting an
-environment variable.
+In addition to the plugin itself, you only need your asset bundling
+tool of choice. The plugin needs no other configuration than setting
+an environment variable. There are no gem dependencies.
 
 Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
