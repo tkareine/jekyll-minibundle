@@ -5,7 +5,7 @@ require_relative 'lib/jekyll/minibundle/version'
 gem_name = 'jekyll-minibundle'
 
 namespace :gem do
-  CLOBBER.include "#{gem_name}-*.gem"
+  CLEAN.include "#{gem_name}-*.gem"
 
   desc 'Package the software as a gem'
   task :build => :test do
