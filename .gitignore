@@ -1,2 +1,4 @@
+/*.gem
+/Gemfile.lock
 /node_modules/
 /test/fixture/site/_site/
