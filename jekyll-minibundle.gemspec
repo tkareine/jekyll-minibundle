@@ -29,6 +29,7 @@ No other dependencies than the asset bundler of your choice.
     lib/jekyll/minibundle/mini_bundle_block.rb
     lib/jekyll/minibundle/mini_stamp_tag.rb
     lib/jekyll/minibundle/stamp_file.rb
+    lib/jekyll/minibundle/version.rb
   }
 
   s.test_files = %w{
