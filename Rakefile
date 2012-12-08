@@ -26,7 +26,7 @@ end
 desc 'Run tests'
 task :test do
   test_dir = 'test'
-  test_glob = 'integration/**/*_test.rb'
+  test_glob = '**/*_test.rb'
   includes = ['lib', test_dir].join(':')
   tests = Dir["#{test_dir}/#{test_glob}"].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.

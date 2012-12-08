@@ -1,3 +1,5 @@
+require 'cgi'
+
 module Jekyll::Minibundle
   module BundleMarkup
     def self.make_markup(type, path, attributes)
@@ -12,7 +14,11 @@ module Jekyll::Minibundle
     end
 
     def self.make_attributes(attributes)
-      attributes.map { |name, value| %{ #{name}="#{value}"} }.join('')
+      attributes.map { |name, value| make_attribute(name, value) }.join('')
+    end
+
+    def self.make_attribute(name, value)
+      %{ #{name}="#{CGI.escape_html(value)}"}
     end
   end
 end
