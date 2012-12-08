@@ -7,7 +7,6 @@ module Jekyll::Minibundle::Test
       attributes = { media: 'screen, projection', extra: '">attack<br' }
       actual = BundleMarkup.make_markup :css, 'http://localhost', attributes
       expected = %{<link rel="stylesheet" href="http://localhost" media="screen, projection" extra="&quot;&gt;attack&lt;br">}
-      puts "ACTUAL: #{actual}"
       assert_equal expected, actual
     end
   end
