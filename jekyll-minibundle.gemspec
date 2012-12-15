@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
 
   s.description = <<-END
 A minimalistic asset bundling plugin for Jekyll, requiring only your
-bundling tool of choice (not other dependencies, not even other gems).
+bundling tool of choice (no other dependencies, not even other gems).
 Provides asset bundling and filename stamping with MD5 digest.
   END
 
