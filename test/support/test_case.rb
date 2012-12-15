@@ -45,10 +45,10 @@ module Jekyll::Minibundle::Test
         dir = Dir.mktmpdir('jekyll-minibundle-test-')
         at_exit do
           FileUtils.rm_rf dir
-          puts "Cleaned generated site for tests: #{dir}"
+          puts "\nCleaned generated site for tests: #{dir}"
         end
         Dir.chdir(dir) { _generate_site dir }
-        puts "Generated site for tests: #{dir}"
+        puts "\nGenerated site for tests: #{dir}"
         dir
       end
     end
@@ -58,7 +58,7 @@ module Jekyll::Minibundle::Test
         'source'      => fixture_path,
         'destination' => destination
       }
-      Jekyll::Site.new(Jekyll.configuration(options)).process
+      capture_io { Jekyll::Site.new(Jekyll.configuration(options)).process }
     end
   end
 end
