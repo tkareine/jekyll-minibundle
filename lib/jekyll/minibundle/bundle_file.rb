@@ -10,10 +10,10 @@ module Jekyll::Minibundle
 
     def initialize(config)
       @type = config['type']
-      @site_dir = config['site_dir']
-      source_dir = File.join @site_dir, config['source_dir']
-      @destination_path = config['destination_path']
-      @assets = config['assets'].map { |asset_path| File.join source_dir, "#{asset_path}.#{@type}" }
+      @site_source_dir = config['site_dir']
+      asset_source_dir = File.join @site_source_dir, config['source_dir']
+      @assets = config['assets'].map { |asset_path| File.join asset_source_dir, "#{asset_path}.#{@type}" }
+      @asset_destination_path = config['destination_path']
       @attributes = config['attributes']
       update_mtime
     end
@@ -23,11 +23,11 @@ module Jekyll::Minibundle
     end
 
     def asset_path
-      "#{@destination_path}-#{asset_stamp}.#{@type}"
+      "#{@asset_destination_path}-#{asset_stamp}.#{@type}"
     end
 
-    def destination(destination_base_dir)
-      File.join destination_base_dir, asset_path
+    def destination(site_destination_dir)
+      File.join site_destination_dir, asset_path
     end
 
     def mtime
@@ -38,14 +38,14 @@ module Jekyll::Minibundle
       @@mtimes[path] != mtime
     end
 
-    def write(gensite_dir)
+    def write(site_destination_dir)
       rebundle_assets if modified?
-      destination_path = destination gensite_dir
+      destination_path = destination site_destination_dir
 
       return false if File.exist?(destination_path) and !modified?
 
       update_mtime
-      write_destination gensite_dir
+      write_destination site_destination_dir
 
       true
     end
@@ -61,7 +61,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @asset_bundle ||= AssetBundle.new(@type, @assets, @site_dir).make_bundle
+      @asset_bundle ||= AssetBundle.new(@type, @assets, @site_source_dir).make_bundle
     end
 
     def rebundle_assets

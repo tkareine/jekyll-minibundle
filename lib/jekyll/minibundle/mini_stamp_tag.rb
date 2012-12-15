@@ -4,12 +4,12 @@ module Jekyll::Minibundle
   class MiniStampTag < Liquid::Tag
     def initialize(tag_name, text, _tokens)
       super
-      @source, @destination = text.split(/\s+/, 3)[0, 2]
+      @asset_source, @asset_destination = text.split(/\s+/, 3)[0, 2]
     end
 
     def render(context)
       site = context.registers[:site]
-      file = StampFile.new File.join(site.source, @source), @destination
+      file = StampFile.new File.join(site.source, @asset_source), @asset_destination
       file.static_file! site
       file.asset_path
     end

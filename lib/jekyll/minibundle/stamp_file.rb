@@ -7,25 +7,24 @@ module Jekyll::Minibundle
 
     @@mtimes = Hash.new
 
-    def initialize(source_path, destination_path)
-      @source_path = source_path
-      @destination_dir = File.dirname destination_path
-      @destination_extension = File.extname destination_path
-      base = File.basename destination_path
-      @destination_base_prefix = base[0 .. -(@destination_extension.size + 1)]
+    def initialize(asset_source_path, asset_destination_path)
+      @asset_source_path = asset_source_path
+      @asset_destination_dir = File.dirname asset_destination_path
+      @asset_destination_extension = File.extname asset_destination_path
+      @asset_destination_base_prefix = File.basename(asset_destination_path)[0 .. -(@asset_destination_extension.size + 1)]
       update_mtime
     end
 
     def path
-      @source_path
+      @asset_source_path
     end
 
     def asset_path
-      File.join @destination_dir, destination_basename
+      File.join @asset_destination_dir, asset_destination_basename
     end
 
-    def destination(gensite_dir)
-      File.join gensite_dir, @destination_dir, destination_basename
+    def destination(site_destination_dir)
+      File.join site_destination_dir, @asset_destination_dir, asset_destination_basename
     end
 
     def mtime
@@ -36,22 +35,22 @@ module Jekyll::Minibundle
       @@mtimes[path] != mtime
     end
 
-    def write(gensite_dir)
+    def write(site_destination_dir)
       clear_asset_stamp if modified?
-      destination_path = destination gensite_dir
+      destination_path = destination site_destination_dir
 
       return false if File.exist?(destination_path) and !modified?
 
       update_mtime
-      write_destination gensite_dir
+      write_destination site_destination_dir
 
       true
     end
 
     private
 
-    def destination_basename
-      "#{@destination_base_prefix}-#{asset_stamp}#{@destination_extension}"
+    def asset_destination_basename
+      "#{@asset_destination_base_prefix}-#{asset_stamp}#{@asset_destination_extension}"
     end
 
     def asset_stamp
