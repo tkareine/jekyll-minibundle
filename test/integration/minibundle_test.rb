@@ -27,49 +27,49 @@ module Jekyll::Minibundle::Test
     end
 
     def test_css_asset_bundle_is_copied_to_destination_dir
-      assert File.exists?(gensite_path(EXPECTED_CSS_ASSET_PATH))
+      assert File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
     end
 
     def test_js_asset_bundle_is_copied_to_destination_dir
-      assert File.exists?(gensite_path(EXPECTED_JS_ASSET_PATH))
+      assert File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
     end
 
     def test_css_asset_bundle_is_concatenated_in_configured_order
-      bundle = File.read(gensite_path(EXPECTED_CSS_ASSET_PATH))
+      bundle = File.read(destination_path(EXPECTED_CSS_ASSET_PATH))
       assert bundle.index('html { margin: 0; }') < bundle.index('p { margin: 0; }')
     end
 
     def test_js_asset_bundle_is_concatenated_in_configured_order
-      bundle = File.read(gensite_path(EXPECTED_JS_ASSET_PATH))
+      bundle = File.read(destination_path(EXPECTED_JS_ASSET_PATH))
       assert bundle.index('root.dependency = {};') < bundle.index('root.app = {};')
     end
 
     def test_js_asset_bundle_has_inserted_semicolons_between_assets
-      bundle = File.read(gensite_path(EXPECTED_JS_ASSET_PATH))
+      bundle = File.read(destination_path(EXPECTED_JS_ASSET_PATH))
       assert_match(%r|}\)\(window\)\n;\n\(function|, bundle)
     end
 
     def test_css_asset_bundle_is_minified
       source_contents_size = source_assets_size('_assets/styles', %w{reset common}, 'css')
-      destination_contents_size = File.read(gensite_path(EXPECTED_CSS_ASSET_PATH)).size
+      destination_contents_size = File.read(destination_path(EXPECTED_CSS_ASSET_PATH)).size
       assert destination_contents_size < source_contents_size
     end
 
     def test_js_asset_bundle_is_minified
       source_contents_size = source_assets_size('_assets/scripts', %w{dependency app}, 'js')
-      destination_contents_size = File.read(gensite_path(EXPECTED_JS_ASSET_PATH)).size
+      destination_contents_size = File.read(destination_path(EXPECTED_JS_ASSET_PATH)).size
       assert destination_contents_size < source_contents_size
     end
 
     private
 
     def find_html_element_from_index(css)
-      find_html_element(read_from_gensite('index.html'), css)
+      find_html_element(read_from_destination('index.html'), css)
     end
 
-    def source_assets_size(fixture_subdir, assets, type)
+    def source_assets_size(source_subdir, assets, type)
       assets.
-        map { |f| File.read fixture_path(fixture_subdir, "#{f}.#{type}") }.
+        map { |f| File.read source_path(source_subdir, "#{f}.#{type}") }.
         join('').
         size
     end

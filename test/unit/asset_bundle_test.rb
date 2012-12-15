@@ -28,7 +28,7 @@ module Jekyll::Minibundle::Test
     private
 
     def make_bundle
-      bundle = AssetBundle.new :js, [fixture_path('_assets/scripts/dependency.js')], fixture_path
+      bundle = AssetBundle.new :js, [source_path('_assets/scripts/dependency.js')], source_path
       bundle.make_bundle
     end
   end

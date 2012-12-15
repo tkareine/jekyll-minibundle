@@ -9,18 +9,19 @@ module Jekyll::Minibundle::Test
   class TestCase < ::MiniTest::Unit::TestCase
     include ::Jekyll::Minibundle
 
-    FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture/site'))
+    FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))
+    SOURCE_DIR = File.join(FIXTURE_DIR, 'site')
 
-    def fixture_path(*args)
-      File.join(FIXTURE_DIR, *args)
+    def source_path(*args)
+      File.join(SOURCE_DIR, *args)
     end
 
-    def gensite_path(*args)
-      File.join(_gensite_dir, *args)
+    def destination_path(*args)
+      File.join(_destination_dir, *args)
     end
 
-    def read_from_gensite(*args)
-      File.read gensite_path(*args)
+    def read_from_destination(*args)
+      File.read destination_path(*args)
     end
 
     def find_html_element(file, css)
@@ -40,8 +41,8 @@ module Jekyll::Minibundle::Test
 
     private
 
-    def _gensite_dir(&block)
-      @@_gensite_dir ||= begin
+    def _destination_dir(&block)
+      @@_destination_dir ||= begin
         dir = Dir.mktmpdir('jekyll-minibundle-test-')
         at_exit do
           FileUtils.rm_rf dir
@@ -55,7 +56,7 @@ module Jekyll::Minibundle::Test
 
     def _generate_site(destination)
       options = {
-        'source'      => fixture_path,
+        'source'      => source_path,
         'destination' => destination
       }
       capture_io { Jekyll::Site.new(Jekyll.configuration(options)).process }
