@@ -3,7 +3,7 @@ require 'support/test_case'
 module Jekyll::Minibundle::Test
   class MiniBundleTest < TestCase
     EXPECTED_CSS_ASSET_PATH = 'assets/site-b2e0ecc1c100effc2c7353caad20c327.css'
-    EXPECTED_JS_ASSET_PATH = 'assets/site-f78e0c4497343c33e9282df5d684540e.js'
+    EXPECTED_JS_ASSET_PATH = 'assets/site-4782a1f67803038d4f8351051e67deb8.js'
 
     def test_css_asset_bundle_has_configured_attributes
       element = find_html_element_from_index(%{head link[href="#{EXPECTED_CSS_ASSET_PATH}"]}).first
@@ -42,6 +42,11 @@ module Jekyll::Minibundle::Test
     def test_js_asset_bundle_is_concatenated_in_configured_order
       bundle = File.read(gensite_path(EXPECTED_JS_ASSET_PATH))
       assert bundle.index('root.dependency = {};') < bundle.index('root.app = {};')
+    end
+
+    def test_js_asset_bundle_has_inserted_semicolons_between_assets
+      bundle = File.read(gensite_path(EXPECTED_JS_ASSET_PATH))
+      assert_match(%r|}\)\(window\)\n;\n\(function|, bundle)
     end
 
     def test_css_asset_bundle_is_minified

@@ -18,6 +18,7 @@ module Jekyll::Minibundle
         @assets.each do |asset|
           puts "  #{asset}"
           IO.foreach(asset) { |line| wr.write line }
+          wr.puts ';' if @type == :js
         end
       end
       self
