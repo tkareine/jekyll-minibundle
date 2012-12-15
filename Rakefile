@@ -3,6 +3,15 @@ require 'shellwords'
 
 require_relative 'lib/jekyll/minibundle/version'
 
+def get_minibundle_env(overrides = {})
+  bundle_cmd = File.expand_path(File.join(File.dirname(__FILE__), 'test/fixture/site/_bin/remove_comments'))
+  {
+    'JEKYLL_MINIBUNDLE_CMD_JS'  => bundle_cmd,
+    'JEKYLL_MINIBUNDLE_CMD_CSS' => bundle_cmd,
+    'RUBYLIB'                   => File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
+  }.merge(overrides)
+end
+
 namespace :gem do
   gem_name = 'jekyll-minibundle'
 
@@ -26,19 +35,17 @@ end
 
 desc 'Run tests'
 task :test do
-  test_dir = 'test'
-  test_glob = '**/*_test.rb'
-  includes = ['lib', test_dir].join(':')
-  tests = Dir["#{test_dir}/#{test_glob}"].
+  tests = Dir['test/**/*_test.rb'].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  test_cmd = %{bundle exec ruby -I#{includes} -e 'ARGV.each { |f| require f }' #{tests}}
-  bundle_cmd = File.expand_path(File.join(File.dirname(__FILE__), test_dir, 'fixture/site/_bin/remove_comments'))
-  env = {
-    'JEKYLL_MINIBUNDLE_CMD_JS' => bundle_cmd,
-    'JEKYLL_MINIBUNDLE_CMD_CSS' => bundle_cmd
-  }
-  sh(env, test_cmd)
+  test_cmd = %{bundle exec ruby -e 'ARGV.each { |f| require f }' #{tests}}
+  sh(get_minibundle_env('RUBYLIB' => 'lib:test'), test_cmd)
+end
+
+desc 'Generate fixture site for debugging'
+task :debug do
+  Dir.chdir 'test/fixture/site'
+  sh(get_minibundle_env, 'jekyll')
 end
 
 CLEAN.include 'test/fixture/site/_site'
