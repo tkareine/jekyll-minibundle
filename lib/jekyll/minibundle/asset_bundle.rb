@@ -41,7 +41,8 @@ module Jekyll::Minibundle
       end
       yield wr
       wr.close
-      Process.waitpid2 pid
+      _, status = Process.waitpid2 pid
+      raise "Bundling #{@type} assets failed with exit status #{status.exitstatus}, command: #{cmd}" if status.exitstatus != 0
     ensure
       wr.close unless wr.closed?
     end

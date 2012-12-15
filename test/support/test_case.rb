@@ -27,6 +27,17 @@ module Jekyll::Minibundle::Test
       Nokogiri::HTML(file).css(css)
     end
 
+    def with_env(env)
+      org_env = {}
+      env.each do |k, v|
+        org_env[k] = ENV[k]
+        ENV[k] = v
+      end
+      yield
+    ensure
+      org_env.each { |k, v| ENV[k] = v }
+    end
+
     private
 
     def _gensite_dir(&block)
