@@ -89,7 +89,7 @@ Then, specify the command for launching your favorite bundling tool in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable. For example, when
 launching Jekyll:
 
-    $ JEKYLL_MINIBUNDLE_CMD_JS="./node_modules/.bin/uglifyjs --" jekyll
+    $ JEKYLL_MINIBUNDLE_CMD_JS='./node_modules/.bin/uglifyjs --' jekyll
 
 You can pass custom attributes to the generated markup with
 `attributes` map in the configuration.
