@@ -113,6 +113,10 @@ For bundling CSS assets, you use `css` as the argument to `minibundle` block:
 And then specify the command for launching bundling in
 `$JEKYLL_MINIBUNDLE_CMD_CSS` environment variable.
 
+*Tip:* For development workflow, you can use `cat`. For example:
+
+    $ JEKYLL_MINIBUNDLE_CMD_JS='cat' jekyll
+
 # Example site
 
 See the contents of `test/fixture/site` directory.
