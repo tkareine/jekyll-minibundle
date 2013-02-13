@@ -9,11 +9,8 @@ module Jekyll::Minibundle
     end
 
     def render(context)
-      current_config = YAML.load super
       site = context.registers[:site]
-      config = default_config.
-        merge(current_config).
-        merge({ 'type' => @type, 'site_dir' => site.source})
+      config = get_current_config YAML.load(super), site
       file = BundleFile.new config
       file.static_file! site
       file.markup
@@ -26,6 +23,14 @@ module Jekyll::Minibundle
         'assets'            => [],
         'attributes'        => {}
       }
+    end
+
+    private
+
+    def get_current_config(user_config, site)
+      default_config.
+        merge(user_config).
+        merge({ 'type' => @type, 'site_dir' => site.source})
     end
   end
 end
