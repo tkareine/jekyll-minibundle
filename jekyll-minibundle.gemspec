@@ -20,16 +20,19 @@ Provides asset bundling and filename stamping with MD5 digest.
     License.txt
     Rakefile
     Readme.md
-    lib/jekyll/minibundle.rb
     lib/jekyll/minibundle/asset_bundle.rb
-    lib/jekyll/minibundle/asset_file_support.rb
+    lib/jekyll/minibundle/asset_file_operations.rb
+    lib/jekyll/minibundle/asset_file_paths.rb
     lib/jekyll/minibundle/asset_stamp.rb
+    lib/jekyll/minibundle/asset_tag_markup.rb
     lib/jekyll/minibundle/bundle_file.rb
-    lib/jekyll/minibundle/bundle_markup.rb
+    lib/jekyll/minibundle/development_file.rb
+    lib/jekyll/minibundle/development_file_collection.rb
     lib/jekyll/minibundle/mini_bundle_block.rb
     lib/jekyll/minibundle/mini_stamp_tag.rb
     lib/jekyll/minibundle/stamp_file.rb
     lib/jekyll/minibundle/version.rb
+    lib/jekyll/minibundle.rb
   }
 
   s.test_files = %w{
@@ -43,9 +46,9 @@ Provides asset bundling and filename stamping with MD5 digest.
     test/fixture/site/index.html
     test/integration/minibundle_test.rb
     test/integration/ministamp_test.rb
-    test/unit/asset_bundle_test.rb
-    test/unit/bundle_markup_test.rb
     test/support/test_case.rb
+    test/unit/asset_bundle_test.rb
+    test/unit/asset_tag_markup_test.rb
   }
 
   s.add_development_dependency 'jekyll',   '~> 0.12.0'
