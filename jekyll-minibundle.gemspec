@@ -48,9 +48,9 @@ Provides asset bundling and filename stamping with MD5 digest.
     test/support/test_case.rb
   }
 
-  s.add_development_dependency 'jekyll',   '~> 0.11.2'
-  s.add_development_dependency 'minitest', '~> 4.3.3'
-  s.add_development_dependency 'nokogiri', '~> 1.5.5'
+  s.add_development_dependency 'jekyll',   '~> 0.12.0'
+  s.add_development_dependency 'minitest', '~> 4.6.0'
+  s.add_development_dependency 'nokogiri', '~> 1.5.6'
   s.add_development_dependency 'rake',     '~> 10.0.2'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
