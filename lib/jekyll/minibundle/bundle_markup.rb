@@ -1,6 +1,7 @@
 require 'cgi'
 
 module Jekyll::Minibundle
+  # TODO: Rename to AssetTagMarkup
   module BundleMarkup
     def self.make_markup(type, path, attributes)
       case type
