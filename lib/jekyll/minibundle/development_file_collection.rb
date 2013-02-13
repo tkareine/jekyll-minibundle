@@ -1,4 +1,4 @@
-require 'jekyll/minibundle/bundle_markup'
+require 'jekyll/minibundle/asset_tag_markup'
 require 'jekyll/minibundle/development_file'
 
 module Jekyll::Minibundle
@@ -27,7 +27,7 @@ module Jekyll::Minibundle
 
     def markup
       @files.
-        map { |f| BundleMarkup.make_markup @type, f.asset_path, @attributes }.
+        map { |f| AssetTagMarkup.make_markup @type, f.asset_path, @attributes }.
         join('')
     end
   end

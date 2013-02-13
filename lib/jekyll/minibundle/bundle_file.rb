@@ -1,6 +1,6 @@
 require 'jekyll/minibundle/asset_bundle'
 require 'jekyll/minibundle/asset_file_operations'
-require 'jekyll/minibundle/bundle_markup'
+require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle
   class BundleFile
@@ -51,7 +51,7 @@ module Jekyll::Minibundle
     end
 
     def markup
-      BundleMarkup.make_markup @type, asset_path, @attributes
+      AssetTagMarkup.make_markup @type, asset_path, @attributes
     end
 
     private
