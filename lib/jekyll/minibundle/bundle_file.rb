@@ -6,7 +6,7 @@ module Jekyll::Minibundle
   class BundleFile
     include AssetFileOperations
 
-    @@mtimes = Hash.new
+    @@mtimes = {}
 
     def initialize(config)
       @type = config['type']

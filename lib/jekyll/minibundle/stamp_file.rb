@@ -7,7 +7,7 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFilePaths
 
-    @@mtimes = Hash.new
+    @@mtimes = {}
 
     attr_reader :asset_source_path, :asset_destination_dir
 
