@@ -7,7 +7,7 @@ module Jekyll::Minibundle::Test
 
     def test_css_asset_bundle_has_configured_attributes
       with_precompiled_site :production do
-        element = find_html_element_from_index(%{head link[href="#{EXPECTED_CSS_ASSET_PATH}"]}).first
+        element = find_html_element_from_index %{head link[href="#{EXPECTED_CSS_ASSET_PATH}"]}
         assert_equal 'my-styles', element['id']
         assert_equal 'projection', element['media']
       end
@@ -15,7 +15,7 @@ module Jekyll::Minibundle::Test
 
     def test_js_asset_bundle_has_configured_attributes
       with_precompiled_site :production do
-        element = find_html_element_from_index(%{body script[src="#{EXPECTED_JS_ASSET_PATH}"]}).first
+        element = find_html_element_from_index %{body script[src="#{EXPECTED_JS_ASSET_PATH}"]}
         assert_equal 'my-scripts', element['id']
       end
     end
@@ -110,15 +110,15 @@ module Jekyll::Minibundle::Test
     private
 
     def find_css_path_from_index
-      find_html_element_from_index('head link[media="projection"]').first['href']
+      find_html_element_from_index('head link[media="projection"]')['href']
     end
 
     def find_js_path_from_index
-      find_html_element_from_index('body script').first['src']
+      find_html_element_from_index('body script')['src']
     end
 
     def find_html_element_from_index(css)
-      find_html_element(File.read(destination_path('index.html')), css)
+      find_html_element(File.read(destination_path('index.html')), css).first
     end
 
     def source_assets_size(source_subdir, assets, type)
