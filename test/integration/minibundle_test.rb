@@ -81,6 +81,32 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_changing_css_assets_changes_bundle
+      with_site do
+        generate_site :production
+        assert File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
+        File.write source_path('_assets/styles/common.css'), 'h1 {}'
+        generate_site :production
+        refute File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
+        expected_new_path = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
+        assert_equal expected_new_path, find_css_path_from_index
+        assert File.exists?(destination_path(expected_new_path))
+      end
+    end
+
+    def test_changing_js_assets_changes_bundle
+      with_site do
+        generate_site :production
+        assert File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
+        File.write source_path('_assets/scripts/app.js'), '(function() {})()'
+        generate_site :production
+        refute File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
+        expected_new_path = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
+        assert_equal expected_new_path, find_js_path_from_index
+        assert File.exists?(destination_path(expected_new_path))
+      end
+    end
+
     private
 
     def find_css_path_from_index
