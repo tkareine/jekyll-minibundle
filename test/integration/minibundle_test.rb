@@ -22,15 +22,13 @@ module Jekyll::Minibundle::Test
 
     def test_css_asset_bundle_has_stamp
       with_precompiled_site :production do
-        actual = find_html_element_from_index('head link[media="projection"]').first['href']
-        assert_equal EXPECTED_CSS_ASSET_PATH, actual
+        assert_equal EXPECTED_CSS_ASSET_PATH, find_css_path_from_index
       end
     end
 
     def test_js_asset_bundle_has_stamp
       with_precompiled_site :production do
-        actual = find_html_element_from_index('body script').first['src']
-        assert_equal EXPECTED_JS_ASSET_PATH, actual
+        assert_equal EXPECTED_JS_ASSET_PATH, find_js_path_from_index
       end
     end
 
@@ -84,6 +82,14 @@ module Jekyll::Minibundle::Test
     end
 
     private
+
+    def find_css_path_from_index
+      find_html_element_from_index('head link[media="projection"]').first['href']
+    end
+
+    def find_js_path_from_index
+      find_html_element_from_index('body script').first['src']
+    end
 
     def find_html_element_from_index(css)
       find_html_element(File.read(destination_path('index.html')), css)
