@@ -9,8 +9,7 @@ module Jekyll::Minibundle::Test
 
     def test_asset_path_has_stamp
       with_precompiled_site :production do
-        actual = find_html_element(File.read(destination_path('index.html')), 'head link').first['href']
-        assert_equal EXPECTED_ASSET_PATH, actual
+        assert_equal EXPECTED_ASSET_PATH, find_css_path_from_index
       end
     end
 
@@ -35,8 +34,16 @@ module Jekyll::Minibundle::Test
         File.write source_path(CSS_STAMP_SOURCE_FILE), 'h1 {}'
         generate_site :production
         refute File.exists?(destination_path(EXPECTED_ASSET_PATH))
-        assert File.exists?(destination_path('assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'))
+        expected_new_path = 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
+        assert_equal expected_new_path, find_css_path_from_index
+        assert File.exists?(destination_path(expected_new_path))
       end
+    end
+
+    private
+
+    def find_css_path_from_index
+      find_html_element(File.read(destination_path('index.html')), 'head link').first['href']
     end
   end
 end
