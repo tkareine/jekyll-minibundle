@@ -24,5 +24,16 @@ module Jekyll::Minibundle::Test
         assert_equal source_contents, destination_contents
       end
     end
+
+    def test_change_asset_file
+      with_site do
+        generate_site :production
+        assert File.exists?(destination_path(EXPECTED_ASSET_PATH))
+        File.write source_path('_tmp/site.css'), 'h1 {}'
+        generate_site :production
+        refute File.exists?(destination_path(EXPECTED_ASSET_PATH))
+        assert File.exists?(destination_path('assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'))
+      end
+    end
   end
 end

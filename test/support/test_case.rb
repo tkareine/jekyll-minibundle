@@ -15,6 +15,10 @@ module Jekyll::Minibundle::Test
       File.join(FIXTURE_DIR, 'site', *args)
     end
 
+    def source_path(*args)
+      File.join(Dir.pwd, *args)
+    end
+
     def destination_path(*args)
       File.join(Dir.pwd, '_site', *args)
     end
@@ -32,6 +36,15 @@ module Jekyll::Minibundle::Test
       yield
     ensure
       org_env.each { |k, v| ENV[k] = v }
+    end
+
+    def with_site(&block)
+      Dir.mktmpdir "jekyll-minibundle-test-site-" do |dir|
+        Dir.chdir dir do
+          _copy_fixture_site_dir Dir.pwd
+          yield dir
+        end
+      end
     end
 
     def with_precompiled_site(mode, &block)
