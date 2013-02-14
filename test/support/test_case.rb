@@ -10,18 +10,13 @@ module Jekyll::Minibundle::Test
     include ::Jekyll::Minibundle
 
     FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))
-    SOURCE_DIR = File.join(FIXTURE_DIR, 'site')
 
-    def source_path(*args)
-      File.join(SOURCE_DIR, *args)
+    def site_fixture_path(*args)
+      File.join(FIXTURE_DIR, 'site', *args)
     end
 
     def destination_path(*args)
-      File.join(_destination_dir, *args)
-    end
-
-    def read_from_destination(*args)
-      File.read destination_path(*args)
+      File.join(Dir.pwd, '_site', *args)
     end
 
     def find_html_element(file, css)
@@ -39,24 +34,43 @@ module Jekyll::Minibundle::Test
       org_env.each { |k, v| ENV[k] = v }
     end
 
+    def with_precompiled_site(mode, &block)
+      Dir.chdir(_get_precompiled_site(mode), &block)
+    end
+
+    def generate_site(mode)
+      with_env 'JEKYLL_MINIBUNDLE_MODE' => mode.to_s do
+        _generate_site Dir.pwd, '_site'
+      end
+    end
+
     private
 
-    def _destination_dir(&block)
-      @@_destination_dir ||= begin
-        dir = Dir.mktmpdir('jekyll-minibundle-test-')
+    def _copy_fixture_site_dir(dir)
+      FileUtils.cp_r site_fixture_path('.'), dir
+    end
+
+    @@_precompiled_site_dirs = {}
+
+    def _get_precompiled_site(mode)
+      @@_precompiled_site_dirs[mode] ||= begin
+        dir = Dir.mktmpdir("jekyll-minibundle-test-precompiled-site-#{mode}-")
         at_exit do
           FileUtils.rm_rf dir
-          puts "\nCleaned generated site for tests: #{dir}"
+          puts "\nCleaned precompiled site for tests: #{dir}"
         end
-        Dir.chdir(dir) { _generate_site dir }
-        puts "\nGenerated site for tests: #{dir}"
+        Dir.chdir(dir) do
+          _copy_fixture_site_dir Dir.pwd
+          generate_site mode
+        end
+        puts "\nGenerated precompiled site in #{mode} mode for tests: #{dir}"
         dir
       end
     end
 
-    def _generate_site(destination)
+    def _generate_site(source, destination)
       options = {
-        'source'      => source_path,
+        'source'      => source,
         'destination' => destination
       }
       capture_io { Jekyll::Site.new(Jekyll.configuration(options)).process }
