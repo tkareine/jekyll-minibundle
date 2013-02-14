@@ -44,6 +44,7 @@ Provides asset bundling and filename stamping with MD5 digest.
     test/fixture/site/_plugins/minibundle.rb
     test/fixture/site/_tmp/site.css
     test/fixture/site/index.html
+    test/integration/minibundle_development_mode_test.rb
     test/integration/minibundle_production_mode_test.rb
     test/integration/ministamp_test.rb
     test/support/test_case.rb
