@@ -1,7 +1,10 @@
 require 'support/test_case'
+require 'support/fixture_config'
 
 module Jekyll::Minibundle::Test
   class MiniBundleProductionModeTest < TestCase
+    include FixtureConfig
+
     EXPECTED_CSS_ASSET_PATH = 'assets/site-b2e0ecc1c100effc2c7353caad20c327.css'
     EXPECTED_JS_ASSET_PATH = 'assets/site-4782a1f67803038d4f8351051e67deb8.js'
 
@@ -67,7 +70,7 @@ module Jekyll::Minibundle::Test
 
     def test_css_asset_bundle_is_minified
       with_precompiled_site :production do
-        source_contents_size = source_assets_size('_assets/styles', %w{reset common}, 'css')
+        source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w{reset common}, 'css')
         destination_contents_size = File.read(destination_path(EXPECTED_CSS_ASSET_PATH)).size
         assert destination_contents_size < source_contents_size
       end
@@ -75,7 +78,7 @@ module Jekyll::Minibundle::Test
 
     def test_js_asset_bundle_is_minified
       with_precompiled_site :production do
-        source_contents_size = source_assets_size('_assets/scripts', %w{dependency app}, 'js')
+        source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w{dependency app}, 'js')
         destination_contents_size = File.read(destination_path(EXPECTED_JS_ASSET_PATH)).size
         assert destination_contents_size < source_contents_size
       end
