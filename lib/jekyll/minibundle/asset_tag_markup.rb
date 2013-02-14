@@ -1,7 +1,7 @@
 require 'cgi'
 
 module Jekyll::Minibundle
-  module BundleMarkup
+  module AssetTagMarkup
     def self.make_markup(type, path, attributes)
       case type
       when :js

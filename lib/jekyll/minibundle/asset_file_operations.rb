@@ -1,7 +1,7 @@
 require 'fileutils'
 
 module Jekyll::Minibundle
-  module AssetFileSupport
+  module AssetFileOperations
     def static_file!(site)
       static_file_exists = site.static_files.find { |f| f.path == path }
       site.static_files << self unless static_file_exists

@@ -1,12 +1,12 @@
 require 'jekyll/minibundle/asset_bundle'
-require 'jekyll/minibundle/asset_file_support'
-require 'jekyll/minibundle/bundle_markup'
+require 'jekyll/minibundle/asset_file_operations'
+require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle
   class BundleFile
-    include AssetFileSupport
+    include AssetFileOperations
 
-    @@mtimes = Hash.new
+    @@mtimes = {}
 
     def initialize(config)
       @type = config['type']
@@ -15,7 +15,6 @@ module Jekyll::Minibundle
       @assets = config['assets'].map { |asset_path| File.join asset_source_dir, "#{asset_path}.#{@type}" }
       @asset_destination_path = config['destination_path']
       @attributes = config['attributes']
-      update_mtime
     end
 
     def path
@@ -42,16 +41,17 @@ module Jekyll::Minibundle
       rebundle_assets if modified?
       destination_path = destination site_destination_dir
 
-      return false if File.exist?(destination_path) and !modified?
-
-      update_mtime
-      write_destination site_destination_dir
-
-      true
+      if File.exist?(destination_path) && !modified?
+        false
+      else
+        update_mtime
+        write_destination site_destination_dir
+        true
+      end
     end
 
     def markup
-      BundleMarkup.make_markup @type, asset_path, @attributes
+      AssetTagMarkup.make_markup @type, asset_path, @attributes
     end
 
     private
