@@ -1,7 +1,7 @@
 require 'support/test_case'
 
 module Jekyll::Minibundle::Test
-  class MiniBundleTest < TestCase
+  class MiniBundleProductionModeTest < TestCase
     EXPECTED_CSS_ASSET_PATH = 'assets/site-b2e0ecc1c100effc2c7353caad20c327.css'
     EXPECTED_JS_ASSET_PATH = 'assets/site-4782a1f67803038d4f8351051e67deb8.js'
 
