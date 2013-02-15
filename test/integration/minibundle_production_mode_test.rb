@@ -110,6 +110,29 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_relative_and_absolute_destination_paths
+      with_site do
+        expected_css_path = destination_path EXPECTED_CSS_ASSET_PATH
+        expected_js_path = destination_path EXPECTED_JS_ASSET_PATH
+
+        generate_site :production
+
+        assert File.exists?(expected_css_path)
+        assert File.exists?(expected_js_path)
+        assert_equal EXPECTED_CSS_ASSET_PATH, find_css_path_from_index
+        assert_equal EXPECTED_JS_ASSET_PATH, find_js_path_from_index
+
+        find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
+
+        generate_site :production
+
+        assert File.exists?(expected_css_path)
+        assert File.exists?(expected_js_path)
+        assert_equal "/#{EXPECTED_CSS_ASSET_PATH}", find_css_path_from_index
+        assert_equal "/#{EXPECTED_JS_ASSET_PATH}", find_js_path_from_index
+      end
+    end
+
     private
 
     def find_css_path_from_index

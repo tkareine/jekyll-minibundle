@@ -62,6 +62,29 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_relative_and_absolute_destination_paths
+      with_site do
+        expected_css_path = destination_path CSS_BUNDLE_DESTINATION_DIR, 'common.css'
+        expected_js_path = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
+
+        generate_site :development
+
+        assert File.exists?(expected_css_path)
+        assert File.exists?(expected_js_path)
+        assert_equal 'assets/site/common.css', find_css_paths_from_index.last
+        assert_equal 'assets/site/app.js', find_js_paths_from_index.last
+
+        find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
+
+        generate_site :development
+
+        assert File.exists?(expected_css_path)
+        assert File.exists?(expected_js_path)
+        assert_equal '/assets/site/common.css', find_css_paths_from_index.last
+        assert_equal '/assets/site/app.js', find_js_paths_from_index.last
+      end
+    end
+
     def test_do_not_require_bundling_cmds
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_CSS' => nil, 'JEKYLL_MINIBUNDLE_CMD_JS' => nil do

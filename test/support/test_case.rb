@@ -27,6 +27,12 @@ module Jekyll::Minibundle::Test
       Nokogiri::HTML(file).css(css)
     end
 
+    def find_and_gsub_in_file(file, pattern, replacement)
+      old_content = File.read file
+      new_content = old_content.gsub pattern, replacement
+      File.write file, new_content
+    end
+
     def with_env(env)
       org_env = {}
       env.each do |k, v|
