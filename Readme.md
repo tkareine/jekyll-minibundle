@@ -50,8 +50,7 @@ this line:
 
 Asset stamping is intended to be used together with
 [Compass](http://compass-style.org/) and other similar asset
-generation tools where you do not want to include unprocessed input
-assets in the generated site.
+generation tools that have their own configuration for input sources.
 
 Configure Compass to take inputs from `_assets/styles/*.scss` and to
 put output to `_tmp/site.css`. Use `ministamp` tag to copy the
@@ -59,7 +58,7 @@ processed style asset to the generated site:
 
     <link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
 
-Output, containing the MD5 digest in the filename:
+Output, containing the MD5 digest of the file in the filename:
 
     <link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
 
@@ -67,13 +66,17 @@ This feature does not require any external tools.
 
 ## Asset bundling
 
-A straightforward way to bundle assets with any tool that supports
-reading input files from STDIN and writing the output to STDOUT. The
-bundled file has MD5 digest in the filename.
+This is a straightforward way to bundle assets with any tool that
+supports reading input from STDIN and writing the output to STDOUT.
+You write the configuration for input sources directly into the
+content file where you want the markup tag for the bundle file to
+appear. The outcome will be a markup tag containing the path to the
+bundle file, and the generated site will have the bundle file in that
+path. The MD5 digest of the file will be included in the filename.
 
-Place `minibundle` block with configuration to your content file where
-you want the generated markup to appear. For example, for bundling
-JavaScript sources:
+Place `minibundle` block with configuration into your content file
+where you want the generated markup to appear. For example, to bundle
+a set of JavaScript sources:
 
     {% minibundle js %}
     source_dir: _assets/scripts
@@ -94,7 +97,7 @@ launching Jekyll:
 You can pass custom attributes to the generated markup with
 `attributes` map in the configuration.
 
-Output:
+Output in the content file:
 
     <script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
 
