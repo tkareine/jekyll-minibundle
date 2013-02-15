@@ -116,9 +116,15 @@ For bundling CSS assets, you use `css` as the argument to `minibundle` block:
 And then specify the command for launching bundling in
 `$JEKYLL_MINIBUNDLE_CMD_CSS` environment variable.
 
-*Tip:* For development workflow, you can use `cat`. For example:
+## Development mode
 
-    $ JEKYLL_MINIBUNDLE_CMD_JS='cat' jekyll
+For your development workflow, asset bundling can get in the way. To
+remedy this, you can instruct the library into development mode. Then,
+`minibundle` block will not bundle assets, but copy each asset as-is
+to the destination directory under the path specified in
+`destination_path` configuration setting.
+
+    $ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
 
 # Example site
 
