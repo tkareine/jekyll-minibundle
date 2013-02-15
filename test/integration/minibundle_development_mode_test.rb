@@ -10,15 +10,13 @@ module Jekyll::Minibundle::Test
 
     def test_css_assets_have_tags_in_configured_order
       with_precompiled_site :development do
-        paths = find_html_elements_from_index('head link[media="projection"]').map { |el| el['href'] }
-        assert_equal EXPECTED_CSS_ASSET_PATHS, paths
+        assert_equal EXPECTED_CSS_ASSET_PATHS, find_css_paths_from_index
       end
     end
 
     def test_js_assets_have_tags_in_configured_order
       with_precompiled_site :development do
-        paths = find_html_elements_from_index('body script').map { |el| el['src'] }
-        assert_equal EXPECTED_JS_ASSET_PATHS, paths
+        assert_equal EXPECTED_JS_ASSET_PATHS, find_js_paths_from_index
       end
     end
 
@@ -74,6 +72,14 @@ module Jekyll::Minibundle::Test
     end
 
     private
+
+    def find_css_paths_from_index
+      find_html_elements_from_index('head link[media="projection"]').map { |el| el['href'] }
+    end
+
+    def find_js_paths_from_index
+      find_html_elements_from_index('body script').map { |el| el['src'] }
+    end
 
     def find_html_elements_from_index(css)
       find_html_element(File.read(destination_path('index.html')), css)
