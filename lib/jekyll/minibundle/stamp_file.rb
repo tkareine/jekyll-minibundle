@@ -23,9 +23,11 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      clear_asset_stamp if modified?
+      is_modified = modified?
 
-      if destination_is_up_to_date? site_destination_dir
+      clear_asset_stamp if is_modified
+
+      if destination_exists?(site_destination_dir) && !is_modified
         false
       else
         update_mtime

@@ -21,7 +21,7 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      if destination_is_up_to_date? site_destination_dir
+      if destination_exists?(site_destination_dir) && !modified?
         false
       else
         update_mtime

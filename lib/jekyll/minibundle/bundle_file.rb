@@ -39,10 +39,11 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      rebundle_assets if modified?
-      destination_path = destination site_destination_dir
+      is_modified = modified?
 
-      if File.exist?(destination_path) && !modified?
+      rebundle_assets if is_modified
+
+      if File.exists?(destination(site_destination_dir)) && !is_modified
         false
       else
         update_mtime
