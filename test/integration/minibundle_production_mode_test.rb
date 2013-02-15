@@ -50,14 +50,14 @@ module Jekyll::Minibundle::Test
     def test_css_asset_bundle_is_concatenated_in_configured_order
       with_precompiled_site :production do
         bundle = File.read(destination_path(EXPECTED_CSS_ASSET_PATH))
-        assert bundle.index('html { margin: 0; }') < bundle.index('p { margin: 0; }')
+        assert_operator bundle.index('html { margin: 0; }'), :<, bundle.index('p { margin: 0; }')
       end
     end
 
     def test_js_asset_bundle_is_concatenated_in_configured_order
       with_precompiled_site :production do
         bundle = File.read(destination_path(EXPECTED_JS_ASSET_PATH))
-        assert bundle.index('root.dependency = {};') < bundle.index('root.app = {};')
+        assert_operator bundle.index('root.dependency = {};'), :<, bundle.index('root.app = {};')
       end
     end
 
@@ -72,7 +72,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site :production do
         source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w{reset common}, 'css')
         destination_contents_size = File.read(destination_path(EXPECTED_CSS_ASSET_PATH)).size
-        assert destination_contents_size < source_contents_size
+        assert_operator destination_contents_size, :<, source_contents_size
       end
     end
 
@@ -80,7 +80,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site :production do
         source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w{dependency app}, 'js')
         destination_contents_size = File.read(destination_path(EXPECTED_JS_ASSET_PATH)).size
-        assert destination_contents_size < source_contents_size
+        assert_operator destination_contents_size, :<, source_contents_size
       end
     end
 
