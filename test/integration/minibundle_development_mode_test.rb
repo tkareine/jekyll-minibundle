@@ -8,14 +8,14 @@ module Jekyll::Minibundle::Test
     EXPECTED_CSS_ASSET_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_DIR, "#{f}.css") }
     EXPECTED_JS_ASSET_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_DIR, "#{f}.js") }
 
-    def test_css_assets_have_link_tags_in_configured_order
+    def test_css_assets_have_tags_in_configured_order
       with_precompiled_site :development do
         paths = find_html_elements_from_index('head link[media="projection"]').map { |el| el['href'] }
         assert_equal EXPECTED_CSS_ASSET_PATHS, paths
       end
     end
 
-    def test_js_assets_have_link_tags_in_configured_order
+    def test_js_assets_have_tags_in_configured_order
       with_precompiled_site :development do
         paths = find_html_elements_from_index('body script').map { |el| el['src'] }
         assert_equal EXPECTED_JS_ASSET_PATHS, paths
