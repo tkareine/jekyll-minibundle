@@ -42,7 +42,7 @@ module Jekyll::Minibundle::Test
         source = source_path CSS_BUNDLE_SOURCE_DIR, 'common.css'
 
         generate_site :development
-        ensure_file_mtime_change { File.write source, 'h1 {}' }
+        ensure_file_mtime_changes { File.write source, 'h1 {}' }
         refute_equal File.read(destination), File.read(source)
         generate_site :development
         assert_equal File.read(destination), File.read(source)
@@ -55,7 +55,7 @@ module Jekyll::Minibundle::Test
         source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
 
         generate_site :development
-        ensure_file_mtime_change { File.write source, '(function() {})()' }
+        ensure_file_mtime_changes { File.write source, '(function() {})()' }
         refute_equal File.read(destination), File.read(source)
         generate_site :development
         assert_equal File.read(destination), File.read(source)
@@ -111,11 +111,6 @@ module Jekyll::Minibundle::Test
     def expect_file_exists_and_is_equal_to(actual, expected)
       assert File.exists?(actual)
       assert_equal File.read(expected), File.read(actual)
-    end
-
-    def ensure_file_mtime_change(&block)
-      sleep 1.5  # ensures file mtime gets changed
-      yield
     end
   end
 end

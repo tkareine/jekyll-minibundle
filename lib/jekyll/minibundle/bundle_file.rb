@@ -8,6 +8,7 @@ module Jekyll::Minibundle
     include AssetFileOperations
 
     @@mtimes = {}
+    @@writes_after_mtime_updates = Hash.new false
 
     def initialize(config)
       @type = config['type']
@@ -31,23 +32,25 @@ module Jekyll::Minibundle
     end
 
     def mtime
-      @assets.max { |f| File.stat(f).mtime.to_i }
+      @assets.map { |f| File.stat(f).mtime.to_i }.max
     end
 
     def modified?
-      @@mtimes[path] != mtime
+      @@mtimes[asset_destination_canonical_path] != mtime
+    end
+
+    def destination_written_after_mtime_update?
+      @@writes_after_mtime_updates[asset_destination_canonical_path]
     end
 
     def write(site_destination_dir)
-      is_modified = modified?
+      rebundle_assets if modified?
 
-      rebundle_assets if is_modified
-
-      if File.exists?(destination(site_destination_dir)) && !is_modified
+      if File.exists?(destination(site_destination_dir)) && destination_written_after_mtime_update?
         false
       else
-        update_mtime
         write_destination site_destination_dir
+        @@writes_after_mtime_updates[asset_destination_canonical_path] = true
         true
       end
     end
@@ -58,21 +61,32 @@ module Jekyll::Minibundle
 
     private
 
+    def asset_destination_canonical_path
+      "#{@destination_path}.#{@type}"
+    end
+
     def asset_stamp
       @asset_stamp ||= AssetStamp.from_file path
     end
 
     def asset_bundle
-      @asset_bundle ||= AssetBundle.new(@type, @assets, @site_source_dir).make_bundle
+      @asset_bundle ||= begin
+        bundle = AssetBundle.new(@type, @assets, @site_source_dir).make_bundle
+        update_mtime
+        bundle
+      end
     end
 
     def rebundle_assets
       @asset_stamp = nil
       asset_bundle.make_bundle
+      update_mtime
     end
 
     def update_mtime
-      @@mtimes[path] = mtime
+      p = asset_destination_canonical_path
+      @@mtimes[p] = mtime
+      @@writes_after_mtime_updates[p] = false
     end
   end
 end

@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+filename = ARGV.first
+
+count = if File.exists? filename
+  File.read(filename).strip.to_i
+else
+  0
+end
+
+File.write filename, "#{count + 1}\n"
+
+STDOUT.puts STDIN.read

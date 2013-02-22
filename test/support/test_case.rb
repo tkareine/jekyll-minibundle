@@ -63,6 +63,11 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def ensure_file_mtime_changes(&block)
+      sleep 1.5
+      yield
+    end
+
     private
 
     def _copy_fixture_site_dir(dir)

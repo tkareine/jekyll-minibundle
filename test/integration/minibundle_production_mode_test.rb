@@ -133,6 +133,15 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_bundles_assets_only_once_upon_startup
+      with_site do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_cat_and_count_as_side_effect do
+          generate_site :production
+        end
+        assert_equal 1, File.read('count').to_i
+      end
+    end
+
     private
 
     def find_css_path_from_index
@@ -152,6 +161,10 @@ module Jekyll::Minibundle::Test
         map { |f| File.read site_fixture_path(source_subdir, "#{f}.#{type}") }.
         join('').
         size
+    end
+
+    def cmd_for_cat_and_count_as_side_effect
+      site_fixture_path('_bin/cat_and_count_as_side_effect') + ' count'
     end
   end
 end
