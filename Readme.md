@@ -4,9 +4,9 @@ A minimalistic plugin for bundling assets to
 [Jekyll](https://github.com/mojombo/jekyll)'s site generation
 directory.
 
-In addition to the plugin itself, you only need your asset bundling
-tool of choice. The plugin needs no other configuration than setting
-an environment variable. There are no gem dependencies.
+In addition to the plugin itself, you need an asset bundling tool that
+supports standard unix input and output. There are no gem dependencies
+at runtime.
 
 Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
@@ -14,25 +14,25 @@ Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
 # Features
 
-There are two features: asset stamping with MD5 digest over the
+There are two features: asset fingerprinting with MD5 digest over the
 contents of the asset, and asset bundling combined with the first
 feature.
 
 You still need a separate bundling tool, such as
 [UglifyJS2](https://github.com/mishoo/UglifyJS2) to do the actual work
-of bundling (concatenation, minification). There are no other
-dependencies.
+of bundling (concatenation and minification).
 
-Why is this good? Well, a unique content specific identifier in asset
-filename is the best way to handle web caching, because you can allow
-caching the asset for forever. Calculating MD5 digest over the
-contents of the asset is fast and the resulting digest is reasonably
-unique to be generated automatically.
+Why is this good? Well, a fingerprint in asset filename is the
+[recommended way](https://developers.google.com/speed/docs/best-practices/caching)
+to handle caching of static resources, because you can allow caching
+the asset forever. Calculating MD5 digest over the contents of the
+asset is fast and the resulting digest is reasonably unique to be
+generated automatically.
 
-Asset bundling is good for reducing the number of requests to server
-upon page load. It also allows minification for stylesheets and
-JavaScript sources, which makes asset sizes smaller and thus faster to
-load over network.
+Asset bundling is good for reducing the number of requests to the
+backend upon page load. Minification of stylesheets and JavaScript
+sources makes asset sizes smaller and thus faster to load over
+network.
 
 # Usage
 
@@ -46,9 +46,9 @@ this line:
 
     require 'jekyll/minibundle'
 
-## Asset stamping
+## Asset fingerprinting
 
-Asset stamping is intended to be used together with
+Asset fingerprinting is intended to be used together with
 [Compass](http://compass-style.org/) and other similar asset
 generation tools that have their own configuration for input sources.
 
@@ -118,10 +118,11 @@ And then specify the command for launching bundling in
 
 ## Development mode
 
-For your development workflow, asset bundling can get in the way. To
-remedy this, you can instruct the library into development mode. Then,
-`minibundle` block will not bundle assets, but copy each asset as-is
-to the destination directory under the path specified in
+For your development workflow, asset bundling gets in the way because
+you will not see the contents and line numbers of the original assets.
+To remedy this, you can instruct the library into development mode.
+Then, `minibundle` block will not bundle assets, but copy each asset
+as-is to the destination directory under the path specified in
 `destination_path` configuration setting.
 
     $ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
