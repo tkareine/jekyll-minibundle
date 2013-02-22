@@ -24,7 +24,7 @@ module Jekyll::Minibundle
       file.markup
     end
 
-    def default_config
+    def self.default_config
       {
         'source_dir'        => '_assets',
         'destination_path'  => 'assets/site',
@@ -36,7 +36,7 @@ module Jekyll::Minibundle
     private
 
     def get_current_config(user_config, site)
-      default_config.
+      MiniBundleBlock.default_config.
         merge(user_config).
         merge({ 'type' => @type, 'site_dir' => site.source })
     end
