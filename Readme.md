@@ -43,7 +43,7 @@ The plugin is shipped as a
 [RubyGem](https://rubygems.org/gems/jekyll-minibundle):
 
 ``` bash
-gem install jekyll-minibundle
+$ gem install jekyll-minibundle
 ```
 
 Add file `_plugins/minibundle.rb` to your Jekyll site project with
