@@ -1,6 +1,7 @@
 require 'yaml'
 require 'jekyll/minibundle/bundle_file'
 require 'jekyll/minibundle/development_file_collection'
+require 'jekyll/minibundle/environment'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -13,7 +14,7 @@ module Jekyll::Minibundle
       site = context.registers[:site]
       config = get_current_config YAML.load(super), site
 
-      file = if ENV['JEKYLL_MINIBUNDLE_MODE'] == 'development'
+      file = if Environment.development?
         DevelopmentFileCollection.new config
       else
         BundleFile.new config

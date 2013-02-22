@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'jekyll/minibundle/environment'
 
 module Jekyll::Minibundle
   class AssetBundle
@@ -27,10 +28,7 @@ module Jekyll::Minibundle
     private
 
     def bundling_cmd
-      key = "JEKYLL_MINIBUNDLE_CMD_#{@type.upcase}"
-      cmd = ENV[key]
-      raise "You need to set bundling command in $#{key}" if !cmd
-      cmd
+      Environment.command_for @type
     end
 
     def pipe_bundling_to_temp_file(cmd)
