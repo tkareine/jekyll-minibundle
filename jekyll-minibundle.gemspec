@@ -58,5 +58,7 @@ Provides asset bundling and filename stamping with MD5 digest.
   s.add_development_dependency 'nokogiri', '~> 1.5.6'
   s.add_development_dependency 'rake',     '~> 10.0.2'
 
+  s.required_ruby_version = '>= 1.9.2'
+
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end
