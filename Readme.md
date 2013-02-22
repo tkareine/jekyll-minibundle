@@ -23,7 +23,7 @@ implements concatenation and leaves up to you to choose the
 minification tool. [UglifyJS2](https://github.com/mishoo/UglifyJS2) is
 a good and fast minifier. The plugin connects to the minifier with
 standard unix pipe, feeding asset file contents to it in desired order
-via STDIN, and reads the output from STDOUT.
+via standard input, and reads the result from standard output.
 
 Why is this good? Well, a fingerprint in asset's path is the
 [recommended way](https://developers.google.com/speed/docs/best-practices/caching)
@@ -42,12 +42,16 @@ network.
 The plugin is shipped as a
 [RubyGem](https://rubygems.org/gems/jekyll-minibundle):
 
-    gem install jekyll-minibundle
+``` bash
+gem install jekyll-minibundle
+```
 
 Add file `_plugins/minibundle.rb` to your Jekyll site project with
 this line:
 
-    require 'jekyll/minibundle'
+``` ruby
+require 'jekyll/minibundle'
+```
 
 ## Asset fingerprinting
 
@@ -59,11 +63,15 @@ Configure Compass to take inputs from `_assets/styles/*.scss` and to
 put output to `_tmp/site.css`. Use `ministamp` tag to copy the
 processed style asset to the generated site:
 
-    <link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
+``` html
+<link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
+```
 
 Output, containing the MD5 digest of the file in the filename:
 
-    <link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
+``` html
+<link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
+```
 
 This feature does not require any external tools.
 
@@ -81,40 +89,48 @@ Place `minibundle` block with configuration into your content file
 where you want the generated markup to appear. For example, to bundle
 a set of JavaScript sources:
 
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site
-    assets:
-      - dependency
-      - app
-    attributes:
-      id: my-scripts
-    {% endminibundle %}
+``` text
+{% minibundle js %}
+source_dir: _assets/scripts
+destination_path: assets/site
+assets:
+  - dependency
+  - app
+attributes:
+  id: my-scripts
+{% endminibundle %}
+```
 
 Then, specify the command for launching your favorite minifier in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable. For example, when
 launching Jekyll:
 
-    $ JEKYLL_MINIBUNDLE_CMD_JS='./node_modules/.bin/uglifyjs --' jekyll
+``` bash
+$ JEKYLL_MINIBUNDLE_CMD_JS='./node_modules/.bin/uglifyjs --' jekyll
+```
 
 You can pass custom attributes to the generated markup with
 `attributes` map in the configuration.
 
 Output in the content file:
 
-    <script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
+``` html
+<script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
+```
 
 For bundling CSS assets, you use `css` as the argument to `minibundle` block:
 
-    {% minibundle css %}
-    source_dir: _assets/styles
-    destination_path: assets/site
-    assets:
-      - reset
-      - common
-    attributes:
-      media: screen
-    {% endminibundle %}
+``` text
+{% minibundle css %}
+source_dir: _assets/styles
+destination_path: assets/site
+assets:
+  - reset
+  - common
+attributes:
+  media: screen
+{% endminibundle %}
+```
 
 And then specify the command for launching bundling in
 `$JEKYLL_MINIBUNDLE_CMD_CSS` environment variable.
@@ -128,7 +144,9 @@ Then, `minibundle` block will not bundle assets, but copy each asset
 as-is to the destination directory under the path specified in
 `destination_path` configuration setting.
 
-    $ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
+``` bash
+$ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
+```
 
 # Example site
 
