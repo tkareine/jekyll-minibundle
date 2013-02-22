@@ -14,7 +14,7 @@ module Jekyll::Minibundle
       @site_source_dir = config['site_dir']
       asset_source_dir = File.join @site_source_dir, config['source_dir']
       @assets = config['assets'].map { |asset_path| File.join asset_source_dir, "#{asset_path}.#{@type}" }
-      @asset_destination_path = config['destination_path']
+      @destination_path = config['destination_path']
       @attributes = config['attributes']
     end
 
@@ -22,12 +22,12 @@ module Jekyll::Minibundle
       asset_bundle.path
     end
 
-    def asset_path
-      "#{@asset_destination_path}-#{asset_stamp}.#{@type}"
+    def asset_destination_path
+      "#{@destination_path}-#{asset_stamp}.#{@type}"
     end
 
     def destination(site_destination_dir)
-      File.join site_destination_dir, asset_path
+      File.join site_destination_dir, asset_destination_path
     end
 
     def mtime
@@ -53,13 +53,13 @@ module Jekyll::Minibundle
     end
 
     def markup
-      AssetTagMarkup.make_markup @type, asset_path, @attributes
+      AssetTagMarkup.make_markup @type, asset_destination_path, @attributes
     end
 
     private
 
     def asset_stamp
-      @asset_stamp ||= AssetStamp.from_file(path)
+      @asset_stamp ||= AssetStamp.from_file path
     end
 
     def asset_bundle

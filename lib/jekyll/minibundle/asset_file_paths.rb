@@ -4,12 +4,12 @@ module Jekyll::Minibundle
       asset_source_path
     end
 
-    def asset_path
+    def asset_destination_path
       File.join asset_destination_dir, asset_destination_basename
     end
 
     def destination(site_destination_dir)
-      File.join site_destination_dir, asset_destination_dir, asset_destination_basename
+      File.join site_destination_dir, asset_destination_path
     end
 
     def destination_exists?(site_destination_dir)

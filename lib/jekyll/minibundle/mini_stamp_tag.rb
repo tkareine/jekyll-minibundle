@@ -11,7 +11,7 @@ module Jekyll::Minibundle
       site = context.registers[:site]
       file = StampFile.new(File.join(site.source, @asset_source), @asset_destination, &get_basenamer)
       file.static_file! site
-      file.asset_path
+      file.asset_destination_path
     end
 
     private

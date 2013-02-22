@@ -6,12 +6,12 @@ module Jekyll::Minibundle
     def initialize(config)
       @type = config['type']
       asset_source_dir = File.join config['site_dir'], config['source_dir']
-      asset_destination_path = config['destination_path']
+      destination_path = config['destination_path']
 
       @files = config['assets'].map do |asset_path|
         asset_basename = "#{asset_path}.#{@type}"
         asset_source = File.join asset_source_dir, asset_basename
-        asset_destination = File.join asset_destination_path, asset_basename
+        asset_destination = File.join destination_path, asset_basename
         DevelopmentFile.new asset_source, asset_destination
       end
 
@@ -27,7 +27,7 @@ module Jekyll::Minibundle
 
     def markup
       @files.
-        map { |f| AssetTagMarkup.make_markup @type, f.asset_path, @attributes }.
+        map { |f| AssetTagMarkup.make_markup @type, f.asset_destination_path, @attributes }.
         join('')
     end
   end

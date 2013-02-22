@@ -8,13 +8,13 @@ module Jekyll::Minibundle::Test
     EXPECTED_PATH_IN_DEVELOPMENT_MODE = 'assets/screen.css'
     EXPECTED_PATH_IN_PRODUCTION_MODE  = 'assets/screen-390be921ee0eff063817bb5ef2954300.css'
 
-    def test_asset_path_has_no_stamp_in_development_mode
+    def test_asset_destination_path_has_no_stamp_in_development_mode
       with_precompiled_site :development do
         assert_equal EXPECTED_PATH_IN_DEVELOPMENT_MODE, find_css_path_from_index
       end
     end
 
-    def test_asset_path_has_stamp_in_production_mode
+    def test_asset_destination_path_has_stamp_in_production_mode
       with_precompiled_site :production do
         assert_equal EXPECTED_PATH_IN_PRODUCTION_MODE, find_css_path_from_index
       end
