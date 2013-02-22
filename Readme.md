@@ -137,12 +137,12 @@ And then specify the command for launching bundling in
 
 ## Development mode
 
-For your development workflow, asset bundling gets in the way because
-you will not see the contents and line numbers of the original assets.
-To remedy this, you can instruct the library into development mode.
-Then, `minibundle` block will not bundle assets, but copy each asset
-as-is to the destination directory under the path specified in
-`destination_path` configuration setting.
+The plugin has one more trick in its sleeves. If you set environment
+variable `JEKYLL_MINIBUNDLE_MODE` to `development`, then the plugin
+will copy asset files as is to the destination directory (using
+`destination_path` as directory for `minibundle` block), and omit
+fingerprinting. This is useful in development workflow, where you need
+the filenames and line numbers of the original asset sources.
 
 ``` bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
