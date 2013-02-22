@@ -38,7 +38,7 @@ task :test do
   tests = Dir['test/**/*_test.rb'].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  test_cmd = %{bundle exec ruby -e 'ARGV.each { |f| require f }' #{tests}}
+  test_cmd = %{ruby -e 'ARGV.each { |f| require f }' #{tests}}
   sh(get_minibundle_env('RUBYLIB' => 'lib:test'), test_cmd)
 end
 
