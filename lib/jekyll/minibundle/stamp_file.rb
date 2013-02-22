@@ -11,7 +11,8 @@ module Jekyll::Minibundle
 
     attr_reader :asset_source_path, :asset_destination_dir
 
-    def initialize(asset_source_path, asset_destination_path)
+    def initialize(asset_source_path, asset_destination_path, &basenamer)
+      @basenamer = basenamer
       @asset_source_path = asset_source_path
       @asset_destination_dir = File.dirname asset_destination_path
       @asset_destination_extension = File.extname asset_destination_path
@@ -39,7 +40,7 @@ module Jekyll::Minibundle
     private
 
     def asset_destination_basename
-      "#{@asset_destination_base_prefix}-#{asset_stamp}#{@asset_destination_extension}"
+      @basenamer.call @asset_destination_base_prefix, @asset_destination_extension, -> { asset_stamp }
     end
 
     def asset_stamp
