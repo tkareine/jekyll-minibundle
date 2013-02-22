@@ -16,10 +16,10 @@ Provides asset bundling and filename stamping with MD5 digest.
   END
 
   s.files = %w{
-    History.md
-    License.txt
+    CHANGELOG.md
+    LICENSE.txt
     Rakefile
-    Readme.md
+    README.md
     lib/jekyll/minibundle/asset_bundle.rb
     lib/jekyll/minibundle/asset_file_operations.rb
     lib/jekyll/minibundle/asset_file_paths.rb

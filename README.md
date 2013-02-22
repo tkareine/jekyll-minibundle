@@ -154,4 +154,4 @@ See the contents of `test/fixture/site` directory.
 
 # License
 
-MIT. See `License.txt`.
+MIT. See `LICENSE.txt`.

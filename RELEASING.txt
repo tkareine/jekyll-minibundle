@@ -1,7 +1,7 @@
 In order to release, do
 
 $EDITOR lib/jekyll/minibundle/version.rb  # update version number
-$EDITOR History.md                        # describe a summary of changes since last release
+$EDITOR CHANGELOG.md                      # describe a summary of changes since last release
 git diff                                  # review the changes
 rake gem:build                            # check that tests pass
 git add -p
