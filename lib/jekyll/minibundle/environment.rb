@@ -3,7 +3,7 @@ module Jekyll::Minibundle
     def self.command_for(type)
       key = "JEKYLL_MINIBUNDLE_CMD_#{type.upcase}"
       cmd = ENV[key]
-      raise "You need to set bundling command in $#{key}" if !cmd
+      raise "You need to set command for minification in $#{key}" if !cmd
       cmd
     end
 

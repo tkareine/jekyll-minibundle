@@ -21,7 +21,7 @@ module Jekyll::Minibundle::Test
     def test_raise_exception_if_bundle_command_not_configured
       with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => nil do
         err = assert_raises(RuntimeError) { make_bundle }
-        assert_equal 'You need to set bundling command in $JEKYLL_MINIBUNDLE_CMD_JS', err.to_s
+        assert_equal 'You need to set command for minification in $JEKYLL_MINIBUNDLE_CMD_JS', err.to_s
       end
     end
 
