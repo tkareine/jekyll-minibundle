@@ -4,9 +4,9 @@ A minimalistic plugin for bundling assets to
 [Jekyll](https://github.com/mojombo/jekyll)'s site generation
 directory.
 
-In addition to the plugin itself, you need an asset bundling tool that
-supports standard unix input and output. There are no gem dependencies
-at runtime.
+In addition to the plugin itself, you need a minification tool
+supporting standard unix input and output. There are no gem
+dependencies at runtime.
 
 Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
@@ -18,11 +18,14 @@ There are two features: asset fingerprinting with MD5 digest over the
 contents of the asset, and asset bundling combined with the first
 feature.
 
-You still need a separate bundling tool, such as
-[UglifyJS2](https://github.com/mishoo/UglifyJS2) to do the actual work
-of bundling (concatenation and minification).
+Asset bundling consists of concatenation and minification. The plugin
+implements concatenation and leaves up to you to choose the
+minification tool. [UglifyJS2](https://github.com/mishoo/UglifyJS2) is
+a good and fast minifier. The plugin connects to the minifier with
+standard unix pipe, feeding asset file contents to it in desired order
+via STDIN, and reads the output from STDOUT.
 
-Why is this good? Well, a fingerprint in asset filename is the
+Why is this good? Well, a fingerprint in asset's path is the
 [recommended way](https://developers.google.com/speed/docs/best-practices/caching)
 to handle caching of static resources, because you can allow caching
 the asset forever. Calculating MD5 digest over the contents of the
@@ -30,7 +33,7 @@ asset is fast and the resulting digest is reasonably unique to be
 generated automatically.
 
 Asset bundling is good for reducing the number of requests to the
-backend upon page load. Minification of stylesheets and JavaScript
+backend upon page load. The minification of stylesheets and JavaScript
 sources makes asset sizes smaller and thus faster to load over
 network.
 
@@ -66,10 +69,10 @@ This feature does not require any external tools.
 
 ## Asset bundling
 
-This is a straightforward way to bundle assets with any tool that
-supports reading input from STDIN and writing the output to STDOUT.
-You write the configuration for input sources directly into the
-content file where you want the markup tag for the bundle file to
+This is a straightforward way to bundle assets with any minification
+tool that supports reading input from STDIN and writing the output to
+STDOUT. You write the configuration for input sources directly into
+the content file where you want the markup tag for the bundle file to
 appear. The outcome will be a markup tag containing the path to the
 bundle file, and the generated site will have the bundle file in that
 path. The MD5 digest of the file will be included in the filename.
@@ -88,7 +91,7 @@ a set of JavaScript sources:
       id: my-scripts
     {% endminibundle %}
 
-Then, specify the command for launching your favorite bundling tool in
+Then, specify the command for launching your favorite minifier in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable. For example, when
 launching Jekyll:
 
