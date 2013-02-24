@@ -12,14 +12,7 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers[:site]
-      config = get_current_config YAML.load(super), site
-
-      file = if Environment.development?
-        DevelopmentFileCollection.new config
-      else
-        BundleFile.new config
-      end
-
+      file = get_file get_current_config(YAML.load(super), site)
       file.static_file! site
       file.markup
     end
@@ -39,6 +32,14 @@ module Jekyll::Minibundle
       MiniBundleBlock.default_config.
         merge(user_config).
         merge({ 'type' => @type, 'site_dir' => site.source })
+    end
+
+    def get_file(config)
+      if Environment.development?
+        DevelopmentFileCollection.new config
+      else
+        BundleFile.new config
+      end
     end
   end
 end
