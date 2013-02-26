@@ -135,7 +135,7 @@ module Jekyll::Minibundle::Test
 
     def test_bundles_assets_only_once_upon_startup
       with_site do
-        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_cat_and_count_as_side_effect do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_remove_comments_and_count do
           generate_site :production
         end
         assert_equal 1, File.read('count').to_i
@@ -144,9 +144,9 @@ module Jekyll::Minibundle::Test
 
     def test_do_not_bundle_assets_when_nonsource_files_change
       with_site do
-        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_cat_and_count_as_side_effect do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_remove_comments_and_count do
           generate_site :production
-          expected_js_path = destination_path 'assets/site-af84f8c6c7be6f923b8d34cb294714eb.js'
+          expected_js_path = destination_path EXPECTED_JS_ASSET_PATH
           last_mtime = mtime_of expected_js_path
 
           assert_equal 1, File.read('count').to_i
@@ -187,8 +187,8 @@ module Jekyll::Minibundle::Test
         size
     end
 
-    def cmd_for_cat_and_count_as_side_effect
-      site_fixture_path('_bin/cat_and_count_as_side_effect') + ' count'
+    def cmd_for_remove_comments_and_count
+      site_fixture_path('_bin/with_count') + ' count _bin/remove_comments'
     end
   end
 end

@@ -10,4 +10,4 @@ end
 
 File.write filename, "#{count + 1}\n"
 
-STDOUT.puts STDIN.read
+exec(*ARGV[1..-1])
