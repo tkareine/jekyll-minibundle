@@ -76,11 +76,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @@asset_bundles[asset_destination_canonical_path] ||= begin
-        bundle = AssetBundle.new(@type, @assets, @site_source_dir).make_bundle
-        update_mtime
-        bundle
-      end
+      @@asset_bundles[asset_destination_canonical_path] ||= AssetBundle.new(@type, @assets, @site_source_dir)
     end
 
     def rebundle_assets
