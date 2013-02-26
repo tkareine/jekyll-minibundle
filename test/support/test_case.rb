@@ -33,6 +33,10 @@ module Jekyll::Minibundle::Test
       File.write file, new_content
     end
 
+    def mtime_of(path)
+      File.stat(path).mtime
+    end
+
     def with_env(env)
       org_env = {}
       env.each do |k, v|
@@ -57,9 +61,9 @@ module Jekyll::Minibundle::Test
       Dir.chdir(_get_precompiled_site(mode), &block)
     end
 
-    def generate_site(mode)
+    def generate_site(mode, options = {})
       with_env 'JEKYLL_MINIBUNDLE_MODE' => mode.to_s do
-        _generate_site Dir.pwd, '_site'
+        _generate_site _get_site_generation_test_options(options)
       end
     end
 
@@ -92,12 +96,27 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def _generate_site(source, destination)
-      options = {
-        'source'      => source,
-        'destination' => destination
+    def _generate_site(test_options)
+      BundleFile.clear_cache if test_options[:clear_cache]
+
+      capture_io do
+        Jekyll::Site.new(Jekyll.configuration(TestCase.site_generation_jekyll_options)).process
+      end
+    end
+
+    def _get_site_generation_test_options(options)
+      TestCase.site_generation_test_options.merge options
+    end
+
+    def self.site_generation_test_options
+      { clear_cache: true }
+    end
+
+    def self.site_generation_jekyll_options
+      {
+        'source'      => Dir.pwd,
+        'destination' => '_site'
       }
-      capture_io { Jekyll::Site.new(Jekyll.configuration(options)).process }
     end
   end
 end

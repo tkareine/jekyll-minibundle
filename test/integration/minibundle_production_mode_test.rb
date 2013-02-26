@@ -88,8 +88,8 @@ module Jekyll::Minibundle::Test
       with_site do
         generate_site :production
         assert File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
-        File.write source_path('_assets/styles/common.css'), 'h1 {}'
-        generate_site :production
+        ensure_file_mtime_changes { File.write source_path('_assets/styles/common.css'), 'h1 {}' }
+        generate_site :production, clear_cache: false
         refute File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
         expected_new_path = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
         assert_equal expected_new_path, find_css_path_from_index
@@ -101,8 +101,8 @@ module Jekyll::Minibundle::Test
       with_site do
         generate_site :production
         assert File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
-        File.write source_path('_assets/scripts/app.js'), '(function() {})()'
-        generate_site :production
+        ensure_file_mtime_changes { File.write source_path('_assets/scripts/app.js'), '(function() {})()' }
+        generate_site :production, clear_cache: false
         refute File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
         expected_new_path = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
         assert_equal expected_new_path, find_js_path_from_index
@@ -139,6 +139,30 @@ module Jekyll::Minibundle::Test
           generate_site :production
         end
         assert_equal 1, File.read('count').to_i
+      end
+    end
+
+    def test_do_not_bundle_assets_when_nonsource_files_change
+      with_site do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_for_cat_and_count_as_side_effect do
+          generate_site :production
+          expected_js_path = destination_path 'assets/site-af84f8c6c7be6f923b8d34cb294714eb.js'
+          last_mtime = mtime_of expected_js_path
+
+          assert_equal 1, File.read('count').to_i
+
+          ensure_file_mtime_changes { File.write source_path('_assets/styles/common.css'), 'h1 {}' }
+          generate_site :production, clear_cache: false
+
+          assert_equal last_mtime, mtime_of(expected_js_path)
+          assert_equal 1, File.read('count').to_i
+
+          ensure_file_mtime_changes { FileUtils.touch 'index.html' }
+          generate_site :production, clear_cache: false
+
+          assert_equal last_mtime, mtime_of(expected_js_path)
+          assert_equal 1, File.read('count').to_i
+        end
       end
     end
 

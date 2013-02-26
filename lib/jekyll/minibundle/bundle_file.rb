@@ -7,8 +7,13 @@ module Jekyll::Minibundle
   class BundleFile
     include AssetFileOperations
 
-    @@mtimes = {}
-    @@writes_after_mtime_updates = Hash.new false
+    def self.clear_cache
+      @@mtimes = {}
+      @@writes_after_mtime_updates = Hash.new false
+      @@asset_bundles = {}
+    end
+
+    clear_cache
 
     def initialize(config)
       @type = config['type']
@@ -71,7 +76,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @asset_bundle ||= begin
+      @@asset_bundles[asset_destination_canonical_path] ||= begin
         bundle = AssetBundle.new(@type, @assets, @site_source_dir).make_bundle
         update_mtime
         bundle
