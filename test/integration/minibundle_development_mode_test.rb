@@ -96,6 +96,23 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_do_not_copy_source_when_other_files_change
+      with_site do
+        generate_site :development
+        expected_js_path = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
+        org_mtime = mtime_of expected_js_path
+        ensure_file_mtime_changes { File.write source_path(JS_BUNDLE_SOURCE_DIR, 'dependency.js'), '(function() {})()' }
+        generate_site :development
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
+
+        ensure_file_mtime_changes { FileUtils.touch 'index.html' }
+        generate_site :development
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
+      end
+    end
+
     private
 
     def find_css_paths_from_index
