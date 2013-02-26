@@ -5,8 +5,8 @@ module Jekyll::Minibundle::Test
   class MiniBundleDevelopmentModeTest < TestCase
     include FixtureConfig
 
-    EXPECTED_CSS_ASSET_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_DIR, "#{f}.css") }
-    EXPECTED_JS_ASSET_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_DIR, "#{f}.js") }
+    EXPECTED_CSS_ASSET_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }
+    EXPECTED_JS_ASSET_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_PATH, "#{f}.js") }
 
     def test_css_assets_have_tags_in_configured_order
       with_precompiled_site :development do
@@ -39,7 +39,7 @@ module Jekyll::Minibundle::Test
     def test_changing_css_asset_copies_it_to_destination_dir
       with_site do
         generate_site :development
-        destination = destination_path CSS_BUNDLE_DESTINATION_DIR, 'common.css'
+        destination = destination_path CSS_BUNDLE_DESTINATION_PATH, 'common.css'
         source = source_path CSS_BUNDLE_SOURCE_DIR, 'common.css'
         ensure_file_mtime_changes { File.write source, 'h1 {}' }
 
@@ -54,7 +54,7 @@ module Jekyll::Minibundle::Test
     def test_changing_js_asset_copies_it_to_destination_dir
       with_site do
         generate_site :development
-        destination = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
+        destination = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
         source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
         ensure_file_mtime_changes { File.write source, '(function() {})()' }
 
@@ -68,8 +68,8 @@ module Jekyll::Minibundle::Test
 
     def test_supports_relative_and_absolute_destination_paths
       with_site do
-        expected_css_path = destination_path CSS_BUNDLE_DESTINATION_DIR, 'common.css'
-        expected_js_path = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
+        expected_css_path = destination_path CSS_BUNDLE_DESTINATION_PATH, 'common.css'
+        expected_js_path = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
         generate_site :development
 
         assert File.exists?(expected_css_path)
@@ -99,7 +99,7 @@ module Jekyll::Minibundle::Test
     def test_do_not_copy_source_when_other_files_change
       with_site do
         generate_site :development
-        expected_js_path = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
+        expected_js_path = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
         org_mtime = mtime_of expected_js_path
         ensure_file_mtime_changes { File.write source_path(JS_BUNDLE_SOURCE_DIR, 'dependency.js'), '(function() {})()' }
         generate_site :development
