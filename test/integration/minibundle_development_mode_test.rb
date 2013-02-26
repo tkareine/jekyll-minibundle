@@ -38,26 +38,30 @@ module Jekyll::Minibundle::Test
 
     def test_changing_css_asset_copies_it_to_destination_dir
       with_site do
+        generate_site :development
         destination = destination_path CSS_BUNDLE_DESTINATION_DIR, 'common.css'
         source = source_path CSS_BUNDLE_SOURCE_DIR, 'common.css'
+        ensure_file_mtime_changes { File.write source, 'h1 {}' }
+
+        refute_equal File.read(destination), File.read(source)
 
         generate_site :development
-        ensure_file_mtime_changes { File.write source, 'h1 {}' }
-        refute_equal File.read(destination), File.read(source)
-        generate_site :development
+
         assert_equal File.read(destination), File.read(source)
       end
     end
 
     def test_changing_js_asset_copies_it_to_destination_dir
       with_site do
+        generate_site :development
         destination = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
         source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
+        ensure_file_mtime_changes { File.write source, '(function() {})()' }
+
+        refute_equal File.read(destination), File.read(source)
 
         generate_site :development
-        ensure_file_mtime_changes { File.write source, '(function() {})()' }
-        refute_equal File.read(destination), File.read(source)
-        generate_site :development
+
         assert_equal File.read(destination), File.read(source)
       end
     end
@@ -66,7 +70,6 @@ module Jekyll::Minibundle::Test
       with_site do
         expected_css_path = destination_path CSS_BUNDLE_DESTINATION_DIR, 'common.css'
         expected_js_path = destination_path JS_BUNDLE_DESTINATION_DIR, 'app.js'
-
         generate_site :development
 
         assert File.exists?(expected_css_path)
@@ -75,7 +78,6 @@ module Jekyll::Minibundle::Test
         assert_equal 'assets/site/app.js', find_js_paths_from_index.last
 
         find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
-
         generate_site :development
 
         assert File.exists?(expected_css_path)

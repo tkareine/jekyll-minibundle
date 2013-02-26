@@ -49,9 +49,8 @@ module Jekyll::Minibundle::Test
 
     def test_supports_relative_and_absolute_destination_paths
       with_site do
-        expected_path = destination_path EXPECTED_PATH_IN_PRODUCTION_MODE
-
         generate_site :production
+        expected_path = destination_path EXPECTED_PATH_IN_PRODUCTION_MODE
 
         assert File.exists?(expected_path)
         assert_equal EXPECTED_PATH_IN_PRODUCTION_MODE, find_css_path_from_index

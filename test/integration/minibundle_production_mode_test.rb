@@ -87,11 +87,16 @@ module Jekyll::Minibundle::Test
     def test_changing_css_assets_changes_bundle
       with_site do
         generate_site :production
+
         assert File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
+
         ensure_file_mtime_changes { File.write source_path('_assets/styles/common.css'), 'h1 {}' }
         generate_site :production, clear_cache: false
+
         refute File.exists?(destination_path(EXPECTED_CSS_ASSET_PATH))
+
         expected_new_path = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
+
         assert_equal expected_new_path, find_css_path_from_index
         assert File.exists?(destination_path(expected_new_path))
       end
@@ -100,11 +105,16 @@ module Jekyll::Minibundle::Test
     def test_changing_js_assets_changes_bundle
       with_site do
         generate_site :production
+
         assert File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
+
         ensure_file_mtime_changes { File.write source_path('_assets/scripts/app.js'), '(function() {})()' }
         generate_site :production, clear_cache: false
+
         refute File.exists?(destination_path(EXPECTED_JS_ASSET_PATH))
+
         expected_new_path = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
+
         assert_equal expected_new_path, find_js_path_from_index
         assert File.exists?(destination_path(expected_new_path))
       end
@@ -112,10 +122,9 @@ module Jekyll::Minibundle::Test
 
     def test_supports_relative_and_absolute_destination_paths
       with_site do
+        generate_site :production
         expected_css_path = destination_path EXPECTED_CSS_ASSET_PATH
         expected_js_path = destination_path EXPECTED_JS_ASSET_PATH
-
-        generate_site :production
 
         assert File.exists?(expected_css_path)
         assert File.exists?(expected_js_path)
@@ -123,7 +132,6 @@ module Jekyll::Minibundle::Test
         assert_equal EXPECTED_JS_ASSET_PATH, find_js_path_from_index
 
         find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
-
         generate_site :production
 
         assert File.exists?(expected_css_path)
