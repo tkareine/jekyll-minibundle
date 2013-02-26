@@ -93,13 +93,12 @@ module Jekyll::Minibundle::Test
         dir = Dir.mktmpdir("jekyll-minibundle-test-precompiled-site-#{mode}-")
         at_exit do
           FileUtils.rm_rf dir
-          puts "\nCleaned precompiled site for tests: #{dir}"
+          puts "\nCleaned precompiled site in #{mode} mode for tests: #{dir}"
         end
         Dir.chdir(dir) do
           _copy_fixture_site_dir Dir.pwd
           generate_site mode
         end
-        puts "\nGenerated precompiled site in #{mode} mode for tests: #{dir}"
         dir
       end
     end
