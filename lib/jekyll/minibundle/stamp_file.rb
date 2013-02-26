@@ -17,6 +17,22 @@ module Jekyll::Minibundle
       @asset_destination_dir = File.dirname asset_destination_path
       @asset_destination_extension = File.extname asset_destination_path
       @asset_destination_base_prefix = File.basename(asset_destination_path)[0 .. -(@asset_destination_extension.size + 1)]
+      @was_modified = false
+    end
+
+    def markup
+      # we must regenerate the fingerprint here, if at all, in order
+      # to make sure the markup and generated file have the same
+      # fingerprint
+      if modified?
+        @asset_stamp = nil
+        @@mtimes[path] = mtime
+        @was_modified = true
+      else
+        @was_modified = false
+      end
+
+      asset_destination_path
     end
 
     def last_mtime_of(path)
@@ -24,14 +40,9 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      is_modified = modified?
-
-      clear_asset_stamp if is_modified
-
-      if destination_exists?(site_destination_dir) && !is_modified
+      if destination_exists?(site_destination_dir) && !@was_modified
         false
       else
-        update_mtime
         write_destination site_destination_dir
         true
       end
@@ -45,14 +56,6 @@ module Jekyll::Minibundle
 
     def asset_stamp
       @asset_stamp ||= AssetStamp.from_file(path)
-    end
-
-    def clear_asset_stamp
-      @asset_stamp = nil
-    end
-
-    def update_mtime
-      @@mtimes[path] = mtime
     end
   end
 end

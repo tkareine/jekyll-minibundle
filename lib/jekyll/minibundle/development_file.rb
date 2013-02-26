@@ -24,16 +24,10 @@ module Jekyll::Minibundle
       if destination_exists?(site_destination_dir) && !modified?
         false
       else
-        update_mtime
+        @@mtimes[path] = mtime
         write_destination site_destination_dir
         true
       end
-    end
-
-    private
-
-    def update_mtime
-      @@mtimes[path] = mtime
     end
   end
 end

@@ -19,6 +19,13 @@ module Jekyll::Minibundle
       @attributes = config['attributes']
     end
 
+    def markup
+      # we must rebundle here, if at all, in order to make sure the
+      # markup and generated file have the same fingerprint
+      rebundle_assets if modified?
+      AssetTagMarkup.make_markup @type, asset_destination_path, @attributes
+    end
+
     def path
       asset_bundle.path
     end
@@ -44,8 +51,6 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      rebundle_assets if modified?
-
       if File.exists?(destination(site_destination_dir)) && destination_written_after_mtime_update?
         false
       else
@@ -53,10 +58,6 @@ module Jekyll::Minibundle
         @@writes_after_mtime_updates[asset_destination_canonical_path] = true
         true
       end
-    end
-
-    def markup
-      AssetTagMarkup.make_markup @type, asset_destination_path, @attributes
     end
 
     private
