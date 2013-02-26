@@ -72,6 +72,14 @@ module Jekyll::Minibundle::Test
       yield
     end
 
+    def cmd_to_remove_comments_and_count
+      site_fixture_path('_bin/with_count') + ' count _bin/remove_comments'
+    end
+
+    def get_cmd_count
+      File.read('count').to_i
+    end
+
     private
 
     def _copy_fixture_site_dir(dir)
