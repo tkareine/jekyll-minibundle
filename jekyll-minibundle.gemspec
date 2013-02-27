@@ -18,8 +18,10 @@ Provides asset bundling and filename stamping with MD5 digest.
   s.files = %w{
     CHANGELOG.md
     LICENSE.txt
-    Rakefile
     README.md
+    RELEASING.txt
+    Rakefile
+    jekyll-minibundle.gemspec
     lib/jekyll/minibundle/asset_bundle.rb
     lib/jekyll/minibundle/asset_file_operations.rb
     lib/jekyll/minibundle/asset_file_paths.rb
@@ -28,6 +30,7 @@ Provides asset bundling and filename stamping with MD5 digest.
     lib/jekyll/minibundle/bundle_file.rb
     lib/jekyll/minibundle/development_file.rb
     lib/jekyll/minibundle/development_file_collection.rb
+    lib/jekyll/minibundle/environment.rb
     lib/jekyll/minibundle/mini_bundle_block.rb
     lib/jekyll/minibundle/mini_stamp_tag.rb
     lib/jekyll/minibundle/stamp_file.rb
