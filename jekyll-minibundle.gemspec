@@ -41,6 +41,7 @@ Provides asset bundling and filename stamping with MD5 digest.
     test/fixture/site/_assets/styles/common.css
     test/fixture/site/_assets/styles/reset.css
     test/fixture/site/_bin/remove_comments
+    test/fixture/site/_bin/with_count
     test/fixture/site/_plugins/minibundle.rb
     test/fixture/site/_tmp/site.css
     test/fixture/site/index.html
@@ -51,6 +52,8 @@ Provides asset bundling and filename stamping with MD5 digest.
     test/support/test_case.rb
     test/unit/asset_bundle_test.rb
     test/unit/asset_tag_markup_test.rb
+    test/unit/bundle_file_test.rb
+    test/unit/stamp_file_test.rb
   }
 
   s.add_development_dependency 'jekyll',   '~> 0.12.0'
