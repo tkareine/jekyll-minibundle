@@ -1,3 +1,11 @@
+# 1.1.0 / 2013-02-27
+
+* `ministamp` tag omits fingerprint in development mode
+* Clarify documentation
+* Comply with (Gemnasium) conventions for changelogs (@tmatilai)
+* Bug fix: do not bundle assets when nonrelated files change
+* Bug fix: do not bundle assets twice upon startup
+
 # 1.0.0 / 2013-02-15
 
 * Add development mode, where `minibundle` block will copy each asset
