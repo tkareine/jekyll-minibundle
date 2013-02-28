@@ -9,7 +9,7 @@ module Jekyll::Minibundle
 
     def self.clear_cache
       @@mtimes = {}
-      @@writes_after_mtime_updates = Hash.new false
+      @@writes_after_rebundling = Hash.new false
       @@asset_bundles = {}
     end
 
@@ -51,16 +51,12 @@ module Jekyll::Minibundle
       @@mtimes[asset_destination_canonical_path] != mtime
     end
 
-    def destination_written_after_mtime_update?
-      @@writes_after_mtime_updates[asset_destination_canonical_path]
-    end
-
     def write(site_destination_dir)
-      if File.exists?(destination(site_destination_dir)) && destination_written_after_mtime_update?
+      if File.exists?(destination(site_destination_dir)) && destination_written_after_rebundling?
         false
       else
         write_destination site_destination_dir
-        @@writes_after_mtime_updates[asset_destination_canonical_path] = true
+        @@writes_after_rebundling[asset_destination_canonical_path] = true
         true
       end
     end
@@ -80,15 +76,15 @@ module Jekyll::Minibundle
     end
 
     def rebundle_assets
+      p = asset_destination_canonical_path
+      @@writes_after_rebundling[p] = false
+      @@mtimes[p] = mtime
       @asset_stamp = nil
       asset_bundle.make_bundle
-      update_mtime
     end
 
-    def update_mtime
-      p = asset_destination_canonical_path
-      @@mtimes[p] = mtime
-      @@writes_after_mtime_updates[p] = false
+    def destination_written_after_rebundling?
+      @@writes_after_rebundling[asset_destination_canonical_path]
     end
   end
 end
