@@ -1,12 +1,11 @@
 # Jekyll Minibundle plugin
 
-A minimalistic plugin for bundling assets to
-[Jekyll](https://github.com/mojombo/jekyll)'s site generation
-directory.
-
-In addition to the plugin itself, you need a minification tool
-supporting standard unix input and output. There are no gem
-dependencies at runtime.
+A straightforward asset bundling plugin for
+[Jekyll](https://github.com/mojombo/jekyll), utilizing external
+minification tool of your choice. Provides asset concatenation for
+bundling and asset fingerprinting with MD5 digest for cache busting.
+No other runtime dependencies besides the minification tool (not even
+other gems).
 
 Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
 
@@ -25,7 +24,7 @@ a good and fast minifier. The plugin connects to the minifier with
 standard unix pipe, feeding asset file contents to it in desired order
 via standard input, and reads the result from standard output.
 
-Why is this good? Well, a fingerprint in asset's path is the
+Why is this good? A fingerprint in asset's path is the
 [recommended way](https://developers.google.com/speed/docs/best-practices/caching)
 to handle caching of static resources, because you can allow caching
 the asset forever. Calculating MD5 digest over the contents of the
@@ -138,7 +137,7 @@ And then specify the command for launching bundling in
 ## Development mode
 
 The plugin has one more trick in its sleeves. If you set environment
-variable `JEKYLL_MINIBUNDLE_MODE` to `development`, then the plugin
+variable `$JEKYLL_MINIBUNDLE_MODE` to `development`, then the plugin
 will copy asset files as is to the destination directory (using
 `destination_path` as directory for `minibundle` block), and omit
 fingerprinting. This is useful in development workflow, where you need

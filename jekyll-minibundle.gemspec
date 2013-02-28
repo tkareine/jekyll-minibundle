@@ -10,9 +10,11 @@ Gem::Specification.new do |s|
   s.licenses    = %w{MIT}
 
   s.description = <<-END
-A minimalistic asset bundling plugin for Jekyll, requiring only your
-bundling tool of choice (no other dependencies, not even other gems).
-Provides asset bundling and filename stamping with MD5 digest.
+A straightforward asset bundling plugin for Jekyll, utilizing external
+minification tool of your choice. Provides asset concatenation for
+bundling and asset fingerprinting with MD5 digest for cache busting. No
+other runtime dependencies besides the minification tool (not even
+other gems).
   END
 
   s.files = %w{
