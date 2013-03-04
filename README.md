@@ -7,7 +7,7 @@ bundling and asset fingerprinting with MD5 digest for cache busting.
 No other runtime dependencies besides the minification tool (not even
 other gems).
 
-Tested with Ruby MRI 1.9.3. Ruby 1.8 is *not* supported.
+Tested with Ruby MRI 1.9.3 and 2.0.0. Ruby 1.8 is *not* supported.
 
 [![Build Status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.png)](http://travis-ci.org/tkareine/jekyll-minibundle)
 
