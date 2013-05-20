@@ -39,7 +39,8 @@ task :test do
   files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  cmd = %{ruby -e 'ARGV.each { |f| require f }' #{files}}
+  opts = '-rpp -rpry' if ENV['debug']
+  cmd = %{ruby #{opts} -e 'ARGV.each { |f| require f }' #{files}}
   sh(get_minibundle_env('RUBYLIB' => 'lib:test'), cmd)
 end
 
