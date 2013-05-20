@@ -35,11 +35,12 @@ end
 
 desc 'Run tests'
 task :test do
-  tests = Dir['test/**/*_test.rb'].
+  glob = ENV['tests'] || 'test/**/*_test.rb'
+  files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  test_cmd = %{ruby -e 'ARGV.each { |f| require f }' #{tests}}
-  sh(get_minibundle_env('RUBYLIB' => 'lib:test'), test_cmd)
+  cmd = %{ruby -e 'ARGV.each { |f| require f }' #{files}}
+  sh(get_minibundle_env('RUBYLIB' => 'lib:test'), cmd)
 end
 
 desc 'Generate fixture site for debugging'
