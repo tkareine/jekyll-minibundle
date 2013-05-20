@@ -6,7 +6,7 @@ require 'jekyll'
 require 'jekyll/minibundle'
 
 module Jekyll::Minibundle::Test
-  class TestCase < ::MiniTest::Unit::TestCase
+  class TestCase < ::Minitest::Test
     include ::Jekyll::Minibundle
 
     FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))
