@@ -35,7 +35,7 @@ end
 
 desc 'Run tests'
 task :test do
-  glob = ENV['tests'] || 'test/**/*_test.rb'
+  glob = ENV['tests'] || 'test/{unit,integration}/*_test.rb'
   files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
