@@ -1,3 +1,9 @@
+# 1.2.0 / 2013-09-29
+
+* If Jekyll's logger is available, use it for nice output when bundling
+* Upgrade development dependencies
+* Simplify `BundleFile` class implementation
+
 # 1.1.0 / 2013-02-27
 
 * `ministamp` tag omits fingerprint in development mode
