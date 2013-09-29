@@ -15,9 +15,10 @@ module Jekyll::Minibundle
 
     def make_bundle
       pipe_bundling_to_temp_file bundling_cmd do |wr|
-        puts "Bundling #{@type} assets:"
+        $stdout.puts  # place newline after "(Re)generating..." log messages
+        log "Bundling #{@type} assets:"
         @assets.each do |asset|
-          puts "  #{asset}"
+          log asset
           IO.foreach(asset) { |line| wr.write line }
           wr.puts ';' if @type == :js
         end
@@ -26,6 +27,16 @@ module Jekyll::Minibundle
     end
 
     private
+
+    if defined? ::Jekyll.logger  # introduced in Jekyll 1.0.0
+      def log(msg)
+        ::Jekyll.logger.info 'Minibundle', msg
+      end
+    else
+      def log(msg)
+        $stdout.puts msg
+      end
+    end
 
     def bundling_cmd
       Environment.command_for @type
