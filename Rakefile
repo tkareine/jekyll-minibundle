@@ -39,9 +39,11 @@ task :test do
   files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  opts = '-rpp -rpry' if ENV['debug']
-  cmd = %{ruby #{opts} -e 'ARGV.each { |f| require f }' #{files}}
-  sh(get_minibundle_env('RUBYLIB' => 'lib:test'), cmd)
+  opts = ENV['debug'] ? '-rpp -rpry' : ''
+  eval = %{-e 'ARGV.each { |f| require f }'}
+  cmd = "ruby #{opts} #{eval} #{files}"
+  env = get_minibundle_env 'RUBYLIB' => 'lib:test'
+  sh env, cmd
 end
 
 desc 'Generate fixture site for debugging'
