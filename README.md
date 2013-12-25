@@ -75,6 +75,35 @@ Output, containing the MD5 digest of the file in the filename:
 
 This feature does not require any external tools.
 
+## Restrictions
+
+The plugin disallows using asset source files already known to Jekyll
+as static files. This is because the plugin operates by adding asset
+files as special static files to Jekyll, allowing the plugin work
+nicely with Jekyll's watch (auto-regeneration) mode.
+
+For example, the following snippet causes the plugin to throw an
+exception if `assets/src.css` is not excluded from Jekyll:
+
+``` html
+<link href="{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
+```
+
+If the restriction would not exist, there would be both `src.css` and
+`dest-<md5-hash>.css` files in `_site/assets/` output directory. You
+probably wouldn't want this.
+
+By default, Jekyll excludes directories starting with `_`, so you
+might use the following directory layout for assets:
+
+```
+_assets/  for JS and CSS assets handled by the plugin
+assets/   for images and other assets handled by Jekyll
+```
+
+See [Jekyll configuration](http://jekyllrb.com/docs/configuration/)
+for more about excluding files and directories.
+
 ## Asset bundling
 
 This is a straightforward way to bundle assets with any minification
