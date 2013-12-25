@@ -1,3 +1,10 @@
+# 1.3.0 / 2013-12-25
+
+* Disallow handling asset source files that are already static files
+  in Jekyll (would potentially lead to inconsistencies in watch mode,
+  see "Jekyll static file restriction" in README.md)
+* Upgrade development dependencies
+
 # 1.2.0 / 2013-09-29
 
 * If Jekyll's logger is available, use it for nice output when bundling
