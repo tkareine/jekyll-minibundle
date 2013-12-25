@@ -174,7 +174,7 @@ fingerprinting. This is useful in development workflow, where you need
 the filenames and line numbers of the original asset sources.
 
 ``` bash
-$ JEKYLL_MINIBUNDLE_MODE=development jekyll --auto --server
+$ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
 ```
 
 # Example site
