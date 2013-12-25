@@ -150,16 +150,18 @@ exception if `assets/src.css` is not excluded from Jekyll:
 ```
 
 If the restriction would not exist, there would be both `src.css` and
-`dest-<md5-hash>.css` files in `_site/assets/` output directory. You
-probably wouldn't want this.
+`dest-<md5-hash>.css` files in `_site/assets/` output directory, which
+you probably wouldn't want to happen.
 
-By default, Jekyll excludes directories starting with `_`, so you
-might use the following directory layout for assets:
+By default, Jekyll excludes directories beginning with underscore
+character (`_`), so you might use the following directory layout for
+assets:
 
-```
-_assets/  for JS and CSS assets handled by the plugin
-assets/   for images and other assets handled by Jekyll
-```
+* `_assets/` for JS and CSS assets handled by the plugin that are in
+  version control
+* `_tmp/` for temporary JS and CSS assets handled by the plugin that
+  are not in version control (for example, Compass output files)
+* `assets/` for images and other assets handled by Jekyll directly
 
 See [Jekyll configuration](http://jekyllrb.com/docs/configuration/)
 for more about excluding files and directories.
