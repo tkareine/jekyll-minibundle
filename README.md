@@ -1,11 +1,10 @@
 # Jekyll Minibundle plugin
 
 A straightforward asset bundling plugin for
-[Jekyll](https://github.com/mojombo/jekyll), utilizing external
-minification tool of your choice. Provides asset concatenation for
-bundling and asset fingerprinting with MD5 digest for cache busting.
-No other runtime dependencies besides the minification tool (not even
-other gems).
+[Jekyll](http://jekyllrb.com/), utilizing external minification tool
+of your choice. Provides asset concatenation for bundling and asset
+fingerprinting with MD5 digest for cache busting.  No other runtime
+dependencies besides the minification tool (not even other gems).
 
 Tested with Ruby MRI 1.9.3 and 2.0.0. Ruby 1.8 is *not* supported.
 
