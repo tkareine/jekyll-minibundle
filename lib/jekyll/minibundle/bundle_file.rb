@@ -35,6 +35,11 @@ module Jekyll::Minibundle
       asset_bundle.path
     end
 
+    def check_no_existing_static_file(static_files)
+      existing = @assets & static_files.map(&:path)
+      raise "Minibundle cannot handle static file already handled by Jekyll: #{existing.first}" unless existing.empty?
+    end
+
     def asset_destination_path
       "#{@destination_path}-#{asset_stamp}.#{@type}"
     end

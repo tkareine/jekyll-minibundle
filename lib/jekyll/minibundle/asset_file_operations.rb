@@ -3,8 +3,13 @@ require 'fileutils'
 module Jekyll::Minibundle
   module AssetFileOperations
     def static_file!(site)
-      static_file_exists = site.static_files.find { |f| f.path == path }
-      site.static_files << self unless static_file_exists
+      check_no_existing_static_file site.static_files
+      site.static_files << self
+    end
+
+    def check_no_existing_static_file(static_files)
+      found = static_files.find { |f| f.path == path }
+      raise "Minibundle cannot handle static file already handled by Jekyll: #{path}" if found
     end
 
     def write_destination(site_destination_dir)
