@@ -61,10 +61,10 @@ other gems).
     test/unit/stamp_file_test.rb
   }
 
-  s.add_development_dependency 'jekyll',   '~> 1.2.1'
-  s.add_development_dependency 'minitest', '~> 5.0.8'
-  s.add_development_dependency 'nokogiri', '~> 1.6.0'
-  s.add_development_dependency 'rake',     '~> 10.1.0'
+  s.add_development_dependency 'jekyll',   '~> 1.4.2'
+  s.add_development_dependency 'minitest', '~> 5.2.0'
+  s.add_development_dependency 'nokogiri', '~> 1.6.1'
+  s.add_development_dependency 'rake',     '~> 10.1.1'
 
   s.required_ruby_version = '>= 1.9.3'
 
