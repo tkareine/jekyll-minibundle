@@ -17,9 +17,9 @@ contents of the asset, and asset bundling combined with the first
 feature.
 
 Asset bundling consists of concatenation and minification. The plugin
-implements concatenation and leaves up to you to choose the
-minification tool. [UglifyJS2](https://github.com/mishoo/UglifyJS2) is
-a good and fast minifier. The plugin connects to the minifier with
+implements concatenation and leaves choosing the minification tool up
+to you. [UglifyJS2](https://github.com/mishoo/UglifyJS2) is a good and
+fast minifier, for example. The plugin connects to the minifier with
 standard unix pipe, feeding asset file contents to it in desired order
 via standard input, and reads the result from standard output.
 
@@ -54,8 +54,8 @@ require 'jekyll/minibundle'
 ## Asset fingerprinting
 
 Asset fingerprinting is intended to be used together with
-[Compass](http://compass-style.org/) and other similar asset
-generation tools that have their own configuration for input sources.
+[Compass](http://compass-style.org/) and similar asset generation
+tools that have their own configuration for input sources.
 
 Configure Compass to take inputs from `_assets/styles/*.scss` and to
 put output to `_tmp/site.css`. Use `ministamp` tag to copy the
