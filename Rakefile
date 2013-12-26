@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'rake/clean'
 require 'shellwords'
 
@@ -10,6 +11,12 @@ def get_minibundle_env(overrides = {})
     'JEKYLL_MINIBUNDLE_CMD_CSS' => bundle_cmd,
     'RUBYLIB'                   => File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
   }.merge(overrides)
+end
+
+def run_jekyll_in_fixture_site(command)
+  Dir.chdir 'test/fixture/site'
+  FileUtils.rm_rf '_site'
+  sh get_minibundle_env, "jekyll #{command}"
 end
 
 namespace :gem do
@@ -46,12 +53,18 @@ task :test do
   sh env, cmd
 end
 
-desc 'Generate fixture site for debugging'
-task :debug do
-  Dir.chdir 'test/fixture/site'
-  sh(get_minibundle_env, 'jekyll build')
-end
+namespace :fixture do
+  CLEAN.include 'test/fixture/site/_site'
 
-CLEAN.include 'test/fixture/site/_site'
+  desc 'Generate fixture site'
+  task :build do
+    run_jekyll_in_fixture_site 'build'
+  end
+
+  desc 'Generate fixture site in watch mode'
+  task :watch do
+    run_jekyll_in_fixture_site 'build --watch'
+  end
+end
 
 task :default => :test
