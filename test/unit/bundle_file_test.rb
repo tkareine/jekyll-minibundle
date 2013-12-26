@@ -7,8 +7,6 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_consistent_fingerprint_in_file_and_markup
-      BundleFile.clear_cache
-
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           bundle_file = BundleFile.new({

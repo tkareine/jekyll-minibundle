@@ -138,27 +138,27 @@ attributes:
 And then specify the command for launching bundling in
 `$JEKYLL_MINIBUNDLE_CMD_CSS` environment variable.
 
-## Jekyll static file restriction
+## Recommended directory layout
 
-The plugin disallows using asset source files already known to Jekyll
-as static files. This is because the plugin operates by adding asset
-files as special static files to Jekyll, allowing the plugin work
-nicely with Jekyll's watch (auto-regeneration) mode.
+It's recommended that you exclude the files you use as asset sources
+from Jekyll itself. Otherwise, you end up with duplicate files in the
+output directory.
 
-For example, the following snippet causes the plugin to throw an
-exception if `assets/src.css` is not excluded from Jekyll:
+For example, in the following snippet we're using `assets/src.css` as
+asset source to `ministamp` tag:
 
 ``` html
 <link href="{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
 ```
 
-If the restriction would not exist, there would be both `src.css` and
-`dest-<md5-hash>.css` files in `_site/assets/` output directory, which
-you probably wouldn't want to happen.
+By default, Jekyll includes this file to the output directory. As a
+result, there will be both `src.css` and `dest-<md5>.css` files in
+`_site/assets/` output directory, which you probably do not want to
+happen.
 
-By default, Jekyll excludes directories beginning with underscore
-character (`_`), so you might use the following directory layout for
-assets:
+In order to avoid this, exclude the asset source file from
+Jekyll. Because Jekyll excludes directories beginning with underscore
+character (`_`), consider the following directory layout for assets:
 
 * `_assets/` for JS and CSS assets handled by the plugin that are in
   version control

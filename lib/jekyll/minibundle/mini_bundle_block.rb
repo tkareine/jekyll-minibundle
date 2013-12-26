@@ -1,7 +1,5 @@
 require 'yaml'
-require 'jekyll/minibundle/bundle_file'
-require 'jekyll/minibundle/development_file_collection'
-require 'jekyll/minibundle/environment'
+require 'jekyll/minibundle/asset_file_registry'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -12,7 +10,8 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers[:site]
-      file = get_file get_current_config(YAML.load(super), site)
+      config = get_current_config YAML.load(super), site
+      file = AssetFileRegistry.bundle_file config
       file.static_file! site
       file.markup
     end
@@ -32,14 +31,6 @@ module Jekyll::Minibundle
       MiniBundleBlock.default_config.
         merge(user_config).
         merge({ 'type' => @type, 'site_dir' => site.source })
-    end
-
-    def get_file(config)
-      if Environment.development?
-        DevelopmentFileCollection.new config
-      else
-        BundleFile.new config
-      end
     end
   end
 end

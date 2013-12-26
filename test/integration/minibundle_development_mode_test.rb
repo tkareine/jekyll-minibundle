@@ -45,7 +45,7 @@ module Jekyll::Minibundle::Test
 
         refute_equal File.read(destination), File.read(source)
 
-        generate_site :development
+        generate_site :development, clear_cache: false
 
         assert_equal File.read(destination), File.read(source)
       end
@@ -60,7 +60,7 @@ module Jekyll::Minibundle::Test
 
         refute_equal File.read(destination), File.read(source)
 
-        generate_site :development
+        generate_site :development, clear_cache: false
 
         assert_equal File.read(destination), File.read(source)
       end
@@ -77,8 +77,8 @@ module Jekyll::Minibundle::Test
         assert_equal 'assets/site/common.css', find_css_paths_from_index.last
         assert_equal 'assets/site/app.js', find_js_paths_from_index.last
 
-        find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
-        generate_site :development
+        find_and_gsub_in_file source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
+        generate_site :development, clear_cache: false
 
         assert File.exists?(expected_css_path)
         assert File.exists?(expected_js_path)
@@ -102,12 +102,12 @@ module Jekyll::Minibundle::Test
         expected_js_path = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
         org_mtime = mtime_of expected_js_path
         ensure_file_mtime_changes { File.write source_path(JS_BUNDLE_SOURCE_DIR, 'dependency.js'), '(function() {})()' }
-        generate_site :development
+        generate_site :development, clear_cache: false
 
         assert_equal org_mtime, mtime_of(expected_js_path)
 
         ensure_file_mtime_changes { FileUtils.touch 'index.html' }
-        generate_site :development
+        generate_site :development, clear_cache: false
 
         assert_equal org_mtime, mtime_of(expected_js_path)
       end

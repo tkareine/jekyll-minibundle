@@ -34,11 +34,16 @@ module Jekyll::Minibundle::Test
     def test_change_asset_file
       with_site do
         generate_site :production
+
         assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
-        File.write source_path(STAMP_SOURCE_PATH), 'h1 {}'
-        generate_site :production
+
+        ensure_file_mtime_changes { File.write source_path(STAMP_SOURCE_PATH), 'h1 {}' }
+        generate_site :production, clear_cache: false
+
         refute File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+
         expected_new_path = 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
+
         assert_equal expected_new_path, find_css_path_from_index
         assert File.exists?(destination_path(expected_new_path))
       end
@@ -52,9 +57,8 @@ module Jekyll::Minibundle::Test
         assert File.exists?(expected_path)
         assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
 
-        find_and_gsub_in_file(source_path('index.html'), %r{assets/screen.css}, '/\0')
-
-        generate_site :production
+        find_and_gsub_in_file(source_path('_layouts/default.html'), %r{assets/screen.css}, '/\0')
+        generate_site :production, clear_cache: false
 
         assert File.exists?(expected_path)
         assert_equal "/#{STAMP_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
@@ -67,12 +71,12 @@ module Jekyll::Minibundle::Test
         expected_path = destination_path STAMP_DESTINATION_FINGERPRINT_PATH
         org_mtime = mtime_of expected_path
         ensure_file_mtime_changes { File.write source_path(JS_BUNDLE_SOURCE_DIR, 'dependency.js'), '(function() {})()' }
-        generate_site :production
+        generate_site :production, clear_cache: false
 
         assert_equal org_mtime, mtime_of(expected_path)
 
         ensure_file_mtime_changes { FileUtils.touch 'index.html' }
-        generate_site :production
+        generate_site :production, clear_cache: false
 
         assert_equal org_mtime, mtime_of(expected_path)
       end

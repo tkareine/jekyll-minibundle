@@ -21,7 +21,7 @@ module Jekyll::Minibundle
     end
 
     def modified?
-      last_mtime_of(path) != mtime
+      stamped_at != mtime
     end
   end
 end

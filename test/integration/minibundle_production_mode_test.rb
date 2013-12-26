@@ -128,8 +128,8 @@ module Jekyll::Minibundle::Test
         assert_equal EXPECTED_CSS_BUNDLE_PATH, find_css_path_from_index
         assert_equal EXPECTED_JS_BUNDLE_PATH, find_js_path_from_index
 
-        find_and_gsub_in_file source_path('index.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
-        generate_site :production
+        find_and_gsub_in_file source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site'
+        generate_site :production, clear_cache: false
 
         assert File.exists?(expected_css_path)
         assert File.exists?(expected_js_path)

@@ -6,25 +6,20 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFilePaths
 
-    @@mtimes = {}
-
-    attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_basename
+    attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_basename, :stamped_at
 
     def initialize(asset_source_path, asset_destination_path)
       @asset_source_path = asset_source_path
       @asset_destination_dir = File.dirname asset_destination_path
       @asset_destination_basename = File.basename asset_destination_path
-    end
-
-    def last_mtime_of(path)
-      @@mtimes[path]
+      @stamped_at = nil
     end
 
     def write(site_destination_dir)
       if destination_exists?(site_destination_dir) && !modified?
         false
       else
-        @@mtimes[path] = mtime
+        @stamped_at = mtime
         write_destination site_destination_dir
         true
       end

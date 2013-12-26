@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">
+    {% minibundle css %}
+    source_dir: _assets/styles
+    destination_path: assets/site
+    assets:
+      - reset
+      - common
+    attributes:
+      id: my-styles
+      media: projection
+    {% endminibundle %}
+  </head>
+  <body>
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+    attributes:
+      id: my-scripts
+    {% endminibundle %}
+  </body>
+  <title>{{ page.title }}</title>
+</html>

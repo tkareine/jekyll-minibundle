@@ -7,9 +7,7 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFilePaths
 
-    @@mtimes = {}
-
-    attr_reader :asset_source_path, :asset_destination_dir
+    attr_reader :asset_source_path, :asset_destination_dir, :stamped_at
 
     def initialize(asset_source_path, asset_destination_path, &basenamer)
       @basenamer = basenamer
@@ -17,7 +15,8 @@ module Jekyll::Minibundle
       @asset_destination_dir = File.dirname asset_destination_path
       @asset_destination_extension = File.extname asset_destination_path
       @asset_destination_base_prefix = File.basename(asset_destination_path)[0 .. -(@asset_destination_extension.size + 1)]
-      @was_modified = false
+      @stamped_at = nil
+      @is_modified = false
     end
 
     def markup
@@ -25,22 +24,18 @@ module Jekyll::Minibundle
       # to make sure the markup and generated file have the same
       # fingerprint
       if modified?
-        @asset_stamp = nil
-        @@mtimes[path] = mtime
-        @was_modified = true
+        @stamped_at = mtime
+        @is_modified = true
+        @_asset_stamp = nil
       else
-        @was_modified = false
+        @is_modified = false
       end
 
       asset_destination_path
     end
 
-    def last_mtime_of(path)
-      @@mtimes[path]
-    end
-
     def write(site_destination_dir)
-      if destination_exists?(site_destination_dir) && !@was_modified
+      if destination_exists?(site_destination_dir) && !@is_modified
         false
       else
         write_destination site_destination_dir
@@ -55,7 +50,7 @@ module Jekyll::Minibundle
     end
 
     def asset_stamp
-      @asset_stamp ||= AssetStamp.from_file(path)
+      @_asset_stamp ||= AssetStamp.from_file(path)
     end
   end
 end
