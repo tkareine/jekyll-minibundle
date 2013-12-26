@@ -1,10 +1,10 @@
 # Jekyll Minibundle plugin
 
-A straightforward asset bundling plugin for
-[Jekyll](http://jekyllrb.com/), utilizing external minification tool
-of your choice. Provides asset concatenation for bundling and asset
-fingerprinting with MD5 digest for cache busting.  No other runtime
-dependencies besides the minification tool (not even other gems).
+A straightforward asset bundling plugin for [Jekyll][Jekyll],
+utilizing external minification tool of your choice. It provides asset
+concatenation for bundling and asset fingerprinting with MD5 digest
+for cache busting. There are no other runtime dependencies besides the
+minification tool (not even other gems).
 
 Tested with Ruby MRI 1.9.3 and 2.0.0. Ruby 1.8 is *not* supported.
 
@@ -52,6 +52,9 @@ this line:
 ``` ruby
 require 'jekyll/minibundle'
 ```
+
+You must allow Jekyll to use custom plugins. In
+[Jekyll's configuration][JekyllConf], do not enable `safe` setting.
 
 ## Asset fingerprinting
 
@@ -163,8 +166,8 @@ assets:
   are not in version control (for example, Compass output files)
 * `assets/` for images and other assets handled by Jekyll directly
 
-See [Jekyll configuration](http://jekyllrb.com/docs/configuration/)
-for more about excluding files and directories.
+See [Jekyll configuration][JekyllConf] for more about excluding files
+and directories.
 
 ## Development mode
 
@@ -186,3 +189,6 @@ See the contents of `test/fixture/site` directory.
 # License
 
 MIT. See `LICENSE.txt`.
+
+[Jekyll]: http://jekyllrb.com/
+[JekyllConf]: http://jekyllrb.com/docs/configuration/
