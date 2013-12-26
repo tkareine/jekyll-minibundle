@@ -49,7 +49,7 @@ end
 desc 'Generate fixture site for debugging'
 task :debug do
   Dir.chdir 'test/fixture/site'
-  sh(get_minibundle_env, 'jekyll')
+  sh(get_minibundle_env, 'jekyll build')
 end
 
 CLEAN.include 'test/fixture/site/_site'
