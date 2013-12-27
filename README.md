@@ -153,12 +153,11 @@ asset source to `ministamp` tag:
 
 By default, Jekyll includes this file to the output directory. As a
 result, there will be both `src.css` and `dest-<md5>.css` files in
-`_site/assets/` output directory, which you probably do not want to
-happen.
+`_site/assets/` directory, which you probably do not want.
 
 In order to avoid this, exclude the asset source file from
 Jekyll. Because Jekyll excludes directories beginning with underscore
-character (`_`), consider the following directory layout for assets:
+character (`_`), consider the following directory layout:
 
 * `_assets/` for JS and CSS assets handled by the plugin that are in
   version control
