@@ -21,7 +21,6 @@ minification tool (not even other gems).
     CHANGELOG.md
     LICENSE.txt
     README.md
-    RELEASING.txt
     Rakefile
     jekyll-minibundle.gemspec
     lib/jekyll/minibundle.rb
