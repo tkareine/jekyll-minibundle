@@ -8,17 +8,13 @@ module Jekyll::Minibundle::Test
     def test_asset_destination_path_has_no_stamp_in_development_mode
       with_precompiled_site :development do
         assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
+        assert File.exists?(destination_path(STAMP_DESTINATION_PATH))
       end
     end
 
     def test_asset_destination_path_has_stamp_in_production_mode
       with_precompiled_site :production do
         assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
-      end
-    end
-
-    def test_copies_asset_file_to_destination_dir
-      with_precompiled_site :production do
         assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
       end
     end
