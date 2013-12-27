@@ -1,25 +1,22 @@
 require 'support/test_case'
-require 'support/fixture_config'
 require 'jekyll/minibundle/asset_file_registry'
 
 module Jekyll::Minibundle::Test
   class AssetFileRegistryTest < TestCase
-    include FixtureConfig
-
     def setup
       AssetFileRegistry.clear
     end
 
-    def test_returns_same_instance_for_same_stamp_file_config
-      first = AssetFileRegistry.stamp_file STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH
-      second = AssetFileRegistry.stamp_file STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH
+    def test_returns_same_stamp_file_instance_for_same_destination_path
+      first = AssetFileRegistry.stamp_file '_assets/src1.css', 'assets/dest.css'
+      second = AssetFileRegistry.stamp_file '_assets/src2.css', 'assets/dest.css'
       assert_same first, second
       assert_equal 1, asset_file_registry_size
     end
 
-    def test_returns_same_instance_for_same_bundle_file_config
-      first = AssetFileRegistry.bundle_file bundle_config
-      second = AssetFileRegistry.bundle_file bundle_config
+    def test_returns_same_bundle_file_instance_for_same_destination_path_and_type
+      first = AssetFileRegistry.bundle_file bundle_config.merge({'assets' => %w{a1 a2}})
+      second = AssetFileRegistry.bundle_file bundle_config.merge({'assets' => %w{b1 b2}})
       assert_same first, second
       assert_equal 1, asset_file_registry_size
     end
@@ -36,9 +33,9 @@ module Jekyll::Minibundle::Test
       {
         'type'             => :css,
         'site_dir'         => '.',
-        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
+        'source_dir'       => '_assets/styles',
         'assets'           => %w{dependency app},
-        'destination_path' => JS_BUNDLE_DESTINATION_PATH,
+        'destination_path' => 'assets/site',
         'attributes'       => {}
       }
     end
