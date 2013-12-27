@@ -6,7 +6,7 @@ concatenation for bundling and asset fingerprinting with MD5 digest
 for cache busting. There are no other runtime dependencies besides the
 minification tool (not even other gems).
 
-Tested with Ruby MRI 1.9.3 and 2.0.0. Ruby 1.8 is *not* supported.
+Tested with Ruby MRI 1.9.3, 2.0, and 2.1. Ruby 1.8 is *not* supported.
 
 The plugin works with Jekyll's watch (auto-regeneration) mode.
 
