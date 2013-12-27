@@ -30,7 +30,7 @@ module Jekyll::Minibundle
 
     if defined? ::Jekyll.logger  # introduced in Jekyll 1.0.0
       def log(msg)
-        ::Jekyll.logger.info 'Minibundle', msg
+        ::Jekyll.logger.info 'Minibundle:', msg
       end
     else
       def log(msg)
