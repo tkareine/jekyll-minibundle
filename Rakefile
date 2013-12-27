@@ -30,8 +30,8 @@ namespace :gem do
   end
 
   desc 'Install the software as a gem'
-  task :install => :build do
-    sh %{gem install #{gem_name}-#{Jekyll::Minibundle::VERSION}}
+  task :install do
+    sh %{gem install #{gem_name}-#{Jekyll::Minibundle::VERSION}.gem}
   end
 
   desc 'Uninstall the gem'
