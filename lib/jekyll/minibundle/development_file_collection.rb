@@ -28,7 +28,7 @@ module Jekyll::Minibundle
     def markup
       @files.
         map { |f| AssetTagMarkup.make_markup @type, f.asset_destination_path, @attributes }.
-        join('')
+        join("\n")
     end
   end
 end
