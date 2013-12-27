@@ -1,3 +1,13 @@
+# 1.4.2 / 2013-12-28
+
+* Ensure touching asset source triggers destination write. This was an
+  unintentional edge case earlier. Now the behavior of touching the
+  asset source is consistent with when changing the contents of the
+  source.
+* Separate tags produced by `minibundle` in development mode with
+  newlines
+* Clarify tests, increase coverage
+
 # 1.4.1 / 2013-12-27
 
 * Add missing files to gem package
