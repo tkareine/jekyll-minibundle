@@ -1,3 +1,7 @@
+# 1.4.1 / 2013-12-27
+
+* Add missing files to gem package
+
 # 1.4.0 / 2013-12-27
 
 * Fix bug causing exception to be thrown when `ministamp` or
