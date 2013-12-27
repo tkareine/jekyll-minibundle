@@ -1,7 +1,22 @@
 require 'support/test_case'
+require 'support/fixture_config'
 
 module Jekyll::Minibundle::Test
   class StaticFilesAsAssetSourcesTest < TestCase
+    include FixtureConfig
+
+    def test_asset_and_static_files_with_same_destination_paths_can_coexist
+      with_precompiled_site :production do
+        actual = Dir[destination_path('assets/site*.*')].sort
+        expected = [
+          destination_path('assets/site.css'),
+          destination_path(EXPECTED_CSS_BUNDLE_PATH),
+          destination_path(EXPECTED_JS_BUNDLE_PATH)
+        ].sort
+        assert_equal expected, actual
+      end
+    end
+
     [:development, :production].each do |env|
       define_method :"test_ministamp_allows_using_static_file_as_asset_source_in_#{env}_mode" do
         with_site do
@@ -43,7 +58,7 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'source_dir: _assets/scripts', 'source_dir: assets')
         generate_site :production
 
-        asset_files = Dir[destination_path('assets') + '/site-*.js']
+        asset_files = Dir[destination_path('assets/site-*.js')]
 
         assert_equal 1, asset_files.size
         assert_equal dep_contents, File.read(destination_path('assets/dependency.js'))
