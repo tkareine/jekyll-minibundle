@@ -2,7 +2,7 @@ module Jekyll::Minibundle::Test
   module FixtureConfig
     STAMP_SOURCE_PATH = '_tmp/site.css'
     STAMP_DESTINATION_PATH = 'assets/screen.css'
-    STAMP_DESTINATION_FINGERPRINT_PATH = 'assets/screen-390be921ee0eff063817bb5ef2954300.css'
+    STAMP_DESTINATION_FINGERPRINT_PATH = 'assets/screen-d57c1404fe726e66d57128a1bd190cbb.css'
 
     CSS_BUNDLE_DESTINATION_PATH = 'assets/site'
     CSS_BUNDLE_SOURCE_DIR = '_assets/styles'

@@ -1,4 +1,4 @@
-/* comment to be removed in bundling */
+/* asset file, handled by Minibundle */
 (function(root) {
   root.dependency = {};
 })(window)
