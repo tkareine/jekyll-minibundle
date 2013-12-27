@@ -26,8 +26,6 @@ module Jekyll::Minibundle
         @is_modified = true
         @_asset_stamp = nil
         asset_bundle.make_bundle
-      else
-        @is_modified = false
       end
 
       AssetTagMarkup.make_markup @type, asset_destination_path, @attributes
@@ -58,6 +56,7 @@ module Jekyll::Minibundle
         false
       else
         write_destination site_destination_dir
+        @is_modified = false
         true
       end
     end

@@ -81,39 +81,65 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_assets_changes_bundle
+    def test_changing_css_asset_source_rewrites_destination
       with_site do
         generate_site :production
-
-        assert File.exists?(destination_path(EXPECTED_CSS_BUNDLE_PATH))
-
+        org_mtime = mtime_of destination_path(EXPECTED_CSS_BUNDLE_PATH)
         ensure_file_mtime_changes { File.write source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}' }
         generate_site :production, clear_cache: false
 
         refute File.exists?(destination_path(EXPECTED_CSS_BUNDLE_PATH))
 
-        expected_new_path = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
+        new_destination = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
 
-        assert_equal expected_new_path, find_css_path_from_index
-        assert File.exists?(destination_path(expected_new_path))
+        assert_equal new_destination, find_css_path_from_index
+        assert File.exists?(destination_path(new_destination))
+        assert_operator mtime_of(destination_path(new_destination)), :>, org_mtime
       end
     end
 
-    def test_changing_js_assets_changes_bundle
+    def test_changing_js_asset_source_rewrites_destination
       with_site do
         generate_site :production
-
-        assert File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
-
+        org_mtime = mtime_of destination_path(EXPECTED_JS_BUNDLE_PATH)
         ensure_file_mtime_changes { File.write source_path(JS_BUNDLE_SOURCE_DIR, 'app.js'), '(function() {})()' }
         generate_site :production, clear_cache: false
 
         refute File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
 
-        expected_new_path = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
+        new_destination = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
 
-        assert_equal expected_new_path, find_js_path_from_index
-        assert File.exists?(destination_path(expected_new_path))
+        assert_equal new_destination, find_js_path_from_index
+        assert File.exists?(destination_path(new_destination))
+        assert_operator mtime_of(destination_path(new_destination)), :>, org_mtime
+      end
+    end
+
+    def test_touching_css_asset_source_rewrites_destination
+      with_site do
+        generate_site :production
+        destination = EXPECTED_CSS_BUNDLE_PATH
+        org_mtime = mtime_of destination_path(destination)
+        ensure_file_mtime_changes { FileUtils.touch source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css') }
+        generate_site :production, clear_cache: false
+
+        assert_equal destination, find_css_path_from_index
+        assert File.exists?(destination_path(destination))
+        assert_operator mtime_of(destination_path(destination)), :>, org_mtime
+      end
+    end
+
+    def test_touching_js_asset_source_rewrites_destination
+      with_site do
+        generate_site :production
+        destination = EXPECTED_JS_BUNDLE_PATH
+        org_mtime = mtime_of destination_path(destination)
+        ensure_file_mtime_changes { FileUtils.touch source_path(JS_BUNDLE_SOURCE_DIR, 'app.js') }
+        generate_site :production, clear_cache: false
+
+        assert_equal destination, find_js_path_from_index
+        assert File.exists?(destination_path(destination))
+        assert_operator mtime_of(destination_path(destination)), :>, org_mtime
       end
     end
 

@@ -27,8 +27,6 @@ module Jekyll::Minibundle
         @stamped_at = mtime
         @is_modified = true
         @_asset_stamp = nil
-      else
-        @is_modified = false
       end
 
       asset_destination_path
@@ -39,6 +37,7 @@ module Jekyll::Minibundle
         false
       else
         write_destination site_destination_dir
+        @is_modified = false
         true
       end
     end

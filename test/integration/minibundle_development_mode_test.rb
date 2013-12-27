@@ -36,33 +36,41 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_copies_it_to_destination_dir
-      with_site do
-        generate_site :development
-        destination = destination_path CSS_BUNDLE_DESTINATION_PATH, 'common.css'
-        source = source_path CSS_BUNDLE_SOURCE_DIR, 'common.css'
-        ensure_file_mtime_changes { File.write source, 'h1 {}' }
+    [
+     {desc: "changing", action: ->(source) { File.write source, 'h1 {}' }},
+     {desc: "touching", action: ->(source) { FileUtils.touch source }}
+    ].each do |spec|
+      define_method :"test_#{spec[:desc]}_css_asset_source_rewrites_destination" do
+        with_site do
+          generate_site :development
+          destination = destination_path CSS_BUNDLE_DESTINATION_PATH, 'common.css'
+          org_mtime = mtime_of destination
+          source = source_path CSS_BUNDLE_SOURCE_DIR, 'common.css'
+          ensure_file_mtime_changes { spec[:action].call(source) }
+          generate_site :development, clear_cache: false
 
-        refute_equal File.read(destination), File.read(source)
-
-        generate_site :development, clear_cache: false
-
-        assert_equal File.read(destination), File.read(source)
+          assert_equal File.read(destination), File.read(source)
+          assert_operator mtime_of(destination), :>, org_mtime
+        end
       end
     end
 
-    def test_changing_js_asset_copies_it_to_destination_dir
-      with_site do
-        generate_site :development
-        destination = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
-        source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
-        ensure_file_mtime_changes { File.write source, '(function() {})()' }
+    [
+     {desc: "changing", action: ->(source) { File.write source, '(function() {})()' }},
+     {desc: "touching", action: ->(source) { FileUtils.touch source }}
+    ].each do |spec|
+      define_method :"test_#{spec[:desc]}_js_asset_source_rewrites_destination" do
+        with_site do
+          generate_site :development
+          destination = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'
+          org_mtime = mtime_of destination
+          source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
+          ensure_file_mtime_changes { spec[:action].call(source) }
+          generate_site :development, clear_cache: false
 
-        refute_equal File.read(destination), File.read(source)
-
-        generate_site :development, clear_cache: false
-
-        assert_equal File.read(destination), File.read(source)
+          assert_equal File.read(destination), File.read(source)
+          assert_operator mtime_of(destination), :>, org_mtime
+        end
       end
     end
 

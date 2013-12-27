@@ -6,17 +6,10 @@ module Jekyll::Minibundle::Test
   class BundleFileTest < TestCase
     include FixtureConfig
 
-    def test_consistent_fingerprint_in_file_and_markup
+    def test_calling_markup_determines_fingerprint_and_destination_write
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
-          bundle_file = BundleFile.new({
-            'type'             => :js,
-            'site_dir'         => '.',
-            'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-            'assets'           => %w{dependency app},
-            'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-            'attributes'       => {}
-          })
+          bundle_file = BundleFile.new bundle_config
           source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
           old_destination = destination_path EXPECTED_JS_BUNDLE_PATH
           org_markup, last_markup = nil
@@ -52,6 +45,52 @@ module Jekyll::Minibundle::Test
           assert_equal 2, get_cmd_count
         end
       end
+    end
+
+    def test_many_consecutive_markup_calls_trigger_one_destination_write
+      with_site do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
+          bundle_file = BundleFile.new bundle_config
+          source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
+          destination = destination_path EXPECTED_JS_BUNDLE_PATH
+          org_markup, last_markup = nil
+
+          capture_io do
+            org_markup = bundle_file.markup
+            bundle_file.markup
+            bundle_file.write '_site'
+          end
+
+          org_mtime = mtime_of destination
+
+          assert_equal 1, get_cmd_count
+
+          ensure_file_mtime_changes { FileUtils.touch source }
+
+          capture_io do
+            last_markup = bundle_file.markup
+            bundle_file.markup
+            bundle_file.write '_site'
+          end
+
+          assert_equal org_markup, last_markup
+          assert_operator mtime_of(destination), :>, org_mtime
+          assert_equal 2, get_cmd_count
+        end
+      end
+    end
+
+    private
+
+    def bundle_config
+      {
+       'type'             => :js,
+       'site_dir'         => '.',
+       'source_dir'       => JS_BUNDLE_SOURCE_DIR,
+       'assets'           => %w{dependency app},
+       'destination_path' => JS_BUNDLE_DESTINATION_PATH,
+       'attributes'       => {}
+      }
     end
   end
 end

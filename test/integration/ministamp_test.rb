@@ -31,21 +31,34 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_change_asset_file
+    def test_changing_asset_source_rewrites_destination
       with_site do
         generate_site :production
-
-        assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
-
+        org_mtime = mtime_of destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         ensure_file_mtime_changes { File.write source_path(STAMP_SOURCE_PATH), 'h1 {}' }
         generate_site :production, clear_cache: false
 
         refute File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
 
-        expected_new_path = 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
+        new_destination = 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
 
-        assert_equal expected_new_path, find_css_path_from_index
-        assert File.exists?(destination_path(expected_new_path))
+        assert_equal new_destination, find_css_path_from_index
+        assert File.exists?(destination_path(new_destination))
+        assert_operator mtime_of(destination_path(new_destination)), :>, org_mtime
+      end
+    end
+
+    def test_touching_asset_source_rewrites_destination
+      with_site do
+        generate_site :production
+        destination = STAMP_DESTINATION_FINGERPRINT_PATH
+        org_mtime = mtime_of destination_path(destination)
+        ensure_file_mtime_changes { FileUtils.touch source_path(STAMP_SOURCE_PATH) }
+        generate_site :production, clear_cache: false
+
+        assert_equal destination, find_css_path_from_index
+        assert File.exists?(destination_path(destination))
+        assert_operator mtime_of(destination_path(destination)), :>, org_mtime
       end
     end
 
