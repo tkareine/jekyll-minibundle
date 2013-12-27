@@ -20,7 +20,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_css_assets_are_copied_to_destination_dir
+    def test_copies_css_assets_to_destination_dir
       with_precompiled_site :development do
         EXPECTED_CSS_ASSET_PATHS.each do |path|
           expect_file_exists_and_is_equal_to(destination_path(path), site_fixture_path(CSS_BUNDLE_SOURCE_DIR, File.basename(path)))
@@ -28,7 +28,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_js_assets_are_copied_to_destination_dir
+    def test_copies_js_assets_to_destination_dir
       with_precompiled_site :development do
         EXPECTED_JS_ASSET_PATHS.each do |path|
           expect_file_exists_and_is_equal_to(destination_path(path), site_fixture_path(JS_BUNDLE_SOURCE_DIR, File.basename(path)))
@@ -95,7 +95,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_do_not_require_bundling_cmds
+    def test_does_not_require_bundling_commands
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_CSS' => nil, 'JEKYLL_MINIBUNDLE_CMD_JS' => nil do
           generate_site :development
@@ -104,7 +104,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_do_not_copy_source_when_other_files_change
+    def test_does_not_rewrite_destination_when_nonsource_files_change
       with_site do
         generate_site :development
         expected_js_path = destination_path JS_BUNDLE_DESTINATION_PATH, 'app.js'

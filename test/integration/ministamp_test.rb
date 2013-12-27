@@ -17,13 +17,13 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_asset_file_is_copied_to_destination_dir
+    def test_copies_asset_file_to_destination_dir
       with_precompiled_site :production do
         assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
       end
     end
 
-    def test_asset_file_is_equal_to_source_file
+    def test_contents_of_asset_destination_are_equal_to_source
       with_precompiled_site :production do
         source_contents = File.read site_fixture_path(STAMP_SOURCE_PATH)
         destination_contents = File.read destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
@@ -78,7 +78,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_do_not_copy_source_when_other_files_change
+    def test_does_not_rewrite_destination_when_nonsource_files_change
       with_site do
         generate_site :production
         expected_path = destination_path STAMP_DESTINATION_FINGERPRINT_PATH

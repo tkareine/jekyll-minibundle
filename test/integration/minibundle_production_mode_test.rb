@@ -32,40 +32,40 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_css_asset_bundle_is_copied_to_destination_dir
+    def test_copies_css_asset_bundle_to_destination_dir
       with_precompiled_site :production do
         assert File.exists?(destination_path(EXPECTED_CSS_BUNDLE_PATH))
       end
     end
 
-    def test_js_asset_bundle_is_copied_to_destination_dir
+    def test_copies_js_asset_bundle_to_destination_dir
       with_precompiled_site :production do
         assert File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
       end
     end
 
-    def test_css_asset_bundle_is_concatenated_in_configured_order
+    def test_concatenates_css_asset_bundle_in_configured_order
       with_precompiled_site :production do
         bundle = File.read(destination_path(EXPECTED_CSS_BUNDLE_PATH))
         assert_operator bundle.index('html { margin: 0; }'), :<, bundle.index('p { margin: 0; }')
       end
     end
 
-    def test_js_asset_bundle_is_concatenated_in_configured_order
+    def test_concatenates_js_asset_bundle_in_configured_order
       with_precompiled_site :production do
         bundle = File.read(destination_path(EXPECTED_JS_BUNDLE_PATH))
         assert_operator bundle.index('root.dependency = {};'), :<, bundle.index('root.app = {};')
       end
     end
 
-    def test_js_asset_bundle_has_inserted_semicolons_between_assets
+    def test_inserts_semicolons_between_js_assets
       with_precompiled_site :production do
         bundle = File.read(destination_path(EXPECTED_JS_BUNDLE_PATH))
         assert_match(%r|}\)\(window\)\n;\n\(function|, bundle)
       end
     end
 
-    def test_css_asset_bundle_is_minified
+    def test_minifies_css_asset_bundle
       with_precompiled_site :production do
         source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w{reset common}, 'css')
         destination_contents_size = File.read(destination_path(EXPECTED_CSS_BUNDLE_PATH)).size
@@ -73,7 +73,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_js_asset_bundle_is_minified
+    def test_minifies_js_asset_bundle
       with_precompiled_site :production do
         source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w{dependency app}, 'js')
         destination_contents_size = File.read(destination_path(EXPECTED_JS_BUNDLE_PATH)).size
@@ -164,7 +164,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_bundles_assets_only_once_upon_startup
+    def test_bundles_assets_only_once_at_startup
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           generate_site :production
@@ -173,7 +173,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_do_not_bundle_assets_when_nonsource_files_change
+    def test_does_not_rebundle_assets_when_nonsource_files_change
       with_site do
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           generate_site :production
