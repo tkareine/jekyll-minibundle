@@ -1,3 +1,10 @@
+# 1.4.0 / 2013-12-27
+
+* Fix bug causing exception to be thrown when `ministamp` or
+  `minibundle` is called twice with same asset source argument. Allow
+  handling asset source files that are already static files in Jekyll
+  (remove the restriction introduced in 1.3.0). (@agrigg)
+
 # 1.3.0 / 2013-12-25
 
 * Disallow handling asset source files that are already static files
