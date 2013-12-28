@@ -13,11 +13,9 @@ module Jekyll::Minibundle::Test
           source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
           old_destination = destination_path EXPECTED_JS_BUNDLE_PATH
           org_markup, last_markup = nil
+          capture_io { org_markup = bundle_file.markup }
 
-          capture_io do
-            org_markup = bundle_file.markup
-            bundle_file.write '_site'
-          end
+          assert bundle_file.write('_site')
 
           org_mtime = mtime_of old_destination
 
@@ -25,17 +23,16 @@ module Jekyll::Minibundle::Test
 
           last_markup = bundle_file.markup
           ensure_file_mtime_changes { File.write source, '(function() {})()' }
-          bundle_file.write '_site'
 
           # preserve fingerprint and content seen in last markup phase
+          refute bundle_file.write('_site')
           assert_equal org_markup, last_markup
           assert_equal org_mtime, mtime_of(old_destination)
           assert_equal 1, get_cmd_count
 
-          capture_io do
-            last_markup = bundle_file.markup
-            bundle_file.write '_site'
-          end
+          capture_io { last_markup = bundle_file.markup }
+
+          assert bundle_file.write('_site')
 
           new_destination = destination_path 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
 
@@ -54,25 +51,20 @@ module Jekyll::Minibundle::Test
           source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
           destination = destination_path EXPECTED_JS_BUNDLE_PATH
           org_markup, last_markup = nil
+          capture_io { org_markup = bundle_file.markup }
+          bundle_file.markup
 
-          capture_io do
-            org_markup = bundle_file.markup
-            bundle_file.markup
-            bundle_file.write '_site'
-          end
+          assert bundle_file.write('_site')
 
           org_mtime = mtime_of destination
 
           assert_equal 1, get_cmd_count
 
           ensure_file_mtime_changes { FileUtils.touch source }
+          capture_io { last_markup = bundle_file.markup }
+          bundle_file.markup
 
-          capture_io do
-            last_markup = bundle_file.markup
-            bundle_file.markup
-            bundle_file.write '_site'
-          end
-
+          assert bundle_file.write('_site')
           assert_equal org_markup, last_markup
           assert_operator mtime_of(destination), :>, org_mtime
           assert_equal 2, get_cmd_count
@@ -85,16 +77,13 @@ module Jekyll::Minibundle::Test
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           bundle_file = BundleFile.new bundle_config
 
-          bundle_file.write '_site'
-
+          refute bundle_file.write('_site')
           assert_empty Dir[destination_path('assets/*.js')]
           assert_equal 0, get_cmd_count
 
-          capture_io do
-            bundle_file.markup
-            bundle_file.write '_site'
-          end
+          capture_io { bundle_file.markup }
 
+          assert bundle_file.write('_site')
           assert File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
           assert_equal 1, get_cmd_count
         end
