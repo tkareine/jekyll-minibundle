@@ -5,21 +5,6 @@ module Jekyll::Minibundle::Test
   class MiniBundleProductionModeTest < TestCase
     include FixtureConfig
 
-    def test_css_asset_bundle_has_configured_attributes
-      with_precompiled_site :production do
-        element = find_html_element_from_index %{head link[href="#{EXPECTED_CSS_BUNDLE_PATH}"]}
-        assert_equal 'my-styles', element['id']
-        assert_equal 'projection', element['media']
-      end
-    end
-
-    def test_js_asset_bundle_has_configured_attributes
-      with_precompiled_site :production do
-        element = find_html_element_from_index %{body script[src="#{EXPECTED_JS_BUNDLE_PATH}"]}
-        assert_equal 'my-scripts', element['id']
-      end
-    end
-
     def test_css_asset_bundle_has_stamp
       with_precompiled_site :production do
         assert_equal EXPECTED_CSS_BUNDLE_PATH, find_css_path_from_index
@@ -29,6 +14,21 @@ module Jekyll::Minibundle::Test
     def test_js_asset_bundle_has_stamp
       with_precompiled_site :production do
         assert_equal EXPECTED_JS_BUNDLE_PATH, find_js_path_from_index
+      end
+    end
+
+    def test_css_asset_bundle_has_configured_attributes
+      with_precompiled_site :production do
+        element = find_css_element_from_index
+        assert_equal 'my-styles', element['id']
+        assert_equal 'projection', element['media']
+      end
+    end
+
+    def test_js_asset_bundle_has_configured_attributes
+      with_precompiled_site :production do
+        element = find_js_element_from_index
+        assert_equal 'my-scripts', element['id']
       end
     end
 
@@ -199,12 +199,20 @@ module Jekyll::Minibundle::Test
 
     private
 
+    def find_css_element_from_index
+      find_html_element_from_index('head link[media!="screen"]')
+    end
+
     def find_css_path_from_index
-      find_html_element_from_index('head link[media="projection"]')['href']
+      find_css_element_from_index['href']
+    end
+
+    def find_js_element_from_index
+      find_html_element_from_index('body script')
     end
 
     def find_js_path_from_index
-      find_html_element_from_index('body script')['src']
+      find_js_element_from_index['src']
     end
 
     def find_html_element_from_index(css)

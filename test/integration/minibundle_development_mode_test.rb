@@ -20,6 +20,20 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_css_assets_have_configured_attributes
+      with_precompiled_site :development do
+        elements = find_css_elements_from_index.map { |el| [el['id'], el['media']] }.uniq
+        assert_equal [['my-styles', 'projection']], elements
+      end
+    end
+
+    def test_js_assets_have_configured_attributes
+      with_precompiled_site :development do
+        elements = find_js_elements_from_index.map { |el| el['id'] }.uniq
+        assert_equal ['my-scripts'], elements
+      end
+    end
+
     def test_copies_css_assets_to_destination_dir
       with_precompiled_site :development do
         EXPECTED_CSS_ASSET_PATHS.each do |path|
@@ -123,12 +137,20 @@ module Jekyll::Minibundle::Test
 
     private
 
+    def find_css_elements_from_index
+      find_html_elements_from_index('head link[media!="screen"]')
+    end
+
     def find_css_paths_from_index
-      find_html_elements_from_index('head link[media="projection"]').map { |el| el['href'] }
+      find_css_elements_from_index.map { |el| el['href'] }
+    end
+
+    def find_js_elements_from_index
+      find_html_elements_from_index('body script')
     end
 
     def find_js_paths_from_index
-      find_html_elements_from_index('body script').map { |el| el['src'] }
+      find_js_elements_from_index.map { |el| el['src'] }
     end
 
     def find_html_elements_from_index(css)
