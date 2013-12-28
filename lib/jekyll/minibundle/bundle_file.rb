@@ -51,13 +51,14 @@ module Jekyll::Minibundle
       @stamped_at != mtime
     end
 
+    # writes destination only after `markup` has been called
     def write(site_destination_dir)
-      if File.exists?(destination(site_destination_dir)) && !@is_modified
-        false
-      else
+      if @is_modified
         write_destination site_destination_dir
         @is_modified = false
         true
+      else
+        false
       end
     end
 

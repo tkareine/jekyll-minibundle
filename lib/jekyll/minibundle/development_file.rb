@@ -16,12 +16,12 @@ module Jekyll::Minibundle
     end
 
     def write(site_destination_dir)
-      if destination_exists?(site_destination_dir) && !modified?
-        false
-      else
+      if modified?
         @stamped_at = mtime
         write_destination site_destination_dir
         true
+      else
+        false
       end
     end
   end

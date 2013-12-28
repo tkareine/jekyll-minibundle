@@ -80,6 +80,27 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_calling_write_before_markup_has_no_effect
+      with_site do
+        with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
+          bundle_file = BundleFile.new bundle_config
+
+          bundle_file.write '_site'
+
+          assert_empty Dir[destination_path('assets/*.js')]
+          assert_equal 0, get_cmd_count
+
+          capture_io do
+            bundle_file.markup
+            bundle_file.write '_site'
+          end
+
+          assert File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
+          assert_equal 1, get_cmd_count
+        end
+      end
+    end
+
     private
 
     def bundle_config

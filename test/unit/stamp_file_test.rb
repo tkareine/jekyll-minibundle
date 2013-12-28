@@ -62,6 +62,20 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_calling_write_before_markup_has_no_effect
+      with_site do
+        stamp_file = StampFile.new(STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+        stamp_file.write '_site'
+
+        assert_empty Dir[destination_path('assets/*.css')]
+
+        stamp_file.markup
+        stamp_file.write '_site'
+
+        assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+      end
+    end
+
     private
 
     def stamp_basenamer

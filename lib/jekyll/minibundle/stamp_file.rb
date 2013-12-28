@@ -32,13 +32,14 @@ module Jekyll::Minibundle
       asset_destination_path
     end
 
+    # writes destination only after `markup` has been called
     def write(site_destination_dir)
-      if destination_exists?(site_destination_dir) && !@is_modified
-        false
-      else
+      if @is_modified
         write_destination site_destination_dir
         @is_modified = false
         true
+      else
+        false
       end
     end
 

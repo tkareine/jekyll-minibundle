@@ -12,10 +12,6 @@ module Jekyll::Minibundle
       File.join site_destination_dir, asset_destination_path
     end
 
-    def destination_exists?(site_destination_dir)
-      File.exists? destination(site_destination_dir)
-    end
-
     def mtime
       File.stat(path).mtime.to_i
     end
