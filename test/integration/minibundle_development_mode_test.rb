@@ -5,18 +5,18 @@ module Jekyll::Minibundle::Test
   class MiniBundleDevelopmentModeTest < TestCase
     include FixtureConfig
 
-    EXPECTED_CSS_ASSET_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }
-    EXPECTED_JS_ASSET_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_PATH, "#{f}.js") }
+    CSS_ASSET_DESTINATION_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }
+    JS_ASSET_DESTINATION_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_PATH, "#{f}.js") }
 
     def test_css_assets_have_tags_in_configured_order
       with_precompiled_site :development do
-        assert_equal EXPECTED_CSS_ASSET_PATHS, find_css_paths_from_index
+        assert_equal CSS_ASSET_DESTINATION_PATHS, find_css_paths_from_index
       end
     end
 
     def test_js_assets_have_tags_in_configured_order
       with_precompiled_site :development do
-        assert_equal EXPECTED_JS_ASSET_PATHS, find_js_paths_from_index
+        assert_equal JS_ASSET_DESTINATION_PATHS, find_js_paths_from_index
       end
     end
 
@@ -36,7 +36,7 @@ module Jekyll::Minibundle::Test
 
     def test_copies_css_assets_to_destination_dir
       with_precompiled_site :development do
-        EXPECTED_CSS_ASSET_PATHS.each do |path|
+        CSS_ASSET_DESTINATION_PATHS.each do |path|
           expect_file_exists_and_is_equal_to(destination_path(path), site_fixture_path(CSS_BUNDLE_SOURCE_DIR, File.basename(path)))
         end
       end
@@ -44,7 +44,7 @@ module Jekyll::Minibundle::Test
 
     def test_copies_js_assets_to_destination_dir
       with_precompiled_site :development do
-        EXPECTED_JS_ASSET_PATHS.each do |path|
+        JS_ASSET_DESTINATION_PATHS.each do |path|
           expect_file_exists_and_is_equal_to(destination_path(path), site_fixture_path(JS_BUNDLE_SOURCE_DIR, File.basename(path)))
         end
       end

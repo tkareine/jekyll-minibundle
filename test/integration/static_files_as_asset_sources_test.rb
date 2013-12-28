@@ -10,8 +10,8 @@ module Jekyll::Minibundle::Test
         actual = Dir[destination_path('assets/site*.*')].sort
         expected = [
           destination_path('assets/site.css'),
-          destination_path(EXPECTED_CSS_BUNDLE_PATH),
-          destination_path(EXPECTED_JS_BUNDLE_PATH)
+          destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH),
+          destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         ].sort
         assert_equal expected, actual
       end

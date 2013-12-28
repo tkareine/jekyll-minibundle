@@ -11,7 +11,7 @@ module Jekyll::Minibundle::Test
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           bundle_file = BundleFile.new bundle_config
           source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
-          old_destination = destination_path EXPECTED_JS_BUNDLE_PATH
+          old_destination = destination_path JS_BUNDLE_DESTINATION_FINGERPRINT_PATH
           org_markup, last_markup = nil
           capture_io { org_markup = bundle_file.markup }
 
@@ -49,7 +49,7 @@ module Jekyll::Minibundle::Test
         with_env 'JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count do
           bundle_file = BundleFile.new bundle_config
           source = source_path JS_BUNDLE_SOURCE_DIR, 'app.js'
-          destination = destination_path EXPECTED_JS_BUNDLE_PATH
+          destination = destination_path JS_BUNDLE_DESTINATION_FINGERPRINT_PATH
           org_markup, last_markup = nil
           capture_io { org_markup = bundle_file.markup }
           bundle_file.markup
@@ -84,7 +84,7 @@ module Jekyll::Minibundle::Test
           capture_io { bundle_file.markup }
 
           assert bundle_file.write('_site')
-          assert File.exists?(destination_path(EXPECTED_JS_BUNDLE_PATH))
+          assert File.exists?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
           assert_equal 1, get_cmd_count
         end
       end
