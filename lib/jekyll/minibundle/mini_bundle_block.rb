@@ -30,7 +30,7 @@ module Jekyll::Minibundle
     def get_current_config(user_config, site)
       MiniBundleBlock.default_config.
         merge(user_config).
-        merge({ 'type' => @type, 'site_dir' => site.source })
+        merge('type' => @type, 'site_dir' => site.source)
     end
   end
 end
