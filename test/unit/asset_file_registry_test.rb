@@ -41,7 +41,7 @@ module Jekyll::Minibundle::Test
     end
 
     def asset_file_registry_size
-      AssetFileRegistry.class_variable_get(:@@_instances).size
+      AssetFileRegistry.instance_variable_get(:@_instances).size
     end
   end
 end
