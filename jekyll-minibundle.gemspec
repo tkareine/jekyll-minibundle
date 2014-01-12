@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__), 'lib/jekyll/minibundle/version'))
+require_relative 'lib/jekyll/minibundle/version'
 
 Gem::Specification.new do |s|
   s.name        = 'jekyll-minibundle'
