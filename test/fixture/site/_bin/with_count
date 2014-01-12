@@ -8,6 +8,6 @@ else
   0
 end
 
-File.write filename, "#{count + 1}\n"
+File.write(filename, "#{count + 1}\n")
 
 exec(*ARGV[1..-1])

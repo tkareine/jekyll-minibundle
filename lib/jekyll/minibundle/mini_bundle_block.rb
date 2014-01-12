@@ -10,9 +10,9 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers[:site]
-      config = get_current_config YAML.load(super), site
-      file = AssetFileRegistry.bundle_file config
-      file.static_file! site
+      config = get_current_config(YAML.load(super), site)
+      file = AssetFileRegistry.bundle_file(config)
+      file.static_file!(site)
       file.markup
     end
 

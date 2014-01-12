@@ -6,7 +6,7 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_asset_and_static_files_with_same_destination_paths_can_coexist
-      with_precompiled_site :production do
+      with_precompiled_site(:production) do
         actual = Dir[destination_path('assets/site*.*')].sort
         expected = [
           destination_path('assets/site.css'),
@@ -21,9 +21,9 @@ module Jekyll::Minibundle::Test
       define_method :"test_ministamp_allows_using_static_file_as_asset_source_in_#{env}_mode" do
         with_site do
           contents = 'h2 {}'
-          File.write source_path('assets/shared.css'), contents
+          File.write(source_path('assets/shared.css'), contents)
           find_and_gsub_in_file(source_path('_layouts/default.html'), 'ministamp _tmp/site.css', 'ministamp assets/shared.css')
-          generate_site env
+          generate_site(env)
 
           asset_files = Dir[destination_path('assets') + '/screen*.css']
 
@@ -38,10 +38,10 @@ module Jekyll::Minibundle::Test
       with_site do
         dep_contents = 'console.log("lol")'
         app_contents = 'console.log("balal")'
-        File.write source_path('assets/dependency.js'), dep_contents
-        File.write source_path('assets/app.js'), app_contents
+        File.write(source_path('assets/dependency.js'), dep_contents)
+        File.write(source_path('assets/app.js'), app_contents)
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'source_dir: _assets/scripts', 'source_dir: assets')
-        generate_site :development
+        generate_site(:development)
 
         assert_equal dep_contents, File.read(destination_path('assets/dependency.js'))
         assert_equal app_contents, File.read(destination_path('assets/app.js'))
@@ -53,10 +53,10 @@ module Jekyll::Minibundle::Test
         dep_contents = 'console.log("lol")'
         app_contents = 'console.log("balal")'
         bundled_contents = "#{dep_contents};\n#{app_contents};\n"
-        File.write source_path('assets/dependency.js'), dep_contents
-        File.write source_path('assets/app.js'), app_contents
+        File.write(source_path('assets/dependency.js'), dep_contents)
+        File.write(source_path('assets/app.js'), app_contents)
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'source_dir: _assets/scripts', 'source_dir: assets')
-        generate_site :production
+        generate_site(:production)
 
         asset_files = Dir[destination_path('assets/site-*.js')]
 

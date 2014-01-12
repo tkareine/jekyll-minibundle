@@ -9,15 +9,15 @@ module Jekyll::Minibundle::Test
     def test_calling_markup_determines_fingerprint_and_destination_write
       with_site do
         stamp_file = StampFile.new(STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
-        source = source_path STAMP_SOURCE_PATH
-        old_destination = destination_path STAMP_DESTINATION_FINGERPRINT_PATH
+        source = source_path(STAMP_SOURCE_PATH)
+        old_destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_markup = stamp_file.markup
 
         assert stamp_file.write('_site')
 
-        org_mtime = mtime_of old_destination
+        org_mtime = mtime_of(old_destination)
         last_markup = stamp_file.markup
-        ensure_file_mtime_changes { File.write source, 'h1 {}' }
+        ensure_file_mtime_changes { File.write(source, 'h1 {}') }
 
         # preserve fingerprint and content seen in last markup phase
         refute stamp_file.write('_site')
@@ -29,7 +29,7 @@ module Jekyll::Minibundle::Test
 
         assert stamp_file.write('_site')
 
-        new_destination = destination_path 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
+        new_destination = destination_path('assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css')
 
         # see updated fingerprint in the next round
         refute_equal org_markup, last_markup
@@ -41,15 +41,15 @@ module Jekyll::Minibundle::Test
     def test_many_consecutive_markup_calls_trigger_one_destination_write
       with_site do
         stamp_file = StampFile.new(STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
-        source = source_path STAMP_SOURCE_PATH
-        destination = destination_path STAMP_DESTINATION_FINGERPRINT_PATH
+        source = source_path(STAMP_SOURCE_PATH)
+        destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_markup = stamp_file.markup
         stamp_file.markup
 
         assert stamp_file.write('_site')
 
-        org_mtime = mtime_of destination
-        ensure_file_mtime_changes { FileUtils.touch source }
+        org_mtime = mtime_of(destination)
+        ensure_file_mtime_changes { FileUtils.touch(source) }
         last_markup = stamp_file.markup
         stamp_file.markup
 

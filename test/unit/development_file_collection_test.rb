@@ -8,7 +8,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_write_before_markup_writes_destination
       with_site do
-        dev_files = DevelopmentFileCollection.new bundle_config
+        dev_files = DevelopmentFileCollection.new(bundle_config)
 
         assert first_file_of(dev_files).write('_site')
 
@@ -16,7 +16,7 @@ module Jekyll::Minibundle::Test
 
         assert File.exists?(destination_file)
 
-        org_mtime = mtime_of destination_file
+        org_mtime = mtime_of(destination_file)
         dev_files.markup
 
         refute first_file_of(dev_files).write('_site')

@@ -13,18 +13,18 @@ module Jekyll::Minibundle
 
     def self.bundle_file(config)
       asset_destination_path = "#{config['destination_path']}.#{config['type']}"
-      @@_instances[asset_destination_path] ||= register_bundle_file config
+      @@_instances[asset_destination_path] ||= register_bundle_file(config)
     end
 
     def self.stamp_file(asset_source_path, asset_destination_path)
-      @@_instances[asset_destination_path] ||= register_stamp_file asset_source_path, asset_destination_path
+      @@_instances[asset_destination_path] ||= register_stamp_file(asset_source_path, asset_destination_path)
     end
 
     def self.register_bundle_file(config)
       if Environment.development?
-        DevelopmentFileCollection.new config
+        DevelopmentFileCollection.new(config)
       else
-        BundleFile.new config
+        BundleFile.new(config)
       end
     end
 

@@ -5,7 +5,7 @@ module Jekyll::Minibundle::Test
   class AssetTagMarkupTest < TestCase
     def test_escapes_attribute_values
       attributes = { media: 'screen, projection', extra: '">attack<br' }
-      actual = AssetTagMarkup.make_markup :css, 'http://localhost', attributes
+      actual = AssetTagMarkup.make_markup(:css, 'http://localhost', attributes)
       expected = %{<link rel="stylesheet" href="http://localhost" media="screen, projection" extra="&quot;&gt;attack&lt;br">}
       assert_equal expected, actual
     end

@@ -5,11 +5,11 @@ module Jekyll::Minibundle
     end
 
     def asset_destination_path
-      File.join asset_destination_dir, asset_destination_basename
+      File.join(asset_destination_dir, asset_destination_basename)
     end
 
     def destination(site_destination_dir)
-      File.join site_destination_dir, asset_destination_path
+      File.join(site_destination_dir, asset_destination_path)
     end
 
     def mtime

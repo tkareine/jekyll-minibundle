@@ -10,15 +10,15 @@ module Jekyll::Minibundle
 
     def initialize(asset_source_path, asset_destination_path)
       @asset_source_path = asset_source_path
-      @asset_destination_dir = File.dirname asset_destination_path
-      @asset_destination_basename = File.basename asset_destination_path
+      @asset_destination_dir = File.dirname(asset_destination_path)
+      @asset_destination_basename = File.basename(asset_destination_path)
       @stamped_at = nil
     end
 
     def write(site_destination_dir)
       if modified?
         @stamped_at = mtime
-        write_destination site_destination_dir
+        write_destination(site_destination_dir)
         true
       else
         false

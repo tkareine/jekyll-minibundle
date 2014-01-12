@@ -10,8 +10,8 @@ module Jekyll::Minibundle
     def initialize(config)
       @type = config['type']
       @site_source_dir = config['site_dir']
-      asset_source_dir = File.join @site_source_dir, config['source_dir']
-      @assets = config['assets'].map { |asset_path| File.join asset_source_dir, "#{asset_path}.#{@type}" }
+      asset_source_dir = File.join(@site_source_dir, config['source_dir'])
+      @assets = config['assets'].map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
       @destination_path = config['destination_path']
       @attributes = config['attributes']
       @stamped_at = nil
@@ -28,7 +28,7 @@ module Jekyll::Minibundle
         asset_bundle.make_bundle
       end
 
-      AssetTagMarkup.make_markup @type, asset_destination_path, @attributes
+      AssetTagMarkup.make_markup(@type, asset_destination_path, @attributes)
     end
 
     def path
@@ -40,7 +40,7 @@ module Jekyll::Minibundle
     end
 
     def destination(site_destination_dir)
-      File.join site_destination_dir, asset_destination_path
+      File.join(site_destination_dir, asset_destination_path)
     end
 
     def mtime
@@ -54,7 +54,7 @@ module Jekyll::Minibundle
     # writes destination only after `markup` has been called
     def write(site_destination_dir)
       if @is_modified
-        write_destination site_destination_dir
+        write_destination(site_destination_dir)
         @is_modified = false
         true
       else
@@ -65,7 +65,7 @@ module Jekyll::Minibundle
     private
 
     def asset_stamp
-      @_asset_stamp ||= AssetStamp.from_file path
+      @_asset_stamp ||= AssetStamp.from_file(path)
     end
 
     def asset_bundle

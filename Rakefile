@@ -14,8 +14,8 @@ def get_minibundle_env(overrides = {})
 end
 
 def run_jekyll_in_fixture_site(command)
-  Dir.chdir 'test/fixture/site'
-  FileUtils.rm_rf '_site'
+  Dir.chdir('test/fixture/site')
+  FileUtils.rm_rf('_site')
   sh get_minibundle_env, "jekyll #{command}"
 end
 
@@ -49,7 +49,7 @@ task :test do
   opts = ENV['debug'] ? '-rpp -rpry' : ''
   eval = %{-e 'ARGV.each { |f| require f }'}
   cmd = "ruby #{opts} #{eval} #{files}"
-  env = get_minibundle_env 'RUBYLIB' => 'lib:test'
+  env = get_minibundle_env('RUBYLIB' => 'lib:test')
   sh env, cmd
 end
 
@@ -58,12 +58,12 @@ namespace :fixture do
 
   desc 'Generate fixture site'
   task :build do
-    run_jekyll_in_fixture_site 'build'
+    run_jekyll_in_fixture_site('build')
   end
 
   desc 'Generate fixture site in watch mode'
   task :watch do
-    run_jekyll_in_fixture_site 'build --watch'
+    run_jekyll_in_fixture_site('build --watch')
   end
 end
 

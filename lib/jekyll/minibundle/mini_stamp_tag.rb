@@ -9,8 +9,8 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers[:site]
-      file = AssetFileRegistry.stamp_file File.join(site.source, @asset_source), @asset_destination
-      file.static_file! site
+      file = AssetFileRegistry.stamp_file(File.join(site.source, @asset_source), @asset_destination)
+      file.static_file!(site)
       file.markup
     end
   end

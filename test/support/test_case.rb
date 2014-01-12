@@ -28,9 +28,9 @@ module Jekyll::Minibundle::Test
     end
 
     def find_and_gsub_in_file(file, pattern, replacement)
-      old_content = File.read file
-      new_content = old_content.gsub pattern, replacement
-      File.write file, new_content
+      old_content = File.read(file)
+      new_content = old_content.gsub(pattern, replacement)
+      File.write(file, new_content)
     end
 
     def mtime_of(path)
@@ -49,9 +49,9 @@ module Jekyll::Minibundle::Test
     end
 
     def with_site(&block)
-      Dir.mktmpdir "jekyll-minibundle-test-site-" do |dir|
-        Dir.chdir dir do
-          _copy_fixture_site_dir Dir.pwd
+      Dir.mktmpdir("jekyll-minibundle-test-site-") do |dir|
+        Dir.chdir(dir) do
+          _copy_fixture_site_dir(Dir.pwd)
           yield dir
         end
       end
@@ -62,8 +62,8 @@ module Jekyll::Minibundle::Test
     end
 
     def generate_site(mode, options = {})
-      with_env 'JEKYLL_MINIBUNDLE_MODE' => mode.to_s do
-        _generate_site _get_site_generation_test_options(options)
+      with_env('JEKYLL_MINIBUNDLE_MODE' => mode.to_s) do
+        _generate_site(_get_site_generation_test_options(options))
       end
     end
 
@@ -77,7 +77,7 @@ module Jekyll::Minibundle::Test
     end
 
     def get_cmd_count
-      if File.exists? 'count'
+      if File.exists?('count')
         File.read('count').to_i
       else
         0
@@ -87,7 +87,7 @@ module Jekyll::Minibundle::Test
     private
 
     def _copy_fixture_site_dir(dir)
-      FileUtils.cp_r site_fixture_path('.'), dir
+      FileUtils.cp_r(site_fixture_path('.'), dir)
     end
 
     @@_precompiled_site_dirs = {}
@@ -96,12 +96,12 @@ module Jekyll::Minibundle::Test
       @@_precompiled_site_dirs[mode] ||= begin
         dir = Dir.mktmpdir("jekyll-minibundle-test-precompiled-site-#{mode}-")
         at_exit do
-          FileUtils.rm_rf dir
+          FileUtils.rm_rf(dir)
           puts "\nCleaned precompiled site in #{mode} mode for tests: #{dir}"
         end
         Dir.chdir(dir) do
-          _copy_fixture_site_dir Dir.pwd
-          generate_site mode
+          _copy_fixture_site_dir(Dir.pwd)
+          generate_site(mode)
         end
         dir
       end
@@ -116,7 +116,7 @@ module Jekyll::Minibundle::Test
     end
 
     def _get_site_generation_test_options(options)
-      TestCase.site_generation_test_options.merge options
+      TestCase.site_generation_test_options.merge(options)
     end
 
     def self.site_generation_test_options

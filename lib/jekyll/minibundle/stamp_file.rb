@@ -12,8 +12,8 @@ module Jekyll::Minibundle
     def initialize(asset_source_path, asset_destination_path, &basenamer)
       @basenamer = basenamer
       @asset_source_path = asset_source_path
-      @asset_destination_dir = File.dirname asset_destination_path
-      @asset_destination_extension = File.extname asset_destination_path
+      @asset_destination_dir = File.dirname(asset_destination_path)
+      @asset_destination_extension = File.extname(asset_destination_path)
       @asset_destination_base_prefix = File.basename(asset_destination_path)[0 .. -(@asset_destination_extension.size + 1)]
       @stamped_at = nil
       @is_modified = false
@@ -35,7 +35,7 @@ module Jekyll::Minibundle
     # writes destination only after `markup` has been called
     def write(site_destination_dir)
       if @is_modified
-        write_destination site_destination_dir
+        write_destination(site_destination_dir)
         @is_modified = false
         true
       else
@@ -46,7 +46,7 @@ module Jekyll::Minibundle
     private
 
     def asset_destination_basename
-      @basenamer.call @asset_destination_base_prefix, @asset_destination_extension, -> { asset_stamp }
+      @basenamer.call(@asset_destination_base_prefix, @asset_destination_extension, -> { asset_stamp })
     end
 
     def asset_stamp
