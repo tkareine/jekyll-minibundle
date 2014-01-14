@@ -40,7 +40,7 @@ namespace :gem do
   end
 end
 
-desc 'Run tests'
+desc 'Run tests; envars: tests=<test_path> to select a particular suite, debug=1 to require Pry and PP'
 task :test do
   glob = ENV['tests'] || 'test/{unit,integration}/*_test.rb'
   files = Dir[glob].
