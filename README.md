@@ -3,8 +3,10 @@
 A straightforward asset bundling plugin for [Jekyll][Jekyll],
 utilizing external minification tool of your choice. It provides asset
 concatenation for bundling and asset fingerprinting with MD5 digest
-for cache busting. There are no other runtime dependencies besides the
-minification tool (not even other gems).
+for cache busting.
+
+There are no runtime dependencies, expect for the minification tool
+used for bundling. Asset fingerprinting has no dependencies.
 
 Tested with Ruby MRI 1.9.3, 2.0, and 2.1. Ruby 1.8 is *not* supported.
 
@@ -58,16 +60,11 @@ You must allow Jekyll to use custom plugins. In
 
 ## Asset fingerprinting
 
-Asset fingerprinting is intended to be used together with
-[Compass](http://compass-style.org/) and similar asset generation
-tools that have their own configuration for input sources.
-
-Configure Compass to take inputs from `_assets/styles/*.scss` and to
-put output to `_tmp/site.css`. Use `ministamp` tag to copy the
-processed style asset to the generated site:
+If you just want to have fingerprint in your asset's path, use
+`ministamp` tag:
 
 ``` html
-<link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
+<link href="{% ministamp _assets/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
 ```
 
 Output, containing the MD5 digest of the file in the filename:
@@ -76,7 +73,18 @@ Output, containing the MD5 digest of the file in the filename:
 <link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
 ```
 
-This feature does not require any external tools.
+The generated site will have the asset file at that path.
+
+This feature is useful when combined with asset generation tools
+external to Jekyll. For example, you can configure
+[Compass](http://compass-style.org/) to take inputs from
+`_assets/styles/*.scss` and to produce output to
+`_tmp/site.css`. Then, you use `ministamp` tag to copy the file to the
+generated site with fingerprint:
+
+``` html
+<link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
+```
 
 ## Asset bundling
 
@@ -86,7 +94,7 @@ STDOUT. You write the configuration for input sources directly into
 the content file where you want the markup tag for the bundle file to
 appear. The outcome will be a markup tag containing the path to the
 bundle file, and the generated site will have the bundle file in that
-path. The MD5 digest of the file will be included in the filename.
+path. The path will contain a fingerprint.
 
 Place `minibundle` block with configuration into your content file
 where you want the generated markup to appear. For example, to bundle
