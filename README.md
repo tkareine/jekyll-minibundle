@@ -5,8 +5,8 @@ utilizing external minification tool of your choice. It provides asset
 concatenation for bundling and asset fingerprinting with MD5 digest
 for cache busting.
 
-There are no runtime dependencies, expect for the minification tool
-used for bundling. Asset fingerprinting has no dependencies.
+There are no runtime dependencies, except for the minification tool
+used for bundling (fingerprinting has no dependencies).
 
 Tested with Ruby MRI 1.9.3, 2.0, and 2.1. Ruby 1.8 is *not* supported.
 
