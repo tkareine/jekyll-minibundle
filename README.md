@@ -48,7 +48,7 @@ The plugin is shipped as a
 $ gem install jekyll-minibundle
 ```
 
-Add file `_plugins/minibundle.rb` to your Jekyll site project with
+Add `_plugins/minibundle.rb` file to your Jekyll site project with
 this line:
 
 ``` ruby
@@ -60,7 +60,7 @@ You must allow Jekyll to use custom plugins. In
 
 ## Asset fingerprinting
 
-If you just want to have fingerprint in your asset's path, use
+If you just want to have a fingerprint in your asset's path, use
 `ministamp` tag:
 
 ``` html
@@ -73,14 +73,14 @@ Output, containing the MD5 digest of the file in the filename:
 <link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
 ```
 
-The generated site will have the asset file at that path.
+Jekyll's output directory will have the asset file at that path.
 
 This feature is useful when combined with asset generation tools
 external to Jekyll. For example, you can configure
 [Compass](http://compass-style.org/) to take inputs from
 `_assets/styles/*.scss` and to produce output to
-`_tmp/site.css`. Then, you use `ministamp` tag to copy the file to the
-generated site with fingerprint:
+`_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
+fingerprint to Jekyll's output directory:
 
 ``` html
 <link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
@@ -93,8 +93,8 @@ tool that supports reading input from STDIN and writing the output to
 STDOUT. You write the configuration for input sources directly into
 the content file where you want the markup tag for the bundle file to
 appear. The outcome will be a markup tag containing the path to the
-bundle file, and the generated site will have the bundle file in that
-path. The path will contain a fingerprint.
+bundle file, and the Jekyll's output directory will have the bundle
+file at that path. The path will contain a fingerprint.
 
 Place `minibundle` block with configuration into your content file
 where you want the generated markup to appear. For example, to bundle
@@ -165,12 +165,13 @@ result, there will be both `src.css` and `dest-<md5>.css` files in
 
 In order to avoid this, exclude the asset source file from
 Jekyll. Because Jekyll excludes directories beginning with underscore
-character (`_`), consider the following directory layout:
+character (`_`), consider using the following directory layout:
 
-* `_assets/` for JS and CSS assets handled by the plugin that are in
-  version control
-* `_tmp/` for temporary JS and CSS assets handled by the plugin that
-  are not in version control (for example, Compass output files)
+* `_assets/` for JavaScript and CSS assets handled by the plugin that
+  are in version control
+* `_tmp/` for temporary JavaScript and CSS assets handled by the
+  plugin that are not in version control (for example, Compass output
+  files)
 * `assets/` for images and other assets handled by Jekyll directly
 
 See [Jekyll configuration][JekyllConf] for more about excluding files
@@ -178,12 +179,13 @@ and directories.
 
 ## Development mode
 
-The plugin has one more trick in its sleeves. If you set environment
-variable `$JEKYLL_MINIBUNDLE_MODE` to `development`, then the plugin
-will copy asset files as is to the destination directory (using
-`destination_path` as directory for `minibundle` block), and omit
-fingerprinting. This is useful in development workflow, where you need
-the filenames and line numbers of the original asset sources.
+The plugin has one more trick in its sleeves. If you set
+`$JEKYLL_MINIBUNDLE_MODE` environment variable to `development`, then
+the plugin will copy asset files as is to Jekyll's output directory
+and omit fingerprinting. The `destination_path` setting in
+`minibundle` block sets the destination directory for bundled
+files. This is useful in development workflow, where you need the
+filenames and line numbers of the original asset sources.
 
 ``` bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
