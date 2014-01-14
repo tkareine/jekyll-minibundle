@@ -1,13 +1,13 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'lib/jekyll/minibundle/version'))
 
 Gem::Specification.new do |s|
-  s.name        = 'jekyll-minibundle'
-  s.version     = Jekyll::Minibundle::VERSION
-  s.summary     = 'A minimalistic asset bundling plugin for Jekyll'
-  s.authors     = ['Tuomas Kareinen']
-  s.email       = 'tkareine@gmail.com'
-  s.homepage    = 'https://github.com/tkareine/jekyll-minibundle'
-  s.licenses    = %w{MIT}
+  s.name     = 'jekyll-minibundle'
+  s.version  = Jekyll::Minibundle::VERSION
+  s.summary  = 'A minimalistic asset bundling plugin for Jekyll'
+  s.authors  = ['Tuomas Kareinen']
+  s.email    = 'tkareine@gmail.com'
+  s.homepage = 'https://github.com/tkareine/jekyll-minibundle'
+  s.license  = 'MIT'
 
   s.description = <<-END
 A straightforward asset bundling plugin for Jekyll, utilizing external
