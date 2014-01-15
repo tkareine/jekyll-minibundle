@@ -14,15 +14,17 @@ module Jekyll::Minibundle
     end
 
     def make_bundle
-      pipe_bundling_to_temp_file(bundling_cmd) do |wr|
+      cmd = get_minifier_cmd
+      exit_status = spawn_minifier(cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
         log("Bundling #{@type} assets:")
         @assets.each do |asset|
           log(asset)
-          IO.foreach(asset) { |line| wr.write(line) }
-          wr.puts(';') if @type == :js
+          IO.foreach(asset) { |line| input.write(line) }
+          input.puts(';') if @type == :js
         end
       end
+      fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{cmd}" if exit_status != 0
       self
     end
 
@@ -38,11 +40,11 @@ module Jekyll::Minibundle
       end
     end
 
-    def bundling_cmd
+    def get_minifier_cmd
       Environment.command_for(@type)
     end
 
-    def pipe_bundling_to_temp_file(cmd)
+    def spawn_minifier(cmd)
       pid = nil
       rd, wr = IO.pipe
       Dir.chdir(@site_dir) do
@@ -52,7 +54,7 @@ module Jekyll::Minibundle
       yield wr
       wr.close
       _, status = Process.waitpid2(pid)
-      fail "Bundling #{@type} assets failed with exit status #{status.exitstatus}, command: #{cmd}" if status.exitstatus != 0
+      status.exitstatus
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }
     end
