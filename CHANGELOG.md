@@ -1,3 +1,12 @@
+# 1.4.3 / 2014-01-16
+
+* Do not leak read pipe file descriptor upon minifier command failure
+* Loosen version constraints for development gem dependencies
+* Clarify documentation
+* Fix some Ruby coding style issues
+* Minor internal state handling improvements
+* Clarify tests, increase test coverage
+
 # 1.4.2 / 2013-12-28
 
 * Ensure touching asset source triggers destination write. This was an
