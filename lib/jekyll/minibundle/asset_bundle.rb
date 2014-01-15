@@ -48,12 +48,13 @@ module Jekyll::Minibundle
       Dir.chdir(@site_dir) do
         pid = spawn(cmd, out: [@temp_file.path, 'w'], in: rd)
       end
+      rd.close
       yield wr
       wr.close
       _, status = Process.waitpid2(pid)
       fail "Bundling #{@type} assets failed with exit status #{status.exitstatus}, command: #{cmd}" if status.exitstatus != 0
     ensure
-      wr.close unless wr.closed?
+      [rd, wr].each { |io| io.close unless io.closed? }
     end
   end
 end
