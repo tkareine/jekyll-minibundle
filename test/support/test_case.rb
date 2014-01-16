@@ -108,7 +108,7 @@ module Jekyll::Minibundle::Test
     end
 
     def _generate_site(test_options)
-      AssetFileRegistry.clear if test_options[:clear_cache]
+      AssetFileRegistry.clear if test_options.fetch(:clear_cache)
 
       capture_io do
         Jekyll::Site.new(Jekyll.configuration(TestCase.site_generation_jekyll_options)).process
