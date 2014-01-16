@@ -8,7 +8,7 @@ module Jekyll::Minibundle
     end
 
     def render(context)
-      site = context.registers[:site]
+      site = context.registers.fetch(:site)
       file = AssetFileRegistry.stamp_file(File.join(site.source, @asset_source), @asset_destination)
       file.static_file!(site)
       file.markup

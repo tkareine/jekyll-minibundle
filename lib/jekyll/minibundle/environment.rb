@@ -3,9 +3,7 @@ module Jekyll::Minibundle
     class << self
       def command_for(type)
         key = "JEKYLL_MINIBUNDLE_CMD_#{type.upcase}"
-        cmd = ENV[key]
-        fail "You need to set command for minification in $#{key}" if !cmd
-        cmd
+        ENV.fetch(key) { fail "You need to set command for minification in $#{key}" }
       end
 
       def development?

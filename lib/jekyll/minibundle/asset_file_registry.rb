@@ -11,7 +11,7 @@ module Jekyll::Minibundle
       end
 
       def bundle_file(config)
-        asset_destination_path = "#{config['destination_path']}.#{config['type']}"
+        asset_destination_path = "#{config.fetch('destination_path')}.#{config.fetch('type')}"
         @_instances[asset_destination_path] ||= register_bundle_file(config)
       end
 

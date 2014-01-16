@@ -8,12 +8,12 @@ module Jekyll::Minibundle
     include AssetFileOperations
 
     def initialize(config)
-      @type = config['type']
-      @site_source_dir = config['site_dir']
-      asset_source_dir = File.join(@site_source_dir, config['source_dir'])
-      @assets = config['assets'].map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
-      @destination_path = config['destination_path']
-      @attributes = config['attributes']
+      @type = config.fetch('type')
+      @site_source_dir = config.fetch('site_dir')
+      asset_source_dir = File.join(@site_source_dir, config.fetch('source_dir'))
+      @assets = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
+      @destination_path = config.fetch('destination_path')
+      @attributes = config.fetch('attributes')
       @stamped_at = nil
       @is_modified = false
     end

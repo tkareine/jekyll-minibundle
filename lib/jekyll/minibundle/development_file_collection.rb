@@ -4,18 +4,18 @@ require 'jekyll/minibundle/development_file'
 module Jekyll::Minibundle
   class DevelopmentFileCollection
     def initialize(config)
-      @type = config['type']
-      asset_source_dir = File.join(config['site_dir'], config['source_dir'])
-      destination_path = config['destination_path']
+      @type = config.fetch('type')
+      asset_source_dir = File.join(config.fetch('site_dir'), config.fetch('source_dir'))
+      destination_path = config.fetch('destination_path')
 
-      @files = config['assets'].map do |asset_path|
+      @files = config.fetch('assets').map do |asset_path|
         asset_basename = "#{asset_path}.#{@type}"
         asset_source = File.join(asset_source_dir, asset_basename)
         asset_destination = File.join(destination_path, asset_basename)
         DevelopmentFile.new(asset_source, asset_destination)
       end
 
-      @attributes = config['attributes']
+      @attributes = config.fetch('attributes')
     end
 
     def static_file!(site)
