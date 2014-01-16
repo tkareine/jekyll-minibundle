@@ -1,3 +1,10 @@
+# 1.4.4 / 2014-01-16
+
+* Conserve memory when calculating fingerprint for an asset.
+  Previously, we read the whole asset file into memory and then
+  calculated the MD5 digest. This is bad for big assets. Now, we read
+  the file in chunks.
+
 # 1.4.3 / 2014-01-16
 
 * Do not leak read pipe file descriptor upon minifier command failure
