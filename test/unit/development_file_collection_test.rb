@@ -14,7 +14,7 @@ module Jekyll::Minibundle::Test
 
         destination_file = destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js')
 
-        assert File.exists?(destination_file)
+        assert File.exist?(destination_file)
 
         org_mtime = mtime_of(destination_file)
         dev_files.markup

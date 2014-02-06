@@ -94,16 +94,16 @@ module Jekyll::Minibundle::Test
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
         generate_site(:development)
 
-        assert File.exists?(expected_css_path)
-        assert File.exists?(expected_js_path)
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
         assert_equal 'assets/site/common.css', find_css_paths_from_index.last
         assert_equal 'assets/site/app.js', find_js_paths_from_index.last
 
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site')
         generate_site(:development, clear_cache: false)
 
-        assert File.exists?(expected_css_path)
-        assert File.exists?(expected_js_path)
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
         assert_equal '/assets/site/common.css', find_css_paths_from_index.last
         assert_equal '/assets/site/app.js', find_js_paths_from_index.last
       end
@@ -158,7 +158,7 @@ module Jekyll::Minibundle::Test
     end
 
     def expect_file_exists_and_is_equal_to(actual, expected)
-      assert File.exists?(actual)
+      assert File.exist?(actual)
       assert_equal File.read(expected), File.read(actual)
     end
   end

@@ -84,7 +84,7 @@ module Jekyll::Minibundle::Test
           capture_io { bundle_file.markup }
 
           assert bundle_file.write('_site')
-          assert File.exists?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+          assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
           assert_equal 1, get_cmd_count
         end
       end

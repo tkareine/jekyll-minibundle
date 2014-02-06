@@ -77,7 +77,7 @@ module Jekyll::Minibundle::Test
     end
 
     def get_cmd_count
-      if File.exists?('count')
+      if File.exist?('count')
         File.read('count').to_i
       else
         0

@@ -70,7 +70,7 @@ module Jekyll::Minibundle::Test
         stamp_file.markup
 
         assert stamp_file.write('_site')
-        assert File.exists?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
       end
     end
 

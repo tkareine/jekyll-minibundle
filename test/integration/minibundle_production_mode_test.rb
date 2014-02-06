@@ -34,13 +34,13 @@ module Jekyll::Minibundle::Test
 
     def test_copies_css_asset_bundle_to_destination_dir
       with_precompiled_site(:production) do
-        assert File.exists?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
       end
     end
 
     def test_copies_js_asset_bundle_to_destination_dir
       with_precompiled_site(:production) do
-        assert File.exists?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
       end
     end
 
@@ -88,12 +88,12 @@ module Jekyll::Minibundle::Test
         ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
         generate_site(:production, clear_cache: false)
 
-        refute File.exists?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        refute File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         new_destination = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
 
         assert_equal new_destination, find_css_path_from_index
-        assert File.exists?(destination_path(new_destination))
+        assert File.exist?(destination_path(new_destination))
         assert_operator mtime_of(destination_path(new_destination)), :>, org_mtime
       end
     end
@@ -105,12 +105,12 @@ module Jekyll::Minibundle::Test
         ensure_file_mtime_changes { File.write(source_path(JS_BUNDLE_SOURCE_DIR, 'app.js'), '(function() {})()') }
         generate_site(:production, clear_cache: false)
 
-        refute File.exists?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         new_destination = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
 
         assert_equal new_destination, find_js_path_from_index
-        assert File.exists?(destination_path(new_destination))
+        assert File.exist?(destination_path(new_destination))
         assert_operator mtime_of(destination_path(new_destination)), :>, org_mtime
       end
     end
@@ -124,7 +124,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, clear_cache: false)
 
         assert_equal destination, find_css_path_from_index
-        assert File.exists?(destination_path(destination))
+        assert File.exist?(destination_path(destination))
         assert_operator mtime_of(destination_path(destination)), :>, org_mtime
       end
     end
@@ -138,7 +138,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, clear_cache: false)
 
         assert_equal destination, find_js_path_from_index
-        assert File.exists?(destination_path(destination))
+        assert File.exist?(destination_path(destination))
         assert_operator mtime_of(destination_path(destination)), :>, org_mtime
       end
     end
@@ -149,16 +149,16 @@ module Jekyll::Minibundle::Test
         expected_css_path = destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
 
-        assert File.exists?(expected_css_path)
-        assert File.exists?(expected_js_path)
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
         assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
         assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
 
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site')
         generate_site(:production, clear_cache: false)
 
-        assert File.exists?(expected_css_path)
-        assert File.exists?(expected_js_path)
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
         assert_equal "/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
         assert_equal "/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index
       end
