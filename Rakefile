@@ -40,13 +40,13 @@ namespace :gem do
   end
 end
 
-desc 'Run tests; envars: tests=<test_path> to select a particular suite, debug=1 to require Pry and PP'
+desc 'Run tests; envars: tests=<test_path> to select a particular suite, debug=1 to require Pry and PP and enable warnings'
 task :test do
   glob = ENV.fetch('tests', 'test/{unit,integration}/*_test.rb')
   files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  opts = ENV['debug'] ? '-rpp -rpry' : ''
+  opts = ENV['debug'] ? '-w -rpp -rpry' : ''
   eval = %{-e 'ARGV.each { |f| require f }'}
   cmd = "ruby #{opts} #{eval} #{files}"
   env = get_minibundle_env('RUBYLIB' => 'lib:test')
