@@ -12,8 +12,8 @@ Tested with Ruby MRI 1.9.3, 2.0, and 2.1. Ruby 1.8 is *not* supported.
 
 The plugin works with Jekyll's watch (auto-regeneration) mode.
 
-[![Gem Version](https://badge.fury.io/rb/jekyll-minibundle.png)](http://badge.fury.io/rb/jekyll-minibundle)
-[![Build Status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.png)](http://travis-ci.org/tkareine/jekyll-minibundle)
+[![Gem Version](https://badge.fury.io/rb/jekyll-minibundle.svg)](http://badge.fury.io/rb/jekyll-minibundle)
+[![Build Status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)](http://travis-ci.org/tkareine/jekyll-minibundle)
 
 # Features
 
