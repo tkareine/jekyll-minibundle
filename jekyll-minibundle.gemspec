@@ -27,10 +27,10 @@ minification tool (not even other gems).
 
   s.test_files = `git ls-files -- test`.split("\n")
 
-  s.add_development_dependency 'jekyll',   '~> 1.5'
+  s.add_development_dependency 'jekyll',   '~> 2.0'
   s.add_development_dependency 'minitest', '~> 5.3'
   s.add_development_dependency 'nokogiri', '~> 1.6'
-  s.add_development_dependency 'rake',     '~> 10.2'
+  s.add_development_dependency 'rake',     '~> 10.3'
 
   s.required_ruby_version = '>= 1.9.3'
 
