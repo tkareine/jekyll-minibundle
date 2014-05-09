@@ -8,7 +8,8 @@ module Jekyll::Minibundle
 
     attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_basename, :stamped_at
 
-    def initialize(asset_source_path, asset_destination_path)
+    def initialize(site, asset_source_path, asset_destination_path)
+      @site = site
       @asset_source_path = asset_source_path
       @asset_destination_dir = File.dirname(asset_destination_path)
       @asset_destination_basename = File.basename(asset_destination_path)

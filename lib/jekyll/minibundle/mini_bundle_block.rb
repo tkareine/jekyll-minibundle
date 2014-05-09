@@ -11,8 +11,8 @@ module Jekyll::Minibundle
     def render(context)
       site = context.registers.fetch(:site)
       config = get_current_config(YAML.load(super), site)
-      file = AssetFileRegistry.bundle_file(config)
-      file.static_file!(site)
+      file = AssetFileRegistry.bundle_file(site, config)
+      file.add_as_static_file_to(site)
       file.markup
     end
 
@@ -30,7 +30,7 @@ module Jekyll::Minibundle
     def get_current_config(user_config, site)
       MiniBundleBlock.default_config.
         merge(user_config).
-        merge('type' => @type, 'site_dir' => site.source)
+        merge('type' => @type)
     end
   end
 end

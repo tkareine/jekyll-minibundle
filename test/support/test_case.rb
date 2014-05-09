@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'ostruct'
 require 'tempfile'
 require 'minitest/autorun'
 require 'nokogiri'
@@ -52,7 +53,8 @@ module Jekyll::Minibundle::Test
       Dir.mktmpdir("jekyll-minibundle-test-site-") do |dir|
         Dir.chdir(dir) do
           _copy_fixture_site_dir(Dir.pwd)
-          yield dir
+          site = OpenStruct.new(:source => dir)
+          yield site, dir
         end
       end
     end

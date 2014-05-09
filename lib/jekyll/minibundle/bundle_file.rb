@@ -6,11 +6,14 @@ require 'jekyll/minibundle/asset_tag_markup'
 module Jekyll::Minibundle
   class BundleFile
     include AssetFileOperations
+    include AssetFilePaths
 
-    def initialize(config)
+    attr_reader :stamped_at
+
+    def initialize(site, config)
+      @site = site
       @type = config.fetch('type')
-      @site_source_dir = config.fetch('site_dir')
-      asset_source_dir = File.join(@site_source_dir, config.fetch('source_dir'))
+      asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
       @assets = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
       @destination_path = config.fetch('destination_path')
       @attributes = config.fetch('attributes')
@@ -39,16 +42,8 @@ module Jekyll::Minibundle
       "#{@destination_path}-#{asset_stamp}.#{@type}"
     end
 
-    def destination(site_destination_dir)
-      File.join(site_destination_dir, asset_destination_path)
-    end
-
     def mtime
       @assets.map { |f| File.stat(f).mtime.to_i }.max
-    end
-
-    def modified?
-      @stamped_at != mtime
     end
 
     # writes destination only after `markup` has been called
@@ -69,7 +64,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @_asset_bundle ||= AssetBundle.new(@type, @assets, @site_source_dir)
+      @_asset_bundle ||= AssetBundle.new(@type, @assets, @site.source)
     end
   end
 end

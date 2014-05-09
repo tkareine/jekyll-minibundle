@@ -4,6 +4,10 @@ module Jekyll::Minibundle
       asset_source_path
     end
 
+    def relative_path
+      path.sub(/\A#{@site.source}/, '')
+    end
+
     def asset_destination_path
       File.join(asset_destination_dir, asset_destination_basename)
     end
@@ -18,6 +22,14 @@ module Jekyll::Minibundle
 
     def modified?
       stamped_at != mtime
+    end
+
+    def to_liquid
+      {
+        'path'          => relative_path,
+        'modified_time' => mtime.to_s,
+        'extname'       => File.extname(relative_path)
+      }
     end
   end
 end

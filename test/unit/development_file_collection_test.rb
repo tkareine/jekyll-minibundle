@@ -7,8 +7,8 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_calling_write_before_markup_writes_destination
-      with_site do
-        dev_files = DevelopmentFileCollection.new(bundle_config)
+      with_site do |site|
+        dev_files = DevelopmentFileCollection.new(site, bundle_config)
 
         assert first_file_of(dev_files).write('_site')
 
@@ -24,12 +24,31 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_to_liquid
+      with_site do |site|
+        files = DevelopmentFileCollection.new(site, bundle_config).
+            instance_variable_get('@files').
+            sort_by { |f| f.path }
+
+        hash = files[0].to_liquid
+
+        assert_equal "/#{JS_BUNDLE_SOURCE_DIR}/app.js", hash['path']
+        refute_empty hash['modified_time']
+        assert_equal '.js', hash['extname']
+
+        hash = files[1].to_liquid
+
+        assert_equal "/#{JS_BUNDLE_SOURCE_DIR}/dependency.js", hash['path']
+        refute_empty hash['modified_time']
+        assert_equal '.js', hash['extname']
+      end
+    end
+
     private
 
     def bundle_config
       {
        'type'             => :js,
-       'site_dir'         => '.',
        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
        'assets'           => %w{dependency app},
        'destination_path' => JS_BUNDLE_DESTINATION_PATH,

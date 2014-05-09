@@ -2,7 +2,9 @@ require 'fileutils'
 
 module Jekyll::Minibundle
   module AssetFileOperations
-    def static_file!(site)
+    def add_as_static_file_to(site)
+      # NOTE: Rely on explicit site parameter (not on self's @site) so
+      # that we can utilize asset registry clearing for tests.
       unless site.static_files.include? self
         site.static_files << self
       end

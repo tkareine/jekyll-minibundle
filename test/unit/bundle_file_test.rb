@@ -7,9 +7,9 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_calling_markup_determines_fingerprint_and_destination_write
-      with_site do
+      with_site do |site|
         with_env('JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count) do
-          bundle_file = BundleFile.new(bundle_config)
+          bundle_file = BundleFile.new(site, bundle_config)
           source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
           old_destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
           org_markup, last_markup = nil
@@ -45,9 +45,9 @@ module Jekyll::Minibundle::Test
     end
 
     def test_many_consecutive_markup_calls_trigger_one_destination_write
-      with_site do
+      with_site do |site|
         with_env('JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count) do
-          bundle_file = BundleFile.new(bundle_config)
+          bundle_file = BundleFile.new(site, bundle_config)
           source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
           destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
           org_markup, last_markup = nil
@@ -73,9 +73,9 @@ module Jekyll::Minibundle::Test
     end
 
     def test_calling_write_before_markup_has_no_effect
-      with_site do
+      with_site do |site|
         with_env('JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count) do
-          bundle_file = BundleFile.new(bundle_config)
+          bundle_file = BundleFile.new(site, bundle_config)
 
           refute bundle_file.write('_site')
           assert_empty Dir[destination_path('assets/*.js')]
@@ -90,12 +90,19 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_to_liquid
+      with_site do |site|
+        hash = BundleFile.new(site, bundle_config).to_liquid
+        assert_match(/jekyll-minibundle-js-/, hash['path'])
+        refute_empty hash['modified_time']
+      end
+    end
+
     private
 
     def bundle_config
       {
        'type'             => :js,
-       'site_dir'         => '.',
        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
        'assets'           => %w{dependency app},
        'destination_path' => JS_BUNDLE_DESTINATION_PATH,
