@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'jekyll/minibundle/environment'
+require 'jekyll/minibundle/compatibility'
 
 module Jekyll::Minibundle
   class AssetBundle
@@ -17,9 +18,9 @@ module Jekyll::Minibundle
       cmd = get_minifier_cmd
       exit_status = spawn_minifier(cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
-        log("Bundling #{@type} assets:")
+        Compatibility.log_info("Bundling #{@type} assets:")
         @asset_paths.each do |asset|
-          log(relative_path_from(asset, @site_dir))
+          Compatibility.log_info(relative_path_from(asset, @site_dir))
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
@@ -29,16 +30,6 @@ module Jekyll::Minibundle
     end
 
     private
-
-    if defined? ::Jekyll.logger  # introduced in Jekyll 1.0.0
-      def log(msg)
-        ::Jekyll.logger.info('Minibundle:', msg)
-      end
-    else
-      def log(msg)
-        $stdout.puts(msg)
-      end
-    end
 
     def relative_path_from(path, base)
       path.sub(/\A#{base}\//, '')

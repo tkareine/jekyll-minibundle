@@ -1,5 +1,5 @@
-require 'safe_yaml/load'
 require 'jekyll/minibundle/asset_file_registry'
+require 'jekyll/minibundle/compatibility'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -10,7 +10,7 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers.fetch(:site)
-      config = get_current_config(SafeYAML.load(super), site)
+      config = get_current_config(Compatibility.load_yaml(super), site)
       file = AssetFileRegistry.bundle_file(site, config)
       file.add_as_static_file_to(site)
       file.destination_path_for_markup
