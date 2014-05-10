@@ -1,11 +1,22 @@
-In order to release:
+# In order to release:
 
-$EDITOR lib/jekyll/minibundle/version.rb  # update version number
-$EDITOR CHANGELOG.md                      # describe a summary of changes since the last release
-git diff                                  # review the changes
-bundle exec rake gem:build                # check that tests pass
+# Push any commits not yet in upstream and wait for green build in CI,
+# <https://travis-ci.org/tkareine/jekyll-minibundle/builds>
+
+# Update version number
+$EDITOR lib/jekyll/minibundle/version.rb
+
+# Describe a summary of changes since the last release
+$EDITOR CHANGELOG.md
+
+# Review the changes
+git diff
+
+# Build gem, check that tests pass
+bundle exec rake gem:build
+
 git add -p
 git commit -m 'Release <version>'
 git tag <version>
-git push --tags origin master             # and wait for green build: https://travis-ci.org/tkareine/jekyll-minibundle/builds
+git push --tags origin master
 gem push jekyll-minibundle-<version>.gem
