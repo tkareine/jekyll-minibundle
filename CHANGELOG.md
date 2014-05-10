@@ -1,3 +1,8 @@
+# 1.4.6 / 2014-05-10
+
+* Handle compatibility issues with safe_yaml and logger flexibly. This
+  should allow using the plugin with Jekyll 1.0 and 2.0.
+
 # 1.4.5 / 2014-05-10
 
 * Use SafeYAML to load user input from `minibundle` block for
