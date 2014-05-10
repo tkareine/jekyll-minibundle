@@ -20,7 +20,7 @@ module Jekyll::Minibundle
       @is_modified = false
     end
 
-    def markup
+    def destination_path_for_markup
       # we must regenerate the fingerprint here, if at all, in order
       # to make sure the markup and generated file have the same
       # fingerprint

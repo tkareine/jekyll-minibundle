@@ -11,7 +11,7 @@ module Jekyll::Minibundle
       site = context.registers.fetch(:site)
       file = AssetFileRegistry.stamp_file(site, @asset_source, @asset_destination)
       file.add_as_static_file_to(site)
-      file.markup
+      file.destination_path_for_markup
     end
   end
 end

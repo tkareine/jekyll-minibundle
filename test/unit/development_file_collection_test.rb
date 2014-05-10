@@ -6,7 +6,7 @@ module Jekyll::Minibundle::Test
   class DevelopmentFileCollectionTest < TestCase
     include FixtureConfig
 
-    def test_calling_write_before_markup_writes_destination
+    def test_calling_write_before_destination_path_for_markup_writes_destination
       with_site do |site|
         dev_files = DevelopmentFileCollection.new(site, bundle_config)
 
@@ -17,7 +17,7 @@ module Jekyll::Minibundle::Test
         assert File.exist?(destination_file)
 
         org_mtime = mtime_of(destination_file)
-        dev_files.markup
+        dev_files.destination_path_for_markup
 
         refute first_file_of(dev_files).write('_site')
         assert_equal org_mtime, mtime_of(destination_file)

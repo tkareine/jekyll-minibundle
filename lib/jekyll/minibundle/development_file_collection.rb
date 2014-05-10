@@ -25,7 +25,7 @@ module Jekyll::Minibundle
       @files.each { |f| f.add_as_static_file_to(site) }
     end
 
-    def markup
+    def destination_path_for_markup
       @files.
         map { |f| AssetTagMarkup.make_markup(@type, f.asset_destination_path, @attributes) }.
         join("\n")

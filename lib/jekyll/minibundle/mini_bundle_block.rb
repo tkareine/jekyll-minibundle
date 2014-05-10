@@ -13,7 +13,7 @@ module Jekyll::Minibundle
       config = get_current_config(YAML.load(super), site)
       file = AssetFileRegistry.bundle_file(site, config)
       file.add_as_static_file_to(site)
-      file.markup
+      file.destination_path_for_markup
     end
 
     def self.default_config

@@ -21,7 +21,7 @@ module Jekyll::Minibundle
       @is_modified = false
     end
 
-    def markup
+    def destination_path_for_markup
       # we must rebundle here, if at all, in order to make sure the
       # markup and generated file have the same fingerprint
       if modified?
@@ -46,7 +46,8 @@ module Jekyll::Minibundle
       @assets.map { |f| File.stat(f).mtime.to_i }.max
     end
 
-    # writes destination only after `markup` has been called
+    # writes destination only after `destination_path_for_markup` has
+    # been called
     def write(site_destination_dir)
       if @is_modified
         write_destination(site_destination_dir)
