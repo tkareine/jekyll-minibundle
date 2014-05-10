@@ -44,7 +44,7 @@ module Jekyll::Minibundle::Test
     end
 
     def site
-      OpenStruct.new(:source => '.')
+      new_fake_site('.')
     end
   end
 end
