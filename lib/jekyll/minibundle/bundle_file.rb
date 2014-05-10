@@ -14,7 +14,7 @@ module Jekyll::Minibundle
       @site = site
       @type = config.fetch('type')
       asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
-      @assets = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
+      @asset_paths = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
       @destination_path = config.fetch('destination_path')
       @attributes = config.fetch('attributes')
       @stamped_at = nil
@@ -43,7 +43,7 @@ module Jekyll::Minibundle
     end
 
     def mtime
-      @assets.map { |f| File.stat(f).mtime.to_i }.max
+      @asset_paths.map { |f| File.stat(f).mtime.to_i }.max
     end
 
     # writes destination only after `destination_path_for_markup` has
@@ -65,7 +65,7 @@ module Jekyll::Minibundle
     end
 
     def asset_bundle
-      @_asset_bundle ||= AssetBundle.new(@type, @assets, @site.source)
+      @_asset_bundle ||= AssetBundle.new(@type, @asset_paths, @site.source)
     end
   end
 end

@@ -3,8 +3,8 @@ require 'jekyll/minibundle/environment'
 
 module Jekyll::Minibundle
   class AssetBundle
-    def initialize(type, assets, site_dir)
-      @type, @assets, @site_dir = type, assets, site_dir
+    def initialize(type, asset_paths, site_dir)
+      @type, @asset_paths, @site_dir = type, asset_paths, site_dir
       @temp_file = Tempfile.new("jekyll-minibundle-#{@type}-")
       at_exit { @temp_file.close! }
     end
@@ -18,7 +18,7 @@ module Jekyll::Minibundle
       exit_status = spawn_minifier(cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
         log("Bundling #{@type} assets:")
-        @assets.each do |asset|
+        @asset_paths.each do |asset|
           log(asset)
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
