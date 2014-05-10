@@ -45,14 +45,14 @@
 * Fix bug causing exception to be thrown when `ministamp` or
   `minibundle` is called twice with same asset source argument. Allow
   handling asset source files that are already static files in Jekyll
-  (remove the restriction introduced in 1.3.0). (@agrigg)
+  (remove the restriction introduced in 1.3.0). (#2, @agrigg)
 
 # 1.3.0 / 2013-12-25
 
 * Disallow handling asset source files that are already static files
   in Jekyll. Otherwise, we would potentially get to inconsistencies in
   Jekyll's watch mode. See "Jekyll static file restriction" in
-  README.md. (@agrigg)
+  README.md. (#2, @agrigg)
 * Upgrade development dependencies
 
 # 1.2.0 / 2013-09-29
@@ -65,7 +65,7 @@
 
 * `ministamp` tag omits fingerprint in development mode
 * Clarify documentation
-* Comply with (Gemnasium) conventions for changelogs (@tmatilai)
+* Comply with (Gemnasium) conventions for changelogs (#1, @tmatilai)
 * Bug fix: do not bundle assets when nonrelated files change
 * Bug fix: do not bundle assets twice upon startup
 
