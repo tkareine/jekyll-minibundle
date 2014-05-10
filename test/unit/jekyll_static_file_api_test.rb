@@ -1,5 +1,4 @@
 require 'support/test_case'
-require 'support/fixture_config'
 require 'jekyll/minibundle/development_file'
 require 'jekyll/minibundle/bundle_file'
 require 'jekyll/minibundle/stamp_file'
