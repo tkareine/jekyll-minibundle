@@ -1,3 +1,15 @@
+# 1.4.5 / 2014-05-10
+
+* Use SafeYAML to load user input from `minibundle` block for
+  consistent behavior with Jekyll and for security
+* Clean log messages: show relative paths when bundling assets
+* Add missing implementations of `relative_path` and `to_liquid`
+  methods from Jekyll's StaticFile API (introduced in Jekyll v1.5.0),
+  allowing Minibundle to behave better with other Jekyll plugins (#3,
+  @mmistakes)
+* Fix Ruby deprecation warnings (use `File.exist?` instead of
+  `File.exists?`)
+
 # 1.4.4 / 2014-01-16
 
 * Conserve memory when calculating fingerprint for an asset.
