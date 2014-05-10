@@ -82,7 +82,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_changing_css_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         org_mtime = mtime_of(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
@@ -99,7 +99,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_changing_js_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         org_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         ensure_file_mtime_changes { File.write(source_path(JS_BUNDLE_SOURCE_DIR, 'app.js'), '(function() {})()') }
@@ -116,7 +116,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_touching_css_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         destination = CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH
         org_mtime = mtime_of(destination_path(destination))
@@ -130,7 +130,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_touching_js_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         destination = JS_BUNDLE_DESTINATION_FINGERPRINT_PATH
         org_mtime = mtime_of(destination_path(destination))
@@ -144,7 +144,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_supports_relative_and_absolute_destination_paths
-      with_site do
+      with_site_dir do
         generate_site(:production)
         expected_css_path = destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
@@ -165,7 +165,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_bundles_assets_only_once_at_startup
-      with_site do
+      with_site_dir do
         with_env('JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count) do
           generate_site(:production)
         end
@@ -174,7 +174,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_does_not_rebundle_assets_when_nonsource_files_change
-      with_site do
+      with_site_dir do
         with_env('JEKYLL_MINIBUNDLE_CMD_JS' => cmd_to_remove_comments_and_count) do
           generate_site(:production)
           expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)

@@ -19,7 +19,7 @@ module Jekyll::Minibundle::Test
 
     [:development, :production].each do |env|
       define_method :"test_ministamp_allows_using_static_file_as_asset_source_in_#{env}_mode" do
-        with_site do
+        with_site_dir do
           contents = 'h2 {}'
           File.write(source_path('assets/shared.css'), contents)
           find_and_gsub_in_file(source_path('_layouts/default.html'), 'ministamp _tmp/site.css', 'ministamp assets/shared.css')
@@ -35,7 +35,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_minibundle_allows_using_static_file_as_asset_source_in_development_mode
-      with_site do
+      with_site_dir do
         dep_contents = 'console.log("lol")'
         app_contents = 'console.log("balal")'
         File.write(source_path('assets/dependency.js'), dep_contents)
@@ -49,7 +49,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_minibundle_allows_using_static_file_as_asset_source_in_production_mode
-      with_site do
+      with_site_dir do
         dep_contents = 'console.log("lol")'
         app_contents = 'console.log("balal")'
         bundled_contents = "#{dep_contents};\n#{app_contents};\n"

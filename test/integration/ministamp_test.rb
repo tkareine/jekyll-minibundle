@@ -28,7 +28,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_changing_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         org_mtime = mtime_of(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
         ensure_file_mtime_changes { File.write(source_path(STAMP_SOURCE_PATH), 'h1 {}') }
@@ -45,7 +45,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_touching_asset_source_rewrites_destination
-      with_site do
+      with_site_dir do
         generate_site(:production)
         destination = STAMP_DESTINATION_FINGERPRINT_PATH
         org_mtime = mtime_of(destination_path(destination))
@@ -59,7 +59,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_supports_relative_and_absolute_destination_paths
-      with_site do
+      with_site_dir do
         generate_site(:production)
         expected_path = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
 
@@ -75,7 +75,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_does_not_rewrite_destination_when_nonsource_files_change
-      with_site do
+      with_site_dir do
         generate_site(:production)
         expected_path = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_mtime = mtime_of(expected_path)

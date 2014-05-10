@@ -7,7 +7,7 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_calling_write_before_destination_path_for_markup_writes_destination
-      with_site do |site|
+      with_fake_site do |site|
         dev_files = DevelopmentFileCollection.new(site, bundle_config)
 
         assert first_file_of(dev_files).write('_site')
@@ -25,7 +25,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_to_liquid
-      with_site do |site|
+      with_fake_site do |site|
         files = DevelopmentFileCollection.new(site, bundle_config).
             instance_variable_get('@files').
             sort_by { |f| f.path }

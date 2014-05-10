@@ -55,7 +55,7 @@ module Jekyll::Minibundle::Test
      {desc: "touching", action: ->(source) { FileUtils.touch(source) }}
     ].each do |spec|
       define_method :"test_#{spec.fetch(:desc)}_css_asset_source_rewrites_destination" do
-        with_site do
+        with_site_dir do
           generate_site(:development)
           destination = destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')
           org_mtime = mtime_of(destination)
@@ -74,7 +74,7 @@ module Jekyll::Minibundle::Test
      {desc: "touching", action: ->(source) { FileUtils.touch(source) }}
     ].each do |spec|
       define_method :"test_#{spec.fetch(:desc)}_js_asset_source_rewrites_destination" do
-        with_site do
+        with_site_dir do
           generate_site(:development)
           destination = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
           org_mtime = mtime_of(destination)
@@ -89,7 +89,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_supports_relative_and_absolute_destination_paths
-      with_site do
+      with_site_dir do
         expected_css_path = destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
         generate_site(:development)
@@ -110,7 +110,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_does_not_require_bundling_commands
-      with_site do
+      with_site_dir do
         with_env('JEKYLL_MINIBUNDLE_CMD_CSS' => nil, 'JEKYLL_MINIBUNDLE_CMD_JS' => nil) do
           generate_site(:development)
           pass
@@ -119,7 +119,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_does_not_rewrite_destination_when_nonsource_files_change
-      with_site do
+      with_site_dir do
         generate_site(:development)
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
         org_mtime = mtime_of(expected_js_path)

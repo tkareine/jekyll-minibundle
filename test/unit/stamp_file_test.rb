@@ -7,7 +7,7 @@ module Jekyll::Minibundle::Test
     include FixtureConfig
 
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
-      with_site do |site|
+      with_fake_site do |site|
         stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
         source = source_path(STAMP_SOURCE_PATH)
         old_destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
@@ -39,7 +39,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_many_consecutive_destination_path_for_markup_calls_trigger_one_destination_write
-      with_site do |site|
+      with_fake_site do |site|
         stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
         source = source_path(STAMP_SOURCE_PATH)
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
@@ -61,7 +61,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_calling_write_before_destination_path_for_markup_has_no_effect
-      with_site do |site|
+      with_fake_site do |site|
         stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
 
         refute stamp_file.write('_site')
@@ -75,7 +75,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_to_liquid
-      with_site do |site|
+      with_fake_site do |site|
         hash = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer).to_liquid
         assert_equal "/#{STAMP_SOURCE_PATH}", hash['path']
         refute_empty hash['modified_time']

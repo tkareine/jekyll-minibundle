@@ -49,13 +49,30 @@ module Jekyll::Minibundle::Test
       org_env.each { |k, v| ENV[k] = v }
     end
 
-    def with_site(&block)
+    def with_site_dir(&block)
       Dir.mktmpdir("jekyll-minibundle-test-site-") do |dir|
         Dir.chdir(dir) do
           _copy_fixture_site_dir(Dir.pwd)
-          site = OpenStruct.new(:source => dir)
-          yield site, dir
+          yield dir
         end
+      end
+    end
+
+    def new_fake_site(dir)
+      OpenStruct.new(:source => dir)
+    end
+
+    def new_real_site
+      config = nil
+      capture_io do
+        config = Jekyll.configuration(TestCase.site_generation_jekyll_options)
+      end
+      Jekyll::Site.new(config)
+    end
+
+    def with_fake_site(&block)
+      with_site_dir do |dir|
+        yield new_fake_site(dir)
       end
     end
 
@@ -111,10 +128,8 @@ module Jekyll::Minibundle::Test
 
     def _generate_site(test_options)
       AssetFileRegistry.clear if test_options.fetch(:clear_cache)
-
-      capture_io do
-        Jekyll::Site.new(Jekyll.configuration(TestCase.site_generation_jekyll_options)).process
-      end
+      site = new_real_site
+      capture_io { site.process }
     end
 
     def _get_site_generation_test_options(options)
