@@ -19,7 +19,7 @@ module Jekyll::Minibundle
         $stdout.puts  # place newline after "(Re)generating..." log messages
         log("Bundling #{@type} assets:")
         @asset_paths.each do |asset|
-          log(asset)
+          log(relative_path_from(asset, @site_dir))
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
@@ -38,6 +38,10 @@ module Jekyll::Minibundle
       def log(msg)
         $stdout.puts(msg)
       end
+    end
+
+    def relative_path_from(path, base)
+      path.sub(/\A#{base}\//, '')
     end
 
     def get_minifier_cmd
