@@ -189,7 +189,7 @@ module Jekyll::Minibundle::Test
           assert_equal 1, get_cmd_count
 
           ensure_file_mtime_changes { FileUtils.touch('index.html') }
-          generate_site :production, clear_cache: false
+          generate_site(:production, clear_cache: false)
 
           assert_equal last_mtime, mtime_of(expected_js_path)
           assert_equal 1, get_cmd_count
