@@ -91,13 +91,13 @@ module Jekyll::Minibundle::Test
       yield
     end
 
-    def cmd_to_remove_comments_and_count
-      site_fixture_path('_bin/with_count') + ' count _bin/remove_comments'
+    def bundle_cmd_to_remove_comments_and_count
+      site_fixture_path('_bin/with_count') + ' bundle_cmd_count _bin/remove_comments'
     end
 
-    def get_cmd_count
-      if File.exist?('count')
-        File.read('count').to_i
+    def get_bundle_cmd_count
+      if File.exist?('bundle_cmd_count')
+        File.read('bundle_cmd_count').to_i
       else
         0
       end
