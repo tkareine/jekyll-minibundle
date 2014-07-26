@@ -166,34 +166,71 @@ module Jekyll::Minibundle::Test
 
     def test_bundles_assets_only_once_at_startup
       with_site_dir do
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => bundle_cmd_to_remove_comments_and_count) do
+        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count) do
           generate_site(:production)
         end
-        assert_equal 1, get_bundle_cmd_count
+        assert_equal 1, get_minifier_cmd_count
       end
     end
 
     def test_does_not_rebundle_assets_when_nonsource_files_change
       with_site_dir do
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => bundle_cmd_to_remove_comments_and_count) do
+        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count) do
           generate_site(:production)
           expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
           last_mtime = mtime_of(expected_js_path)
 
-          assert_equal 1, get_bundle_cmd_count
+          assert_equal 1, get_minifier_cmd_count
 
           ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
           generate_site(:production, clear_cache: false)
 
           assert_equal last_mtime, mtime_of(expected_js_path)
-          assert_equal 1, get_bundle_cmd_count
+          assert_equal 1, get_minifier_cmd_count
 
           ensure_file_mtime_changes { FileUtils.touch('index.html') }
           generate_site(:production, clear_cache: false)
 
           assert_equal last_mtime, mtime_of(expected_js_path)
-          assert_equal 1, get_bundle_cmd_count
+          assert_equal 1, get_minifier_cmd_count
         end
+      end
+    end
+
+    def test_supports_block_local_minifier_command
+      with_site_dir do
+        IO.write('test.html', <<-END)
+---
+layout: override
+title: Test
+---
+        END
+
+        IO.write('_layouts/override.html', <<-END)
+<!DOCTYPE html>
+<html>
+  <body>
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/deps
+    assets:
+      - dependency
+    minifier_cmd: #{minifier_cmd_to_remove_comments_and_count('minifier_cmd_local_count')}
+    {% endminibundle %}
+  </body>
+  <title>{{ page.title }}</title>
+</html>
+        END
+
+        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count')) do
+          generate_site(:production)
+        end
+
+        assert_equal 1, get_minifier_cmd_count('minifier_cmd_local_count')
+        assert File.exist?(destination_path('assets/deps-71042d0b7c86c04e015fde694dd9f409.js'))
+
+        assert_equal 1, get_minifier_cmd_count('minifier_cmd_global_count')
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
       end
     end
 

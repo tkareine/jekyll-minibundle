@@ -1,11 +1,14 @@
 require 'tempfile'
-require 'jekyll/minibundle/environment'
 require 'jekyll/minibundle/compatibility'
 
 module Jekyll::Minibundle
   class AssetBundle
-    def initialize(type, asset_paths, site_dir)
-      @type, @asset_paths, @site_dir = type, asset_paths, site_dir
+    def initialize(config)
+      @type = config.fetch(:type)
+      @asset_paths = config.fetch(:asset_paths)
+      @site_dir = config.fetch(:site_dir)
+      @minifier_cmd = config.fetch(:minifier_cmd)
+      fail "You need to set command for minification in $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase}" unless @minifier_cmd
       @temp_file = Tempfile.new("jekyll-minibundle-#{@type}-")
       at_exit { @temp_file.close! }
     end
@@ -15,8 +18,7 @@ module Jekyll::Minibundle
     end
 
     def make_bundle
-      cmd = get_minifier_cmd
-      exit_status = spawn_minifier(cmd) do |input|
+      exit_status = spawn_minifier(@minifier_cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
         Compatibility.log_info("Bundling #{@type} assets:")
         @asset_paths.each do |asset|
@@ -25,7 +27,7 @@ module Jekyll::Minibundle
           input.puts(';') if @type == :js
         end
       end
-      fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{cmd}" if exit_status != 0
+      fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{@minifier_cmd}" if exit_status != 0
       self
     end
 
@@ -33,10 +35,6 @@ module Jekyll::Minibundle
 
     def relative_path_from(path, base)
       path.sub(/\A#{base}\//, '')
-    end
-
-    def get_minifier_cmd
-      Environment.command_for(@type)
     end
 
     def spawn_minifier(cmd)

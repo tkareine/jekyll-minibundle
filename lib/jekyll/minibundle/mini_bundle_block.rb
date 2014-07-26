@@ -1,5 +1,6 @@
 require 'jekyll/minibundle/asset_file_registry'
 require 'jekyll/minibundle/compatibility'
+require 'jekyll/minibundle/environment'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -29,6 +30,7 @@ module Jekyll::Minibundle
 
     def get_current_config(user_config, site)
       MiniBundleBlock.default_config.
+        merge('minifier_cmd' => Environment.minifier_command_for(@type)).
         merge(user_config).
         merge('type' => @type)
     end

@@ -52,11 +52,12 @@ module Jekyll::Minibundle::Test
 
     def bundle_config
       {
-       'type'             => :js,
-       'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-       'assets'           => %w{dependency app},
-       'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-       'attributes'       => {}
+        'type'             => :js,
+        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
+        'assets'           => %w{dependency app},
+        'destination_path' => JS_BUNDLE_DESTINATION_PATH,
+        'attributes'       => {},
+        'minifier_cmd'     => 'unused_minifier_cmd'
       }
     end
   end

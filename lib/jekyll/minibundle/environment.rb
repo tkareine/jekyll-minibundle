@@ -1,9 +1,8 @@
 module Jekyll::Minibundle
   module Environment
     class << self
-      def command_for(type)
-        key = "JEKYLL_MINIBUNDLE_CMD_#{type.upcase}"
-        ENV.fetch(key) { fail "You need to set command for minification in $#{key}" }
+      def minifier_command_for(type)
+        ENV["JEKYLL_MINIBUNDLE_CMD_#{type.upcase}"]
       end
 
       def development?
