@@ -59,7 +59,7 @@ module Jekyll::Minibundle::Test
     end
 
     def new_fake_site(dir)
-      OpenStruct.new(:source => dir)
+      OpenStruct.new(source: dir)
     end
 
     def new_real_site
