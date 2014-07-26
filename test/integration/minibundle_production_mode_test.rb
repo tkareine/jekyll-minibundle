@@ -197,7 +197,35 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_supports_block_local_minifier_command
+    def test_gets_minifier_command_from_site_configuration
+      with_site_dir do
+        merge_to_yaml_file('_config.yml', 'minibundle' => {'minifier_commands' => {'js' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_config_count')}})
+
+        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => nil) do
+          generate_site(:production)
+        end
+
+        assert_equal 0, get_minifier_cmd_count
+        assert_equal 1, get_minifier_cmd_count('minifier_cmd_config_count')
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+      end
+    end
+
+    def test_minifier_command_from_environment_overrides_command_from_site_configuration
+      with_site_dir do
+        merge_to_yaml_file('_config.yml', 'minibundle' => {'minifier_commands' => {'js' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_config_count')}})
+
+        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_env_count')) do
+          generate_site(:production)
+        end
+
+        assert_equal 0, get_minifier_cmd_count('minifier_cmd_config_count')
+        assert_equal 1, get_minifier_cmd_count('minifier_cmd_env_count')
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+      end
+    end
+
+    def test_minifier_command_in_local_block_overrides_command_from_environment
       with_site_dir do
         IO.write('test.html', <<-END)
 ---
@@ -261,6 +289,10 @@ title: Test
         map { |f| File.read(site_fixture_path(source_subdir, "#{f}.#{type}")) }.
         join('').
         size
+    end
+
+    def merge_to_yaml_file(file, hash)
+      IO.write(file, YAML.load_file(file).merge(hash).to_yaml)
     end
   end
 end

@@ -16,7 +16,7 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_bundle_command_not_configured
       err = assert_raises(RuntimeError) { make_bundle(nil) }
-      assert_equal 'You need to set command for minification in $JEKYLL_MINIBUNDLE_CMD_JS', err.to_s
+      assert_match(/\AMissing minification command for bundling js assets. Specify it in/, err.to_s)
     end
 
     private

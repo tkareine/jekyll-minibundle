@@ -6,7 +6,7 @@ module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
     def initialize(tag_name, type, _tokens)
       super
-      @type = type.strip.to_sym
+      @type = type.strip.downcase.to_sym
     end
 
     def render(context)
@@ -17,22 +17,26 @@ module Jekyll::Minibundle
       file.destination_path_for_markup
     end
 
-    def self.default_config
+    def self.default_block_config
       {
-        'source_dir'        => '_assets',
-        'destination_path'  => 'assets/site',
-        'assets'            => [],
-        'attributes'        => {}
+        'source_dir'       => '_assets',
+        'destination_path' => 'assets/site',
+        'assets'           => [],
+        'attributes'       => {}
       }
     end
 
     private
 
-    def get_current_config(user_config, site)
-      MiniBundleBlock.default_config.
-        merge('minifier_cmd' => Environment.minifier_command_for(@type)).
-        merge(user_config).
+    def get_current_config(local_block_config, site)
+      MiniBundleBlock.default_block_config.
+        merge(environment_block_config(site)).
+        merge(local_block_config).
         merge('type' => @type)
+    end
+
+    def environment_block_config(site)
+      { 'minifier_cmd' => Environment.minifier_command(site, @type) }
     end
   end
 end

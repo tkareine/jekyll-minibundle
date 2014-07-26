@@ -8,7 +8,16 @@ module Jekyll::Minibundle
       @asset_paths = config.fetch(:asset_paths)
       @site_dir = config.fetch(:site_dir)
       @minifier_cmd = config.fetch(:minifier_cmd)
-      fail "You need to set command for minification in $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase}" unless @minifier_cmd
+
+      unless @minifier_cmd
+        fail <<-END
+Missing minification command for bundling #{@type} assets. Specify it in
+1) minibundle.minifier_commands.js setting in _config.yml,
+2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
+3) minifier_cmd setting in minibundle block.
+        END
+      end
+
       @temp_file = Tempfile.new("jekyll-minibundle-#{@type}-")
       at_exit { @temp_file.close! }
     end
