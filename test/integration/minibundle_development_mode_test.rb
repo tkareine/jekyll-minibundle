@@ -111,10 +111,8 @@ module Jekyll::Minibundle::Test
 
     def test_does_not_require_bundling_commands
       with_site_dir do
-        with_env('JEKYLL_MINIBUNDLE_CMD_CSS' => nil, 'JEKYLL_MINIBUNDLE_CMD_JS' => nil) do
-          generate_site(:development)
-          pass
-        end
+        generate_site(:development, minifier_cmd_css: nil, minifier_cmd_js: nil)
+        pass
       end
     end
 

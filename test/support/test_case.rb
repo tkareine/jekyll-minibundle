@@ -65,7 +65,7 @@ module Jekyll::Minibundle::Test
     def new_real_site
       config = nil
       capture_io do
-        config = Jekyll.configuration(TestCase.site_generation_jekyll_options)
+        config = Jekyll.configuration('source' => Dir.pwd, 'destination' => '_site')
       end
       Jekyll::Site.new(config)
     end
@@ -81,9 +81,12 @@ module Jekyll::Minibundle::Test
     end
 
     def generate_site(mode, options = {})
-      with_env('JEKYLL_MINIBUNDLE_MODE' => mode.to_s) do
-        _generate_site(_get_site_generation_test_options(options))
-      end
+      env = {
+        'JEKYLL_MINIBUNDLE_MODE'    => mode.to_s,
+        'JEKYLL_MINIBUNDLE_CMD_CSS' => options.fetch(:minifier_cmd_css, minifier_cmd_to_remove_comments),
+        'JEKYLL_MINIBUNDLE_CMD_JS'  => options.fetch(:minifier_cmd_js, minifier_cmd_to_remove_comments)
+      }
+      with_env(env) { _generate_site(options) }
     end
 
     def ensure_file_mtime_changes(&block)
@@ -131,24 +134,9 @@ module Jekyll::Minibundle::Test
     end
 
     def _generate_site(test_options)
-      AssetFileRegistry.clear if test_options.fetch(:clear_cache)
+      AssetFileRegistry.clear if test_options.fetch(:clear_cache, true)
       site = new_real_site
       capture_io { site.process }
-    end
-
-    def _get_site_generation_test_options(options)
-      TestCase.site_generation_test_options.merge(options)
-    end
-
-    def self.site_generation_test_options
-      { clear_cache: true }
-    end
-
-    def self.site_generation_jekyll_options
-      {
-        'source'      => Dir.pwd,
-        'destination' => '_site'
-      }
     end
   end
 end

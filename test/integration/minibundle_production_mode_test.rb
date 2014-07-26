@@ -166,34 +166,30 @@ module Jekyll::Minibundle::Test
 
     def test_bundles_assets_only_once_at_startup
       with_site_dir do
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count) do
-          generate_site(:production)
-        end
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
         assert_equal 1, get_minifier_cmd_count
       end
     end
 
     def test_does_not_rebundle_assets_when_nonsource_files_change
       with_site_dir do
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count) do
-          generate_site(:production)
-          expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-          last_mtime = mtime_of(expected_js_path)
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        last_mtime = mtime_of(expected_js_path)
 
-          assert_equal 1, get_minifier_cmd_count
+        assert_equal 1, get_minifier_cmd_count
 
-          ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
-          generate_site(:production, clear_cache: false)
+        ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
+        generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-          assert_equal last_mtime, mtime_of(expected_js_path)
-          assert_equal 1, get_minifier_cmd_count
+        assert_equal last_mtime, mtime_of(expected_js_path)
+        assert_equal 1, get_minifier_cmd_count
 
-          ensure_file_mtime_changes { FileUtils.touch('index.html') }
-          generate_site(:production, clear_cache: false)
+        ensure_file_mtime_changes { FileUtils.touch('index.html') }
+        generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-          assert_equal last_mtime, mtime_of(expected_js_path)
-          assert_equal 1, get_minifier_cmd_count
-        end
+        assert_equal last_mtime, mtime_of(expected_js_path)
+        assert_equal 1, get_minifier_cmd_count
       end
     end
 
@@ -201,9 +197,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         merge_to_yaml_file('_config.yml', 'minibundle' => {'minifier_commands' => {'js' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_config_count')}})
 
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => nil) do
-          generate_site(:production)
-        end
+        generate_site(:production, minifier_cmd_js: nil)
 
         assert_equal 0, get_minifier_cmd_count
         assert_equal 1, get_minifier_cmd_count('minifier_cmd_config_count')
@@ -215,9 +209,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         merge_to_yaml_file('_config.yml', 'minibundle' => {'minifier_commands' => {'js' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_config_count')}})
 
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_env_count')) do
-          generate_site(:production)
-        end
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count('minifier_cmd_env_count'))
 
         assert_equal 0, get_minifier_cmd_count('minifier_cmd_config_count')
         assert_equal 1, get_minifier_cmd_count('minifier_cmd_env_count')
@@ -250,9 +242,7 @@ title: Test
 </html>
         END
 
-        with_env('JEKYLL_MINIBUNDLE_CMD_JS' => minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count')) do
-          generate_site(:production)
-        end
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count'))
 
         assert_equal 1, get_minifier_cmd_count('minifier_cmd_local_count')
         assert File.exist?(destination_path('assets/deps-71042d0b7c86c04e015fde694dd9f409.js'))

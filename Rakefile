@@ -4,19 +4,19 @@ require 'shellwords'
 
 require_relative 'lib/jekyll/minibundle/version'
 
-def get_minibundle_env(overrides = {})
-  bundle_cmd = File.expand_path(File.join(File.dirname(__FILE__), 'test/fixture/site/_bin/remove_comments'))
-  {
-    'JEKYLL_MINIBUNDLE_CMD_JS'  => bundle_cmd,
-    'JEKYLL_MINIBUNDLE_CMD_CSS' => bundle_cmd,
-    'RUBYLIB'                   => File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
-  }.merge(overrides)
-end
-
 def run_jekyll_in_fixture_site(command)
   Dir.chdir('test/fixture/site')
   FileUtils.rm_rf('_site')
-  sh get_minibundle_env, "jekyll #{command}"
+
+  minifier_cmd = File.expand_path(File.join(File.dirname(__FILE__), 'test/fixture/site/_bin/remove_comments'))
+  env = {
+    'JEKYLL_MINIBUNDLE_CMD_JS'  => minifier_cmd,
+    'JEKYLL_MINIBUNDLE_CMD_CSS' => minifier_cmd,
+    'RUBYLIB'                   => File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
+  }
+  jekyll_cmd = "jekyll #{command}"
+
+  sh env, jekyll_cmd
 end
 
 namespace :gem do
@@ -46,11 +46,9 @@ task :test do
   files = Dir[glob].
     map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
     shelljoin
-  opts = ENV['debug'] ? '-w -rpp -rpry' : ''
+  extra_opts = ENV['debug'] ? '-w -rpp -rpry' : ''
   eval = %{-e 'ARGV.each { |f| require f }'}
-  cmd = "ruby #{opts} #{eval} #{files}"
-  env = get_minibundle_env('RUBYLIB' => 'lib:test')
-  sh env, cmd
+  sh "ruby -I lib:test #{extra_opts} #{eval} #{files}"
 end
 
 namespace :fixture do
