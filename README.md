@@ -180,11 +180,11 @@ You can specify minifier commands in three places:
 2. as environment variables:
 
    ``` bash
-   export JEKYLL_MINIBUNDLE_CSS=_bin/remove_whitespace
-   export JEKYLL_MINIBUNDLE_JS="./node_modules/.bin/uglifyjs -"
+   export JEKYLL_MINIBUNDLE_CMD_CSS=_bin/remove_whitespace
+   export JEKYLL_MINIBUNDLE_CMD_JS="./node_modules/.bin/uglifyjs -"
    ```
 
-3. inside the minibundle block via `minifier_cmd` setting, allowing
+3. inside the minibundle block with `minifier_cmd` setting, allowing
    blocks to have different commands from each other:
 
    ``` text
@@ -203,8 +203,8 @@ You can specify minifier commands in three places:
 These ways of specification are listed in increasing order of
 specificity. Should multiple commands apply to a block, the most
 specific one wins. For example, the `minifier_cmd` setting inside
-`minibundle js` block overrides the setting in `$JEKYLL_MINIBUNDLE_JS`
-environment variable.
+`minibundle js` block overrides the setting in
+`$JEKYLL_MINIBUNDLE_CMD_JS` environment variable.
 
 ## Recommended directory layout
 
