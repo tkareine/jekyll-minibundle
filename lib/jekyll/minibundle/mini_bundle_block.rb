@@ -7,6 +7,9 @@ module Jekyll::Minibundle
     def initialize(tag_name, type, _tokens)
       super
       @type = type.strip.downcase.to_sym
+      if @type.empty?
+        fail ArgumentError, "No asset type for minibundle block; pass value such as 'css' or 'js' as the argument"
+      end
     end
 
     def render(context)
