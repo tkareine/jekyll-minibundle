@@ -10,9 +10,9 @@ module Jekyll::Minibundle
         @_instances = {}
       end
 
-      def bundle_file(site, config)
-        asset_destination_path = "#{config.fetch('destination_path')}.#{config.fetch('type')}"
-        @_instances[asset_destination_path] ||= register_bundle_file(site, config)
+      def bundle_file(site, bundle_config)
+        asset_destination_path = "#{bundle_config.fetch('destination_path')}.#{bundle_config.fetch('type')}"
+        @_instances[asset_destination_path] ||= register_bundle_file(site, bundle_config)
       end
 
       def stamp_file(site, asset_source_path, asset_destination_path)
@@ -21,11 +21,11 @@ module Jekyll::Minibundle
 
       private
 
-      def register_bundle_file(site, config)
+      def register_bundle_file(site, bundle_config)
         if Environment.development?
-          DevelopmentFileCollection.new(site, config)
+          DevelopmentFileCollection.new(site, bundle_config)
         else
-          BundleFile.new(site, config)
+          BundleFile.new(site, bundle_config)
         end
       end
 
