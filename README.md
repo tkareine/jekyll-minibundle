@@ -164,9 +164,11 @@ minibundle:
     js: ./node_modules/.bin/uglifyjs -
 ```
 
+### Minifier command specification
+
 You can specify minifier commands in three places:
 
-1. in `_config.yml` (as shown above):
+1. in `_config.yml` (as shown earlier):
 
    ``` yaml
    minibundle:
@@ -182,8 +184,8 @@ You can specify minifier commands in three places:
    export JEKYLL_MINIBUNDLE_JS="./node_modules/.bin/uglifyjs -"
    ```
 
-3. locally inside the minibundle block, allowing block specific
-   minifier command definition:
+3. inside the minibundle block via `minifier_cmd` setting, allowing
+   blocks to have different commands from each other:
 
    ``` text
    {% minibundle js %}
@@ -199,10 +201,10 @@ You can specify minifier commands in three places:
    ```
 
 These ways of specification are listed in increasing order of
-specificity. Should multiple commands apply to one block, the most
-specific command given wins. For example, the `minifier_cmd` setting
-inside `minibundle js` block overrides the setting in
-`$JEKYLL_MINIBUNDLE_JS` environment variable.
+specificity. Should multiple commands apply to a block, the most
+specific one wins. For example, the `minifier_cmd` setting inside
+`minibundle js` block overrides the setting in `$JEKYLL_MINIBUNDLE_JS`
+environment variable.
 
 ## Recommended directory layout
 
