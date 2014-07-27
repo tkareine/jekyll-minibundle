@@ -1,7 +1,9 @@
-# HEAD
+# 1.5.0 / 2014-07-27
 
 * Support minifier command specification in `_config.yml` and inside
-  `minibundle` block
+  `minibundle` block (#4, @phillipadsmith)
+* Support enabling development mode from `_config.yml`
+* Add argument validation to `minibundle` block and `ministamp` tag
 * Document how to load the gem with Jekyll's `gems` config setting
 
 # 1.4.6 / 2014-05-10
