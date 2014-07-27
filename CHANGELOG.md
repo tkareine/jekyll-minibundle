@@ -1,3 +1,9 @@
+# HEAD
+
+* Support minifier command specification in `_config.yml` and inside
+  `minibundle` block
+* Document how to load the gem with Jekyll's `gems` config setting
+
 # 1.4.6 / 2014-05-10
 
 * Handle compatibility issues with safe_yaml and logger flexibly. This
