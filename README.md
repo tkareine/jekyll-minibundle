@@ -216,6 +216,7 @@ For example, in the following snippet we're using `assets/src.css` as
 asset source to `ministamp` tag:
 
 ``` html
+<!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to output directory -->
 <link href="{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
 ```
 
