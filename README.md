@@ -23,17 +23,17 @@ feature.
 
 Asset bundling consists of concatenation and minification. The plugin
 implements concatenation and leaves choosing the minification tool up
-to you. [UglifyJS2](https://github.com/mishoo/UglifyJS2) is a good and
-fast minifier, for example. The plugin connects to the minifier with
-standard unix pipe, feeding asset file contents to it in desired order
-via standard input, and reads the result from standard output.
+to you. [UglifyJS2][UglifyJS2] is a good and fast minifier, for
+example. The plugin connects to the minifier with standard unix pipe,
+feeding asset file contents to it in desired order via standard input,
+and reads the result from standard output.
 
 Why is this good? A fingerprint in asset's path is the
-[recommended way](https://developers.google.com/speed/docs/best-practices/caching)
-to handle caching of static resources, because you can allow caching
-the asset forever. Calculating MD5 digest over the contents of the
-asset is fast and the resulting digest is reasonably unique to be
-generated automatically.
+[recommended way][GoogleCachingBestPractices] to handle caching of
+static resources, because you can allow caching the asset
+forever. Calculating MD5 digest over the contents of the asset is fast
+and the resulting digest is reasonably unique to be generated
+automatically.
 
 Asset bundling is good for reducing the number of requests to the
 backend upon page load. The minification of stylesheets and JavaScript
@@ -42,22 +42,33 @@ network.
 
 # Usage
 
-The plugin is shipped as a
-[RubyGem](https://rubygems.org/gems/jekyll-minibundle):
+The plugin ships as a
+[RubyGem](https://rubygems.org/gems/jekyll-minibundle). To install:
 
 ``` bash
 $ gem install jekyll-minibundle
 ```
 
-Add `_plugins/minibundle.rb` file to your Jekyll site project with
-this line:
+(You should use [Bundler][GemBundler] to manage the gems in your
+project.)
+
+Then, instruct Jekyll to load the gem by adding this line to the
+[configuration file][JekyllConf] of your Jekyll site project
+(`_config.yml`):
+
+``` yaml
+gems: ['jekyll/minibundle']
+```
+
+An alternative to using the `gems` configuration setting is to add
+`_plugins/minibundle.rb` file to your site project with this line:
 
 ``` ruby
 require 'jekyll/minibundle'
 ```
 
-You must allow Jekyll to use custom plugins. In
-[Jekyll's configuration][JekyllConf], do not enable `safe` setting.
+You must allow Jekyll to use custom plugins. That is, do not enable
+Jekyll's `safe` setting.
 
 ## Asset fingerprinting
 
@@ -77,9 +88,8 @@ Output, containing the MD5 digest of the file in the filename:
 Jekyll's output directory will have the asset file at that path.
 
 This feature is useful when combined with asset generation tools
-external to Jekyll. For example, you can configure
-[Compass](http://compass-style.org/) to take inputs from
-`_assets/styles/*.scss` and to produce output to
+external to Jekyll. For example, you can configure [Compass][Compass]
+to take inputs from `_assets/styles/*.scss` and to produce output to
 `_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
 fingerprint to Jekyll's output directory:
 
@@ -113,16 +123,13 @@ attributes:
 {% endminibundle %}
 ```
 
-Then, specify the command for launching your favorite minifier in
-`$JEKYLL_MINIBUNDLE_CMD_JS` environment variable. For example, when
-launching Jekyll:
+Then, specify the command for launching your favorite minifier in `_config.yml`:
 
-``` bash
-$ JEKYLL_MINIBUNDLE_CMD_JS='./node_modules/.bin/uglifyjs --' jekyll
+``` yaml
+minibundle:
+  minifier_commands:
+    js: ./node_modules/.bin/uglifyjs -
 ```
-
-You can pass custom attributes to the generated markup with
-`attributes` map in the configuration.
 
 Output in the content file:
 
@@ -130,7 +137,11 @@ Output in the content file:
 <script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
 ```
 
-For bundling CSS assets, you use `css` as the argument to `minibundle` block:
+You can pass custom attributes, like `id="my-scripts"` above, to the
+generated markup with `attributes` map inside the `minibundle` block.
+
+For bundling CSS assets, you use `css` as the argument to the
+`minibundle` block:
 
 ``` text
 {% minibundle css %}
@@ -144,8 +155,54 @@ attributes:
 {% endminibundle %}
 ```
 
-And then specify the command for launching bundling in
-`$JEKYLL_MINIBUNDLE_CMD_CSS` environment variable.
+And then specify the minifier command in `_config.yml`:
+
+``` yaml
+minibundle:
+  minifier_commands:
+    css: _bin/remove_whitespace
+    js: ./node_modules/.bin/uglifyjs -
+```
+
+You can specify minifier commands in three places:
+
+1. in `_config.yml` (as shown above):
+
+   ``` yaml
+   minibundle:
+     minifier_commands:
+       css: _bin/remove_whitespace
+       js: ./node_modules/.bin/uglifyjs -
+   ```
+
+2. as environment variables:
+
+   ``` bash
+   export JEKYLL_MINIBUNDLE_CSS=_bin/remove_whitespace
+   export JEKYLL_MINIBUNDLE_JS="./node_modules/.bin/uglifyjs -"
+   ```
+
+3. locally inside the minibundle block, allowing block specific
+   minifier command definition:
+
+   ``` text
+   {% minibundle js %}
+   source_dir: _assets/scripts
+   destination_path: assets/site
+   minifier_cmd: ./node_modules/.bin/uglifyjs -
+   assets:
+     - dependency
+     - app
+   attributes:
+     id: my-scripts
+   {% endminibundle %}
+   ```
+
+These ways of specification are listed in increasing order of
+specificity. Should multiple commands apply to one block, the most
+specific command given wins. For example, the `minifier_cmd` setting
+inside `minibundle js` block overrides the setting in
+`$JEKYLL_MINIBUNDLE_JS` environment variable.
 
 ## Recommended directory layout
 
@@ -200,5 +257,9 @@ See the contents of `test/fixture/site` directory.
 
 MIT. See `LICENSE.txt`.
 
+[Compass]: http://compass-style.org/
+[GemBundler]: http://bundler.io/
+[GoogleCachingBestPractices]: https://developers.google.com/speed/docs/best-practices/caching
 [Jekyll]: http://jekyllrb.com/
 [JekyllConf]: http://jekyllrb.com/docs/configuration/
+[UglifyJS2]: https://github.com/mishoo/UglifyJS2
