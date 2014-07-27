@@ -133,6 +133,22 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_gets_development_mode_from_site_configuration
+      with_site_dir do
+        merge_to_yaml_file('_config.yml', 'minibundle' => {'mode' => 'development'})
+        generate_site(nil)
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
+      end
+    end
+
+    def test_development_mode_from_environment_overrides_mode_from_site_configuration
+      with_site_dir do
+        merge_to_yaml_file('_config.yml', 'minibundle' => {'mode' => 'production'})
+        generate_site(:development)
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
+      end
+    end
+
     private
 
     def find_css_elements_from_index

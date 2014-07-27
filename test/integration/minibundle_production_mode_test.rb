@@ -280,9 +280,5 @@ title: Test
         join('').
         size
     end
-
-    def merge_to_yaml_file(file, hash)
-      IO.write(file, YAML.load_file(file).merge(hash).to_yaml)
-    end
   end
 end

@@ -22,7 +22,7 @@ module Jekyll::Minibundle
       private
 
       def register_bundle_file(site, bundle_config)
-        if Environment.development?
+        if Environment.development?(site)
           DevelopmentFileCollection.new(site, bundle_config)
         else
           BundleFile.new(site, bundle_config)
@@ -30,11 +30,11 @@ module Jekyll::Minibundle
       end
 
       def register_stamp_file(site, asset_source_path, asset_destination_path)
-        StampFile.new(site, asset_source_path, asset_destination_path, &get_stamp_file_basenamer)
+        StampFile.new(site, asset_source_path, asset_destination_path, &get_stamp_file_basenamer(site))
       end
 
-      def get_stamp_file_basenamer
-        if Environment.development?
+      def get_stamp_file_basenamer(site)
+        if Environment.development?(site)
           ->(base, ext, _) { base + ext }
         else
           ->(base, ext, stamper) { "#{base}-#{stamper.call}#{ext}" }

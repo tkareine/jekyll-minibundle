@@ -34,6 +34,10 @@ module Jekyll::Minibundle::Test
       File.write(file, new_content)
     end
 
+    def merge_to_yaml_file(file, hash)
+      IO.write(file, YAML.load_file(file).merge(hash).to_yaml)
+    end
+
     def mtime_of(path)
       File.stat(path).mtime
     end
@@ -82,7 +86,7 @@ module Jekyll::Minibundle::Test
 
     def generate_site(mode, options = {})
       env = {
-        'JEKYLL_MINIBUNDLE_MODE'    => mode.to_s,
+        'JEKYLL_MINIBUNDLE_MODE'    => mode && mode.to_s,
         'JEKYLL_MINIBUNDLE_CMD_CSS' => options.fetch(:minifier_cmd_css, minifier_cmd_to_remove_comments),
         'JEKYLL_MINIBUNDLE_CMD_JS'  => options.fetch(:minifier_cmd_js, minifier_cmd_to_remove_comments)
       }

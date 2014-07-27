@@ -6,8 +6,9 @@ module Jekyll::Minibundle
         ENV["JEKYLL_MINIBUNDLE_CMD_#{type.upcase}"] || Environment.find_site_config(site, ['minibundle', 'minifier_commands', type], String)
       end
 
-      def development?
-        ENV['JEKYLL_MINIBUNDLE_MODE'] == 'development'
+      def development?(site)
+        mode = ENV['JEKYLL_MINIBUNDLE_MODE'] || Environment.find_site_config(site, ['minibundle', 'mode'], String)
+        mode == 'development'
       end
 
       def find_site_config(site, keys, type)
