@@ -251,6 +251,16 @@ filenames and line numbers of the original asset sources.
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
 ```
 
+Alternatively, you can enable development mode from `_config.yml`:
+
+``` yaml
+minibundle:
+  mode: development
+```
+
+Should both be defined, the setting from the environment variable
+wins.
+
 # Example site
 
 See the contents of `test/fixture/site` directory.
