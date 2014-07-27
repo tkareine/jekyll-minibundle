@@ -12,9 +12,9 @@ module Jekyll::Minibundle
       unless @minifier_cmd
         fail <<-END
 Missing minification command for bundling #{@type} assets. Specify it in
-1) minibundle.minifier_commands.js setting in _config.yml,
+1) minibundle.minifier_commands.#{@type} setting in _config.yml,
 2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
-3) minifier_cmd setting in minibundle block.
+3) minifier_cmd setting inside minibundle block.
         END
       end
 
