@@ -114,6 +114,13 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def get_send_results(obj, method_names)
+      method_names.reduce({}) do |acc, method_name|
+        acc[method_name] = obj.send(method_name)
+        acc
+      end
+    end
+
     private
 
     def _copy_fixture_site_dir(dir)

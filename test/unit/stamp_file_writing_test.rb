@@ -3,12 +3,12 @@ require 'support/fixture_config'
 require 'jekyll/minibundle/stamp_file'
 
 module Jekyll::Minibundle::Test
-  class StampFileTest < TestCase
+  class StampFileWritingTest < TestCase
     include FixtureConfig
 
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
-        stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+        stamp_file = new_stamp_file(site)
         source = source_path(STAMP_SOURCE_PATH)
         old_destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_markup = stamp_file.destination_path_for_markup
@@ -40,7 +40,7 @@ module Jekyll::Minibundle::Test
 
     def test_many_consecutive_destination_path_for_markup_calls_trigger_one_destination_write
       with_fake_site do |site|
-        stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+        stamp_file = new_stamp_file(site)
         source = source_path(STAMP_SOURCE_PATH)
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_markup = stamp_file.destination_path_for_markup
@@ -62,7 +62,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_write_before_destination_path_for_markup_has_no_effect
       with_fake_site do |site|
-        stamp_file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+        stamp_file = new_stamp_file(site)
 
         refute stamp_file.write('_site')
         assert_empty Dir[destination_path('assets/*.css')]
@@ -74,16 +74,11 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_to_liquid
-      with_fake_site do |site|
-        hash = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer).to_liquid
-        assert_equal "/#{STAMP_SOURCE_PATH}", hash['path']
-        refute_empty hash['modified_time']
-        assert_equal '.css', hash['extname']
-      end
-    end
-
     private
+
+    def new_stamp_file(site)
+      StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+    end
 
     def stamp_basenamer
       ->(base, ext, stamper) { "#{base}-#{stamper.call}#{ext}" }

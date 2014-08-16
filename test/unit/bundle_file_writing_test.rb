@@ -3,7 +3,7 @@ require 'support/fixture_config'
 require 'jekyll/minibundle/bundle_file'
 
 module Jekyll::Minibundle::Test
-  class BundleFileTest < TestCase
+  class BundleFileWritingTest < TestCase
     include FixtureConfig
 
     def test_calling_markup_determines_fingerprint_and_destination_write
@@ -81,14 +81,6 @@ module Jekyll::Minibundle::Test
         assert bundle_file.write('_site')
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         assert_equal 1, get_minifier_cmd_count
-      end
-    end
-
-    def test_to_liquid
-      with_fake_site do |site|
-        hash = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments)).to_liquid
-        assert_match(/jekyll-minibundle-js-/, hash['path'])
-        refute_empty hash['modified_time']
       end
     end
 
