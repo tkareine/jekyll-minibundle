@@ -18,7 +18,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
         END
       end
 
-      @temp_file = Tempfile.new("jekyll-minibundle-#{@type}-")
+      @temp_file = Tempfile.new(["jekyll-minibundle-", ".#{@type}"])
       at_exit { @temp_file.close! }
     end
 

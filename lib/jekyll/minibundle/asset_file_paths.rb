@@ -16,6 +16,10 @@ module Jekyll::Minibundle
       File.join(site_destination_dir, asset_destination_path)
     end
 
+    def extname
+      File.extname(relative_path)
+    end
+
     def mtime
       File.stat(path).mtime.to_i
     end
@@ -24,12 +28,20 @@ module Jekyll::Minibundle
       stamped_at != mtime
     end
 
+    def destination_rel_dir
+      asset_destination_dir
+    end
+
     def to_liquid
       {
         'path'          => relative_path,
         'modified_time' => mtime.to_s,
-        'extname'       => File.extname(relative_path)
+        'extname'       => extname
       }
+    end
+
+    def write?
+      true
     end
   end
 end

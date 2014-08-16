@@ -30,6 +30,21 @@ module Jekyll::Minibundle::Test
       assert_equal '.js', hash['extname']
     end
 
+    def test_extname
+      assert_equal '.js', @results.fetch(:dependency).fetch(:extname)
+      assert_equal '.js', @results.fetch(:app).fetch(:extname)
+    end
+
+    def test_destination_rel_dir
+      assert_equal 'assets/site', @results.fetch(:dependency).fetch(:destination_rel_dir)
+      assert_equal 'assets/site', @results.fetch(:app).fetch(:destination_rel_dir)
+    end
+
+    def test_write?
+      assert @results.fetch(:dependency).fetch(:write?)
+      assert @results.fetch(:app).fetch(:write?)
+    end
+
     private
 
     def bundle_config

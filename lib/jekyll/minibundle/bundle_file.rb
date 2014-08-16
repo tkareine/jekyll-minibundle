@@ -39,6 +39,10 @@ module Jekyll::Minibundle
       asset_bundle.path
     end
 
+    def asset_destination_dir
+      File.dirname(@destination_path)
+    end
+
     def asset_destination_path
       "#{@destination_path}-#{asset_stamp}.#{@type}"
     end
