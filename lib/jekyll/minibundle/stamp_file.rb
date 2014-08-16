@@ -1,11 +1,11 @@
 require 'jekyll/minibundle/asset_file_operations'
-require 'jekyll/minibundle/asset_file_paths'
+require 'jekyll/minibundle/asset_file_properties'
 require 'jekyll/minibundle/asset_stamp'
 
 module Jekyll::Minibundle
   class StampFile
     include AssetFileOperations
-    include AssetFilePaths
+    include AssetFileProperties
 
     attr_reader :asset_source_path, :asset_destination_dir, :stamped_at
 

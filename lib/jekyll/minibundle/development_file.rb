@@ -1,10 +1,10 @@
 require 'jekyll/minibundle/asset_file_operations'
-require 'jekyll/minibundle/asset_file_paths'
+require 'jekyll/minibundle/asset_file_properties'
 
 module Jekyll::Minibundle
   class DevelopmentFile
     include AssetFileOperations
-    include AssetFilePaths
+    include AssetFileProperties
 
     attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_basename, :stamped_at
 

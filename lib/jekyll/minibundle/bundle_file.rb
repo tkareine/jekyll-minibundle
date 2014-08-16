@@ -1,12 +1,13 @@
 require 'jekyll/minibundle/asset_bundle'
 require 'jekyll/minibundle/asset_file_operations'
+require 'jekyll/minibundle/asset_file_properties'
 require 'jekyll/minibundle/asset_stamp'
 require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle
   class BundleFile
     include AssetFileOperations
-    include AssetFilePaths
+    include AssetFileProperties
 
     attr_reader :stamped_at
 

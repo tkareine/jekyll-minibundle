@@ -1,5 +1,5 @@
 module Jekyll::Minibundle
-  module AssetFilePaths
+  module AssetFileProperties
     def path
       asset_source_path
     end
