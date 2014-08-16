@@ -12,15 +12,15 @@ module Jekyll::Minibundle
       end
 
       def find_site_config(site, keys, type)
-        value = traverse_hash(site.config, keys)
+        value = traverse_keys(site.config, keys)
         if value && !value.is_a?(type)
           fail "Invalid site configuration for key #{keys.join('.')}; expecting type #{type}"
         end
         value
       end
 
-      def traverse_hash(hash, keys)
-        value = hash
+      def traverse_keys(obj, keys)
+        value = obj
         keys.each do |key|
           return nil unless value
           value = value[key]

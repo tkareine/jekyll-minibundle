@@ -3,15 +3,17 @@ require 'jekyll/minibundle/environment'
 
 module Jekyll::Minibundle::Test
   class EnvironmentTest < TestCase
-    def test_hash_traverse_returns_value_when_found
-      assert_equal 1, Environment.traverse_hash({top: {middle: {leaf: 1}}}, [:top, :middle, :leaf])
-      assert_equal({leaf: 1}, Environment.traverse_hash({top: {middle: {leaf: 1}}}, [:top, :middle]))
+    def test_traverse_keys_returns_value_when_found
+      assert_equal 1, Environment.traverse_keys({top: {middle: {leaf: 1}}}, [:top, :middle, :leaf])
+      assert_equal({leaf: 1}, Environment.traverse_keys({top: {middle: {leaf: 1}}}, [:top, :middle]))
+      assert_equal 1, Environment.traverse_keys({top: [{}, {leaf: 1}]}, [:top, 1, :leaf])
     end
 
-    def test_hash_traverse_returns_nil_when_not_found
-      assert_nil Environment.traverse_hash({}, [:top, :no_such_leaf])
-      assert_nil Environment.traverse_hash({top: {}}, [:top, :no_such_leaf])
-      assert_nil Environment.traverse_hash({top: {leaf: 1}}, [:top, :no_such_leaf])
+    def test_traverse_keys_returns_nil_when_not_found
+      assert_nil Environment.traverse_keys({}, [:top, :no_such_leaf])
+      assert_nil Environment.traverse_keys({top: {}}, [:top, :no_such_leaf])
+      assert_nil Environment.traverse_keys({top: {leaf: 1}}, [:top, :no_such_leaf])
+      assert_nil Environment.traverse_keys({top: []}, [:top, 0])
     end
 
     def test_find_site_config_returns_value_when_found
