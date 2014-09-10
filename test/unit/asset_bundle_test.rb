@@ -5,8 +5,8 @@ module Jekyll::Minibundle::Test
   class AssetBundleTest < TestCase
     def test_raise_exception_if_bundle_command_fails
       capture_io do
-        err = assert_raises(RuntimeError) { make_bundle('false') }
-        assert_equal 'Bundling js assets failed with exit status 1, command: false', err.to_s
+        err = assert_raises(RuntimeError) { make_bundle('read ; false') }
+        assert_equal 'Bundling js assets failed with exit status 1, command: read ; false', err.to_s
       end
     end
 
