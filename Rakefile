@@ -26,17 +26,17 @@ namespace :gem do
 
   desc 'Package the software as a gem'
   task :build => :test do
-    sh %{gem build #{gem_name}.gemspec}
+    sh "gem build #{gem_name}.gemspec"
   end
 
   desc 'Install the software as a gem'
   task :install do
-    sh %{gem install #{gem_name}-#{Jekyll::Minibundle::VERSION}.gem}
+    sh "gem install #{gem_name}-#{Jekyll::Minibundle::VERSION}.gem"
   end
 
   desc 'Uninstall the gem'
   task :uninstall => :clean do
-    sh %{gem uninstall #{gem_name}}
+    sh "gem uninstall #{gem_name}"
   end
 end
 
@@ -52,7 +52,7 @@ task :test do
     requirable_files = Dir['test/{unit,integration}/*_test.rb'].
       map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
       shelljoin
-    eval = %{-e 'ARGV.each { |f| require f }'}
+    eval = "-e 'ARGV.each { |f| require f }'"
     "#{eval} #{requirable_files}"
   end
 
