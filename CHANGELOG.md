@@ -1,3 +1,10 @@
+# 1.5.1 / 2015-01-29
+
+* Improve future compatibility with Jekyll. Minibundle has classes
+  adhering to `Jekyll::StaticFile` interface, and some method
+  implementations of the interface were missing.
+* Small refactorings and test improvements
+
 # 1.5.0 / 2014-07-27
 
 * Support minifier command specification in `_config.yml` and inside
