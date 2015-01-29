@@ -3,20 +3,24 @@
 # Push any commits not yet in upstream and wait for green build in CI,
 # <https://travis-ci.org/tkareine/jekyll-minibundle/builds>
 
+# Double check that tests pass
+bundle exec rake test
+
 # Update version number
 $EDITOR lib/jekyll/minibundle/version.rb
 
 # Describe a summary of changes since the last release
 $EDITOR CHANGELOG.md
 
-# Review the changes
+# Review the changes, commit them, tag the release
 git diff
+git add -p
+git commit -m 'Release <version>'
+git tag <version>
 
 # Build gem, check that tests pass
 bundle exec rake gem:build
 
-git add -p
-git commit -m 'Release <version>'
-git tag <version>
+# Push commits and tag, release the gem
 git push --tags origin master
 gem push jekyll-minibundle-<version>.gem
