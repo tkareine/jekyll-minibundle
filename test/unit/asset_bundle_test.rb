@@ -6,7 +6,14 @@ module Jekyll::Minibundle::Test
     def test_raise_exception_if_bundle_command_fails
       capture_io do
         err = assert_raises(RuntimeError) { make_bundle('read _ignore ; false') }
-        assert_equal 'Bundling js assets failed with exit status 1, command: read _ignore ; false', err.to_s
+        assert_equal 'Bundling js assets failed with exit status 1, command: read _ignore ; false Last 5000 chars of output: ', err.to_s
+      end
+    end
+
+    def test_include_output_if_command_fails
+      capture_io do
+        err = assert_raises(RuntimeError) { make_bundle('printf I_FAILED ; false') }
+        assert_equal 'Bundling js assets failed with exit status 1, command: printf I_FAILED ; false Last 5000 chars of output: I_FAILED', err.to_s
       end
     end
 
