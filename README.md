@@ -12,8 +12,8 @@ Tested with Ruby MRI 1.9.3 and 2.x. Ruby 1.8 is *not* supported.
 
 The plugin works with Jekyll's watch (auto-regeneration) mode.
 
-[![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)](http://badge.fury.io/rb/jekyll-minibundle)
-[![Build status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)](http://travis-ci.org/tkareine/jekyll-minibundle)
+[![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
+[![Build status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)][MinibundleBuild]
 
 # Features
 
@@ -42,8 +42,7 @@ network.
 
 # Usage
 
-The plugin ships as a
-[RubyGem](https://rubygems.org/gems/jekyll-minibundle). To install:
+The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
 ``` bash
 $ gem install jekyll-minibundle
@@ -272,7 +271,9 @@ MIT. See `LICENSE.txt`.
 
 [Compass]: http://compass-style.org/
 [GemBundler]: http://bundler.io/
-[GoogleCachingBestPractices]: https://developers.google.com/speed/docs/best-practices/caching
-[Jekyll]: http://jekyllrb.com/
-[JekyllConf]: http://jekyllrb.com/docs/configuration/
+[GoogleCachingBestPractices]: https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
+[MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
+[MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
+[Jekyll]: https://jekyllrb.com/
+[JekyllConf]: https://jekyllrb.com/docs/configuration/
 [UglifyJS2]: https://github.com/mishoo/UglifyJS2
