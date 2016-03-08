@@ -1,15 +1,17 @@
 module Jekyll::Minibundle
   module AssetFileProperties
+    def asset_destination_path
+      File.join(asset_destination_dir, asset_destination_basename)
+    end
+
+    # Conformance to remaining Jekyll StaticFile public API methods
+
     def path
       asset_source_path
     end
 
     def relative_path
       path.sub(/\A#{@site.source}/, '')
-    end
-
-    def asset_destination_path
-      File.join(asset_destination_dir, asset_destination_basename)
     end
 
     def destination(site_destination_dir)
@@ -20,8 +22,16 @@ module Jekyll::Minibundle
       File.extname(relative_path)
     end
 
+    def url
+      asset_destination_path
+    end
+
+    def modified_time
+      File.stat(path).mtime
+    end
+
     def mtime
-      File.stat(path).mtime.to_i
+      modified_time.to_i
     end
 
     def modified?
@@ -35,13 +45,25 @@ module Jekyll::Minibundle
     def to_liquid
       {
         'path'          => relative_path,
-        'modified_time' => mtime.to_s,
+        'modified_time' => modified_time,
         'extname'       => extname
       }
     end
 
     def write?
       true
+    end
+
+    def type
+      nil  # no collection present
+    end
+
+    def defaults
+      {}
+    end
+
+    def placeholders
+      {}
     end
   end
 end

@@ -48,8 +48,8 @@ module Jekyll::Minibundle
       "#{@destination_path}-#{asset_stamp}.#{@type}"
     end
 
-    def mtime
-      @asset_paths.map { |f| File.stat(f).mtime.to_i }.max
+    def modified_time
+      @asset_paths.map { |f| File.stat(f).mtime }.max
     end
 
     # writes destination only after `destination_path_for_markup` has
