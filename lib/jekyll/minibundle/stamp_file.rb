@@ -33,6 +33,10 @@ module Jekyll::Minibundle
       asset_destination_path
     end
 
+    def extname
+      @asset_destination_extension
+    end
+
     # writes destination only after `markup` has been called
     def write(site_destination_dir)
       if @is_modified

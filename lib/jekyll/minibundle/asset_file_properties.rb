@@ -18,10 +18,6 @@ module Jekyll::Minibundle
       File.join(site_destination_dir, asset_destination_path)
     end
 
-    def extname
-      File.extname(relative_path)
-    end
-
     def url
       asset_destination_path
     end

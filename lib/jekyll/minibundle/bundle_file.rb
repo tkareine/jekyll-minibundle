@@ -48,6 +48,10 @@ module Jekyll::Minibundle
       "#{@destination_path}-#{asset_stamp}.#{@type}"
     end
 
+    def extname
+      ".#{@type}"
+    end
+
     def modified_time
       @asset_paths.map { |f| File.stat(f).mtime }.max
     end
