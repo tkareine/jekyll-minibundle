@@ -36,7 +36,12 @@ Missing minification command for bundling #{@type} assets. Specify it in
           input.puts(';') if @type == :js
         end
       end
-      fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{@minifier_cmd}" if exit_status != 0
+      if exit_status != 0
+        output = File.read(@temp_file.path)
+        chars_of_output = 5000
+        truncated_output = output[-chars_of_output..-1] || output
+        fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{@minifier_cmd} Last #{chars_of_output} chars of output: #{truncated_output}"
+      end
       self
     end
 
