@@ -6,19 +6,25 @@ module Jekyll::Minibundle::Test
     def test_raise_exception_if_bundle_command_fails
       capture_io do
         err = assert_raises(RuntimeError) { make_bundle('read _ignore ; false') }
-        assert_equal 'Bundling js assets failed with exit status 1, command: read _ignore ; false Last 5000 chars of output: ', err.to_s
+        assert_equal "Bundling js assets failed with exit status 1, command: 'read _ignore ; false'", err.to_s
       end
     end
 
-    def test_include_output_if_command_fails
-      capture_io do
-        err = assert_raises(RuntimeError) { make_bundle('printf I_FAILED ; false') }
-        assert_equal 'Bundling js assets failed with exit status 1, command: printf I_FAILED ; false Last 5000 chars of output: I_FAILED', err.to_s
+    def test_log_minifier_stdout_if_bundle_command_fails
+      _, actual_stderr = capture_io do
+        assert_raises(RuntimeError) { make_bundle('read _ignore ; echo "line1\nline2" ; false') }
       end
+      expected_stderr = <<-END
+Minibundle: Bundling js assets failed with exit status 1, command: 'read _ignore ; echo \"line1\\nline2\" ; false', last 12 bytes of minifier output:
+Minibundle: line1
+Minibundle: line2
+      END
+      assert_equal expected_stderr, actual_stderr.gsub(/\e\[\d+m/, '').gsub(/^ +/, '')
     end
 
     def test_raise_exception_if_bundle_command_not_found
-      assert_raises(Errno::ENOENT) { make_bundle('no-such-jekyll-minibundle-cmd') }
+      err = assert_raises(RuntimeError) { make_bundle('no-such-jekyll-minibundle-cmd') }
+      assert_equal 'Bundling js assets failed: No such file or directory - no-such-jekyll-minibundle-cmd', err.to_s
     end
 
     def test_raise_exception_if_bundle_command_not_configured

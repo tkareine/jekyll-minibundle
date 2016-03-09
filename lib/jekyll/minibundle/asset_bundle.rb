@@ -1,5 +1,6 @@
 require 'tempfile'
 require 'jekyll/minibundle/compatibility'
+require 'jekyll/minibundle/files'
 
 module Jekyll::Minibundle
   class AssetBundle
@@ -37,10 +38,9 @@ Missing minification command for bundling #{@type} assets. Specify it in
         end
       end
       if exit_status != 0
-        output = File.read(@temp_file.path)
-        chars_of_output = 5000
-        truncated_output = output[-chars_of_output..-1] || output
-        fail "Bundling #{@type} assets failed with exit status #{exit_status}, command: #{@minifier_cmd} Last #{chars_of_output} chars of output: #{truncated_output}"
+        msg = "Bundling #{@type} assets failed with exit status #{exit_status}, command: '#{@minifier_cmd}'"
+        log_minifier_error(msg)
+        fail msg
       end
       self
     end
@@ -62,8 +62,19 @@ Missing minification command for bundling #{@type} assets. Specify it in
       wr.close
       _, status = Process.waitpid2(pid)
       status.exitstatus
+    rescue => e
+      fail "Bundling #{@type} assets failed: #{e}"
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }
+    end
+
+    def log_minifier_error(message)
+      last_bytes = Files.read_last(@temp_file.path, 2000)
+
+      return if last_bytes.empty?
+
+      Compatibility.log_error("#{message}, last #{last_bytes.size} bytes of minifier output:")
+      last_bytes.split("\n").each { |line| Compatibility.log_error(line) }
     end
   end
 end
