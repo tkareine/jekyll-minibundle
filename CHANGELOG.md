@@ -8,7 +8,7 @@
 # 1.5.0 / 2014-07-27
 
 * Support minifier command specification in `_config.yml` and inside
-  `minibundle` block (#4, @phillipadsmith)
+  `minibundle` block. Issue #4 by Phillip Smith (@phillipadsmith).
 * Support enabling development mode from `_config.yml`
 * Add argument validation to `minibundle` block and `ministamp` tag
 * Document how to load the gem with Jekyll's `gems` config setting
@@ -25,8 +25,8 @@
 * Clean log messages: show relative paths when bundling assets
 * Add missing implementations of `relative_path` and `to_liquid`
   methods from Jekyll's StaticFile API (introduced in Jekyll v1.5.0),
-  allowing Minibundle to behave better with other Jekyll plugins (#3,
-  @mmistakes)
+  allowing Minibundle to behave better with other Jekyll
+  plugins. Issue #3 by Michael Rose (@mmistakes).
 * Fix Ruby deprecation warnings (use `File.exist?` instead of
   `File.exists?`)
 
@@ -65,14 +65,15 @@
 * Fix bug causing exception to be thrown when `ministamp` or
   `minibundle` is called twice with same asset source argument. Allow
   handling asset source files that are already static files in Jekyll
-  (remove the restriction introduced in 1.3.0). (#2, @agrigg)
+  (remove the restriction introduced in 1.3.0). Issue #2 by Austin
+  Grigg (@agrigg).
 
 # 1.3.0 / 2013-12-25
 
 * Disallow handling asset source files that are already static files
   in Jekyll. Otherwise, we would potentially get to inconsistencies in
   Jekyll's watch mode. See "Jekyll static file restriction" in
-  README.md. (#2, @agrigg)
+  README.md. Issue #2 by Austin Grigg (@agrigg).
 * Upgrade development dependencies
 
 # 1.2.0 / 2013-09-29
@@ -85,7 +86,8 @@
 
 * `ministamp` tag omits fingerprint in development mode
 * Clarify documentation
-* Comply with (Gemnasium) conventions for changelogs (#1, @tmatilai)
+* Comply with (Gemnasium) conventions for changelogs. Pull Request #1
+  by Teemu Matilainen (@tmatilai).
 * Bug fix: do not bundle assets when nonrelated files change
 * Bug fix: do not bundle assets twice upon startup
 
