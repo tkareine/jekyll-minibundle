@@ -1,3 +1,8 @@
+# Upcoming
+
+* Log the last 2000 bytes of minifier's STDOUT output if the minifier
+  command fails. Pull Request #6 by Martin Nordholts (@Enselic).
+
 # 1.5.1 / 2015-01-29
 
 * Improve future compatibility with Jekyll. Minibundle has classes
