@@ -74,7 +74,11 @@ Missing minification command for bundling #{@type} assets. Specify it in
       return if last_bytes.empty?
 
       Compatibility.log_error("#{message}, last #{last_bytes.size} bytes of minifier output:")
-      last_bytes.split("\n").each { |line| Compatibility.log_error(line) }
+
+      last_bytes.
+        gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }.
+        split("\n").
+        each { |line| Compatibility.log_error(line) }
     end
   end
 end

@@ -11,13 +11,14 @@ module Jekyll::Minibundle::Test
     end
 
     def test_log_minifier_stdout_if_bundle_command_fails
+      cmd = 'ruby -E ISO-8859-15 -e \'gets; puts "line 1\a\nline\t2\xa4"; abort\''
       _, actual_stderr = capture_io do
-        assert_raises(RuntimeError) { make_bundle('read _ignore ; echo "line1\nline2" ; false') }
+        assert_raises(RuntimeError) { make_bundle(cmd) }
       end
       expected_stderr = <<-END
-Minibundle: Bundling js assets failed with exit status 1, command: 'read _ignore ; echo \"line1\\nline2\" ; false', last 12 bytes of minifier output:
-Minibundle: line1
-Minibundle: line2
+Minibundle: Bundling js assets failed with exit status 1, command: '#{cmd}', last 16 bytes of minifier output:
+Minibundle: line 1\\x07
+Minibundle: line 2\\xa4
       END
       assert_equal expected_stderr, actual_stderr.gsub(/\e\[\d+m/, '').gsub(/^ +/, '')
     end
