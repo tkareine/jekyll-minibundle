@@ -6,10 +6,10 @@ module Jekyll::Minibundle
       super
       @asset_source, @asset_destination = text.split(/\s+/, 3)[0, 2]
       if !@asset_source || @asset_source.empty?
-        fail ArgumentError, "No asset source for ministamp tag; pass value such as '/_assets/site.css' as the first argument"
+        fail ArgumentError, "No asset source for ministamp tag; pass value such as '_assets/site.css' as the first argument"
       end
       if !@asset_destination || @asset_destination.empty?
-        fail ArgumentError, "No asset destination for ministamp tag; pass value such as '/assets/site.css' as the second argument"
+        fail ArgumentError, "No asset destination for ministamp tag; pass value such as 'assets/site.css' as the second argument"
       end
     end
 
