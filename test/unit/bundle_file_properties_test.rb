@@ -67,7 +67,6 @@ module Jekyll::Minibundle::Test
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
         'assets'           => %w{dependency app},
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-        'attributes'       => {},
         'minifier_cmd'     => minifier_cmd
       }
     end

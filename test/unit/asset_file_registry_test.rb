@@ -35,7 +35,6 @@ module Jekyll::Minibundle::Test
         'source_dir'       => '_assets/styles',
         'assets'           => %w{dependency app},
         'destination_path' => 'assets/site',
-        'attributes'       => {},
         'minifier_cmd'     => 'unused_minifier_cmd'
       }
     end

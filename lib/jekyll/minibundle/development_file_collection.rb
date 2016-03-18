@@ -1,4 +1,3 @@
-require 'jekyll/minibundle/asset_tag_markup'
 require 'jekyll/minibundle/development_file'
 
 module Jekyll::Minibundle
@@ -14,8 +13,6 @@ module Jekyll::Minibundle
         asset_destination = File.join(destination_path, asset_basename)
         DevelopmentFile.new(site, asset_source, asset_destination)
       end
-
-      @attributes = config.fetch('attributes')
     end
 
     def add_as_static_file_to(site)
@@ -25,10 +22,8 @@ module Jekyll::Minibundle
       @files.each { |f| f.add_as_static_file_to(site) }
     end
 
-    def destination_path_for_markup
-      @files.
-        map { |f| AssetTagMarkup.make_markup(@type, f.asset_destination_path, @attributes) }.
-        join("\n")
+    def destination_paths_for_markup
+      @files.map(&:asset_destination_path)
     end
   end
 end

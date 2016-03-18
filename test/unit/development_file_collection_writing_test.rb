@@ -17,7 +17,7 @@ module Jekyll::Minibundle::Test
         assert File.exist?(destination_file)
 
         org_mtime = mtime_of(destination_file)
-        dev_files.destination_path_for_markup
+        dev_files.destination_paths_for_markup
 
         refute first_file_of(dev_files).write('_site')
         assert_equal org_mtime, mtime_of(destination_file)
@@ -31,8 +31,7 @@ module Jekyll::Minibundle::Test
        'type'             => :js,
        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
        'assets'           => %w{dependency app},
-       'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-       'attributes'       => {}
+       'destination_path' => JS_BUNDLE_DESTINATION_PATH
       }
     end
 

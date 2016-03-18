@@ -163,6 +163,27 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_baseurl
+      with_site_dir do
+        generate_site(:production)
+        expected_css_path = destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
+
+        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle css %}', "{% minibundle css %}\n    baseurl: /css-root")
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+        generate_site(:production, clear_cache: false)
+
+        assert_equal "/css-root/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
+        assert_equal "/js-root/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index
+      end
+    end
+
     def test_bundles_assets_only_once_at_startup
       with_site_dir do
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)

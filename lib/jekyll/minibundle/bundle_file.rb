@@ -2,7 +2,6 @@ require 'jekyll/minibundle/asset_bundle'
 require 'jekyll/minibundle/asset_file_operations'
 require 'jekyll/minibundle/asset_file_properties'
 require 'jekyll/minibundle/asset_stamp'
-require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle
   class BundleFile
@@ -17,13 +16,12 @@ module Jekyll::Minibundle
       asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
       @asset_paths = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
       @destination_path = config.fetch('destination_path')
-      @attributes = config.fetch('attributes')
       @minifier_cmd = config.fetch('minifier_cmd')
       @stamped_at = nil
       @is_modified = false
     end
 
-    def destination_path_for_markup
+    def destination_paths_for_markup
       # we must rebundle here, if at all, in order to make sure the
       # markup and generated file have the same fingerprint
       if modified?
@@ -33,7 +31,7 @@ module Jekyll::Minibundle
         asset_bundle.make_bundle
       end
 
-      AssetTagMarkup.make_markup(@type, asset_destination_path, @attributes)
+      [asset_destination_path]
     end
 
     def path

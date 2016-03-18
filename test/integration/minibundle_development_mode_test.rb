@@ -108,6 +108,27 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_baseurl
+      with_site_dir do
+        expected_css_path = destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        generate_site(:development)
+
+        assert File.exist?(expected_css_path)
+        assert File.exist?(expected_js_path)
+
+        assert_equal 'assets/site/common.css', find_css_paths_from_index.last
+        assert_equal 'assets/site/app.js', find_js_paths_from_index.last
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle css %}', "{% minibundle css %}\n    baseurl: /css-root")
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+        generate_site(:development, clear_cache: false)
+
+        assert_equal '/css-root/assets/site/common.css', find_css_paths_from_index.last
+        assert_equal '/js-root/assets/site/app.js', find_js_paths_from_index.last
+      end
+    end
+
     def test_does_not_require_bundling_commands
       with_site_dir do
         generate_site(:development, minifier_cmd_css: nil, minifier_cmd_js: nil)
