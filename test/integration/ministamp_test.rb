@@ -69,7 +69,6 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(source_path('_layouts/default.html'), %r{assets/screen.css}, '/\0')
         generate_site(:production, clear_cache: false)
 
-        assert File.exist?(expected_path)
         assert_equal "/#{STAMP_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
       end
     end
