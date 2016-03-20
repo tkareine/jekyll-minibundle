@@ -21,7 +21,7 @@ module Jekyll::Minibundle
       @is_modified = false
     end
 
-    def destination_paths_for_markup
+    def destination_path_for_markup
       # we must rebundle here, if at all, in order to make sure the
       # markup destination and generated file paths have the same
       # fingerprint
@@ -32,7 +32,7 @@ module Jekyll::Minibundle
         asset_bundle.make_bundle
       end
 
-      [asset_destination_path]
+      asset_destination_path
     end
 
     def path

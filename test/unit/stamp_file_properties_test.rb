@@ -10,7 +10,7 @@ module Jekyll::Minibundle::Test
 
     def setup
       @results ||= with_fake_site do |site|
-        file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
+        file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
         get_send_results(file, STATIC_FILE_API_PROPERTIES)
       end
     end
@@ -57,12 +57,6 @@ module Jekyll::Minibundle::Test
 
     def test_write?
       assert @results.fetch(:write?)
-    end
-
-    private
-
-    def stamp_basenamer
-      ->(base, ext, stamper) { "#{base}-#{stamper.call}#{ext}" }
     end
   end
 end

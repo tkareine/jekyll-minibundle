@@ -77,11 +77,7 @@ module Jekyll::Minibundle::Test
     private
 
     def new_stamp_file(site)
-      StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH, &stamp_basenamer)
-    end
-
-    def stamp_basenamer
-      ->(base, ext, stamper) { "#{base}-#{stamper.call}#{ext}" }
+      StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
     end
   end
 end

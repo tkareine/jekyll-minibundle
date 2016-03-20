@@ -16,10 +16,21 @@ module Jekyll::Minibundle
     def render(context)
       site = context.registers.fetch(:site)
       bundle_config = get_current_bundle_config(Compatibility.load_yaml(super), site)
-      file = AssetFileRegistry.bundle_file(site, bundle_config)
-      file.add_as_static_file_to(site)
-      file.destination_paths_for_markup.map do |path|
-        AssetTagMarkup.make_markup(@type, bundle_config.fetch('baseurl'), path, bundle_config.fetch('attributes'))
+
+      files =
+        if Environment.development?(site)
+          AssetFileRegistry.register_development_file_collection(site, bundle_config).files
+        else
+          [AssetFileRegistry.register_bundle_file(site, bundle_config)]
+        end
+
+      files.map do |file|
+        AssetTagMarkup.make_markup(
+          @type,
+          bundle_config.fetch('baseurl'),
+          file.destination_path_for_markup,
+          bundle_config.fetch('attributes')
+        )
       end.join("\n")
     end
 
@@ -51,6 +62,8 @@ module Jekyll::Minibundle
     end
 
     def normalize_baseurl_and_destination_path(baseurl, destination_path)
+      baseurl = '' if baseurl.nil?
+
       unless destination_path.start_with?('/')
         return [baseurl, destination_path]
       end

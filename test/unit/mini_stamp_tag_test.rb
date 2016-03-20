@@ -22,10 +22,10 @@ module Jekyll::Minibundle::Test
 
     def test_ignore_rest_arguments
       AssetFileRegistry.clear
-      template = Liquid::Template.parse("{% ministamp #{STAMP_SOURCE_PATH} #{STAMP_DESTINATION_PATH} rest %}")
-      context = {}
-      options = {registers: {site: new_fake_site(site_fixture_path)}}
-      assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, template.render(context, options)
+      output = Liquid::Template
+               .parse("{% ministamp #{STAMP_SOURCE_PATH} #{STAMP_DESTINATION_PATH} rest %}")
+               .render({}, registers: {site: new_fake_site(site_fixture_path)})
+      assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, output
     end
   end
 end

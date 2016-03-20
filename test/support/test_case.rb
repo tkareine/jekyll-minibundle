@@ -3,11 +3,13 @@ require 'ostruct'
 require 'tempfile'
 require 'minitest/autorun'
 require 'nokogiri'
+require 'support/assertions'
 require 'jekyll'
 require 'jekyll/minibundle'
 
 module Jekyll::Minibundle::Test
   class TestCase < ::Minitest::Test
+    include Assertions
     include ::Jekyll::Minibundle
 
     FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))

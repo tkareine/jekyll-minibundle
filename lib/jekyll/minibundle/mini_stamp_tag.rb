@@ -20,8 +20,12 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers.fetch(:site)
-      file = AssetFileRegistry.stamp_file(site, @source_path, @destination_path)
-      file.add_as_static_file_to(site)
+      file =
+        if Environment.development?(site)
+          AssetFileRegistry.register_development_file(site, @source_path, @destination_path)
+        else
+          AssetFileRegistry.register_stamp_file(site, @source_path, @destination_path)
+        end
       @baseurl + file.destination_path_for_markup
     end
 

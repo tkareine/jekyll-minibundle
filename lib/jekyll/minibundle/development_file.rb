@@ -16,6 +16,8 @@ module Jekyll::Minibundle
       @stamped_at = nil
     end
 
+    alias destination_path_for_markup asset_destination_path
+
     def extname
       File.extname(asset_destination_path)
     end
