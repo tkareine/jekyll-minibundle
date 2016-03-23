@@ -1,0 +1,30 @@
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 1.9
+Metrics/AbcSize:
+  Max: 40
+Metrics/ClassLength:
+  Max: 400
+Metrics/LineLength:
+  Max: 200
+Metrics/MethodLength:
+  Max: 50
+Performance/RedundantBlockCall:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Style/CollectionMethods:
+  Enabled: true
+Style/Copyright:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/ExtraSpacing:
+  Enabled: false  # does not work with trailing comments
+Style/PercentLiteralDelimiters:
+  Enabled: false
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space

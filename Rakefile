@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'rake/clean'
 require 'shellwords'
+require 'rubocop/rake_task'
 
 require_relative 'lib/jekyll/minibundle/version'
 
@@ -77,4 +78,6 @@ namespace :fixture do
   end
 end
 
-task default: :test
+RuboCop::RakeTask.new
+
+task default: [:test, :rubocop]
