@@ -51,8 +51,8 @@ module Jekyll::Minibundle::Test
     end
 
     [
-     {desc: "changing", action: ->(source) { File.write(source, 'h1 {}') }},
-     {desc: "touching", action: ->(source) { FileUtils.touch(source) }}
+      {desc: 'changing', action: ->(source) { File.write(source, 'h1 {}') }},
+      {desc: 'touching', action: ->(source) { FileUtils.touch(source) }}
     ].each do |spec|
       define_method :"test_#{spec.fetch(:desc)}_css_asset_source_rewrites_destination" do
         with_site_dir do
@@ -70,8 +70,8 @@ module Jekyll::Minibundle::Test
     end
 
     [
-     {desc: "changing", action: ->(source) { File.write(source, '(function() {})()') }},
-     {desc: "touching", action: ->(source) { FileUtils.touch(source) }}
+      {desc: 'changing', action: ->(source) { File.write(source, '(function() {})()') }},
+      {desc: 'touching', action: ->(source) { FileUtils.touch(source) }}
     ].each do |spec|
       define_method :"test_#{spec.fetch(:desc)}_js_asset_source_rewrites_destination" do
         with_site_dir do

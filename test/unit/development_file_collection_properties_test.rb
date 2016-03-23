@@ -82,10 +82,10 @@ module Jekyll::Minibundle::Test
 
     def bundle_config
       {
-       'type'             => :js,
-       'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-       'assets'           => %w{dependency app},
-       'destination_path' => JS_BUNDLE_DESTINATION_PATH
+        'type'             => :js,
+        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
+        'assets'           => %w{dependency app},
+        'destination_path' => JS_BUNDLE_DESTINATION_PATH
       }
     end
   end

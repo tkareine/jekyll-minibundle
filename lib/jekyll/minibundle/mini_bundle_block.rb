@@ -8,9 +8,7 @@ module Jekyll::Minibundle
     def initialize(tag_name, type, _tokens)
       super
       @type = type.strip.downcase.to_sym
-      if @type.empty?
-        fail ArgumentError, "No asset type for minibundle block; pass value such as 'css' or 'js' as the argument"
-      end
+      raise ArgumentError, "No asset type for minibundle block; pass value such as 'css' or 'js' as the argument" if @type.empty?
     end
 
     def render(context)
@@ -47,18 +45,20 @@ module Jekyll::Minibundle
     private
 
     def get_current_bundle_config(local_bundle_config, site)
-      config = MiniBundleBlock.default_bundle_config.
-        merge(environment_bundle_config(site)).
-        merge(local_bundle_config).
-        merge('type' => @type)
+      config =
+        MiniBundleBlock
+        .default_bundle_config
+        .merge(environment_bundle_config(site))
+        .merge(local_bundle_config)
+        .merge('type' => @type)
 
       baseurl, destination_path = normalize_baseurl_and_destination_path(config.fetch('baseurl'), config.fetch('destination_path'))
 
-      config.merge({'baseurl' => baseurl, 'destination_path' => destination_path})
+      config.merge('baseurl' => baseurl, 'destination_path' => destination_path)
     end
 
     def environment_bundle_config(site)
-      { 'minifier_cmd' => Environment.minifier_command(site, @type) }
+      {'minifier_cmd' => Environment.minifier_command(site, @type)}
     end
 
     def normalize_baseurl_and_destination_path(baseurl, destination_path)
@@ -69,7 +69,7 @@ module Jekyll::Minibundle
       end
 
       normalized_baseurl = baseurl.empty? ? '/' : baseurl
-      normalized_destination_path = destination_path.sub(/\A\/+/, '')
+      normalized_destination_path = destination_path.sub(%r{\A/+}, '')
 
       [normalized_baseurl, normalized_destination_path]
     end

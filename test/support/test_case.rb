@@ -56,10 +56,10 @@ module Jekyll::Minibundle::Test
     end
 
     def with_site_dir(&block)
-      Dir.mktmpdir("jekyll-minibundle-test-site-") do |dir|
+      Dir.mktmpdir('jekyll-minibundle-test-site-') do |dir|
         Dir.chdir(dir) do
           _copy_fixture_site_dir(Dir.pwd)
-          yield dir
+          block.call(dir)
         end
       end
     end
@@ -78,7 +78,7 @@ module Jekyll::Minibundle::Test
 
     def with_fake_site(&block)
       with_site_dir do |dir|
-        yield new_fake_site(dir)
+        block.call(new_fake_site(dir))
       end
     end
 
@@ -97,7 +97,7 @@ module Jekyll::Minibundle::Test
 
     def ensure_file_mtime_changes(&block)
       sleep 1.5
-      yield
+      block.call
     end
 
     def minifier_cmd_to_remove_comments
@@ -117,9 +117,8 @@ module Jekyll::Minibundle::Test
     end
 
     def get_send_results(obj, method_names)
-      method_names.reduce({}) do |acc, method_name|
+      method_names.each_with_object({}) do |method_name, acc|
         acc[method_name] = obj.send(method_name)
-        acc
       end
     end
 

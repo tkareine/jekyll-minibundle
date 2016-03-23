@@ -4,7 +4,7 @@ require 'jekyll/minibundle/asset_tag_markup'
 module Jekyll::Minibundle::Test
   class AssetTagMarkupTest < TestCase
     def test_escapes_attribute_values
-      attributes = { media: 'screen, projection', extra: '">attack<br' }
+      attributes = {media: 'screen, projection', extra: '">attack<br'}
       actual = AssetTagMarkup.make_markup(:css, '', '/asset.css', attributes)
       expected = %{<link rel="stylesheet" href="/asset.css" media="screen, projection" extra="&quot;&gt;attack&lt;br">}
       assert_equal expected, actual
@@ -14,7 +14,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(ArgumentError) do
         AssetTagMarkup.make_markup(:unknown, '', '/asset', {})
       end
-      assert_equal "Unknown type for generating bundle markup: unknown, /asset", err.to_s
+      assert_equal 'Unknown type for generating bundle markup: unknown, /asset', err.to_s
     end
 
     def test_joins_empty_baseurl_and_path

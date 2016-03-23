@@ -116,7 +116,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(RuntimeError) do
         AssetFileRegistry.register_stamp_file(@site, '_assets/src1.css', 'assets/dest.css')
       end
-      assert_equal "ministamp tag has same destination path as a minibundle block: assets/dest.css", err.to_s
+      assert_equal 'ministamp tag has same destination path as a minibundle block: assets/dest.css', err.to_s
       assert_equal 1, asset_file_registry_size
       assert_contains_only @site.static_files, [file]
     end
@@ -126,7 +126,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(RuntimeError) do
         AssetFileRegistry.register_bundle_file(@site, bundle_config.merge('type' => :css, 'destination_path' => 'assets/dest'))
       end
-      assert_equal "minibundle block has same destination path as a ministamp tag: assets/dest.css", err.to_s
+      assert_equal 'minibundle block has same destination path as a ministamp tag: assets/dest.css', err.to_s
       assert_equal 1, asset_file_registry_size
       assert_contains_only @site.static_files, [file]
     end

@@ -11,7 +11,7 @@ module Jekyll::Minibundle
       @minifier_cmd = config.fetch(:minifier_cmd)
 
       unless @minifier_cmd
-        fail <<-END
+        raise <<-END
 Missing minification command for bundling #{@type} assets. Specify it in
 1) minibundle.minifier_commands.#{@type} setting in _config.yml,
 2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
@@ -19,7 +19,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
         END
       end
 
-      @temp_file = Tempfile.new(["jekyll-minibundle-", ".#{@type}"])
+      @temp_file = Tempfile.new(['jekyll-minibundle-', ".#{@type}"])
       at_exit { @temp_file.close! }
     end
 
@@ -40,7 +40,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
       if exit_status != 0
         msg = "Bundling #{@type} assets failed with exit status #{exit_status}, command: '#{@minifier_cmd}'"
         log_minifier_error(msg)
-        fail msg
+        raise msg
       end
       self
     end
@@ -48,7 +48,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
     private
 
     def relative_path_from(path, base)
-      path.sub(/\A#{base}\//, '')
+      path.sub(%r{\A#{base}/}, '')
     end
 
     def spawn_minifier(cmd)
@@ -63,7 +63,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
       _, status = Process.waitpid2(pid)
       status.exitstatus
     rescue => e
-      fail "Bundling #{@type} assets failed: #{e}"
+      raise "Bundling #{@type} assets failed: #{e}"
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }
     end
@@ -75,10 +75,10 @@ Missing minification command for bundling #{@type} assets. Specify it in
 
       Compatibility.log_error("#{message}, last #{last_bytes.size} bytes of minifier output:")
 
-      last_bytes.
-        gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }.
-        split("\n").
-        each { |line| Compatibility.log_error(line) }
+      last_bytes
+        .gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }
+        .split("\n")
+        .each { |line| Compatibility.log_error(line) }
     end
   end
 end

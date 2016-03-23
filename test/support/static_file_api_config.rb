@@ -11,6 +11,6 @@ module Jekyll::Minibundle::Test
       :to_liquid,
       :type,
       :write?
-    ]
+    ].freeze
   end
 end

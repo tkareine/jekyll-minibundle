@@ -25,7 +25,7 @@ namespace :gem do
   CLEAN.include "#{gem_name}-*.gem"
 
   desc 'Package the software as a gem'
-  task :build => :test do
+  task build: :test do
     sh "gem build #{gem_name}.gemspec"
   end
 
@@ -35,7 +35,7 @@ namespace :gem do
   end
 
   desc 'Uninstall the gem'
-  task :uninstall => :clean do
+  task uninstall: :clean do
     sh "gem uninstall #{gem_name}"
   end
 end
@@ -44,17 +44,19 @@ desc 'Run tests; TEST=<test_suite_path>, NAME=<test_name_pattern>, DEBUG=1 to re
 task :test do
   run_single_test = ENV.key?('TEST')
 
-  run_selected_or_all = if run_single_test
-    rb_file = ENV['TEST']
-    name_opt = ENV.key?('NAME') ? " -n #{ENV['NAME']}" : ''
-    "#{rb_file}#{name_opt}"
-  else
-    requirable_files = Dir['test/{unit,integration}/*_test.rb'].
-      map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }.
-      shelljoin
-    eval = "-e 'ARGV.each { |f| require f }'"
-    "#{eval} #{requirable_files}"
-  end
+  run_selected_or_all =
+    if run_single_test
+      rb_file = ENV['TEST']
+      name_opt = ENV.key?('NAME') ? " -n #{ENV['NAME']}" : ''
+      "#{rb_file}#{name_opt}"
+    else
+      requirable_files =
+        Dir['test/{unit,integration}/*_test.rb']
+        .map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }
+        .shelljoin
+      eval = "-e 'ARGV.each { |f| require f }'"
+      "#{eval} #{requirable_files}"
+    end
 
   extra_opts = ENV['DEBUG'] ? '-w -rpp -rpry ' : ''
 
@@ -75,4 +77,4 @@ namespace :fixture do
   end
 end
 
-task :default => :test
+task default: :test

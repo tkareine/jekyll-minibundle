@@ -7,14 +7,14 @@ module Jekyll::Minibundle
       end
 
       def development?(site)
-        mode = ENV['JEKYLL_MINIBUNDLE_MODE'] || Environment.find_site_config(site, ['minibundle', 'mode'], String)
+        mode = ENV['JEKYLL_MINIBUNDLE_MODE'] || Environment.find_site_config(site, %w{minibundle mode}, String)
         mode == 'development'
       end
 
       def find_site_config(site, keys, type)
         value = traverse_keys(site.config, keys)
         if value && !value.is_a?(type)
-          fail "Invalid site configuration for key #{keys.join('.')}; expecting type #{type}"
+          raise "Invalid site configuration for key #{keys.join('.')}; expecting type #{type}"
         end
         value
       end

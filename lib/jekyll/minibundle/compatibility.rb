@@ -1,6 +1,6 @@
 module Jekyll::Minibundle
   module Compatibility
-    LOG_TOPIC = 'Minibundle:'
+    LOG_TOPIC = 'Minibundle:'.freeze
 
     class << self
       # SafeYAML.load is introduced in Jekyll 2.0.0

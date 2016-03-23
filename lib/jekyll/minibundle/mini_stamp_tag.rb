@@ -8,11 +8,11 @@ module Jekyll::Minibundle
       @source_path, destination_path = text.split(/\s+/, 3)[0, 2]
 
       if !@source_path || @source_path.empty?
-        fail ArgumentError, "No asset source for ministamp tag; pass value such as '_assets/site.css' as the first argument"
+        raise ArgumentError, "No asset source for ministamp tag; pass value such as '_assets/site.css' as the first argument"
       end
 
       if !destination_path || destination_path.empty?
-        fail ArgumentError, "No asset destination for ministamp tag; pass value such as 'assets/site.css' as the second argument"
+        raise ArgumentError, "No asset destination for ministamp tag; pass value such as 'assets/site.css' as the second argument"
       end
 
       @baseurl, @destination_path = normalize_destination_path(destination_path)
@@ -33,7 +33,7 @@ module Jekyll::Minibundle
 
     def normalize_destination_path(destination_path)
       if destination_path.start_with?('/')
-        ['/', destination_path.sub(/\A\/+/, '')]
+        ['/', destination_path.sub(%r{\A/+}, '')]
       else
         ['', destination_path]
       end

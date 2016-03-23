@@ -11,7 +11,7 @@ module Jekyll::Minibundle
         when :css
           %{<link rel="stylesheet" href="#{url}"#{make_attributes(attributes)}>}
         else
-          fail ArgumentError, "Unknown type for generating bundle markup: #{type}, #{path}"
+          raise ArgumentError, "Unknown type for generating bundle markup: #{type}, #{path}"
         end
       end
 

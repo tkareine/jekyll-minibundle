@@ -61,7 +61,7 @@ module Jekyll::Minibundle::Test
     def test_inserts_semicolons_between_js_assets
       with_precompiled_site(:production) do
         bundle = File.read(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        assert_match(%r|}\)\(window\)\n;\n\(function|, bundle)
+        assert_match(/}\)\(window\)\n;\n\(function/, bundle)
       end
     end
 
@@ -295,10 +295,10 @@ title: Test
     end
 
     def source_assets_size(source_subdir, assets, type)
-      assets.
-        map { |f| File.read(site_fixture_path(source_subdir, "#{f}.#{type}")) }.
-        join('').
-        size
+      assets
+        .map { |f| File.read(site_fixture_path(source_subdir, "#{f}.#{type}")) }
+        .join('')
+        .size
     end
   end
 end

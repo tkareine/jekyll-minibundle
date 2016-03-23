@@ -16,7 +16,7 @@ module Jekyll::Minibundle
       end
 
       def register_development_file_collection(site, bundle_config)
-        register_file_for_bundle_block(DevelopmentFileCollection, site, bundle_config) { |collection| collection.files }
+        register_file_for_bundle_block(DevelopmentFileCollection, site, bundle_config, &:files)
       end
 
       def register_stamp_file(site, asset_source_path, asset_destination_path)
@@ -35,7 +35,7 @@ module Jekyll::Minibundle
         cached = @_files[asset_destination_path]
 
         if cached
-          fail "minibundle block has same destination path as a ministamp tag: #{asset_destination_path}" if cached.fetch(:type) != :bundle
+          raise "minibundle block has same destination path as a ministamp tag: #{asset_destination_path}" if cached.fetch(:type) != :bundle
 
           cached_file = cached.fetch(:file)
 
@@ -59,7 +59,7 @@ module Jekyll::Minibundle
         cached = @_files[asset_destination_path]
 
         if cached
-          fail "ministamp tag has same destination path as a minibundle block: #{asset_destination_path}" if cached.fetch(:type) != :stamp
+          raise "ministamp tag has same destination path as a minibundle block: #{asset_destination_path}" if cached.fetch(:type) != :stamp
 
           cached_file = cached.fetch(:file)
 
