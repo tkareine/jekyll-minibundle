@@ -23,6 +23,7 @@ module Jekyll::Minibundle::Test
           contents = 'h2 {}'
           File.write(source_path('assets/shared.css'), contents)
           find_and_gsub_in_file(source_path('_layouts/default.html'), 'ministamp _tmp/site.css', 'ministamp assets/shared.css')
+
           generate_site(env)
 
           asset_files = Dir[destination_path('assets') + '/screen*.css']
@@ -41,6 +42,7 @@ module Jekyll::Minibundle::Test
         File.write(source_path('assets/dependency.js'), dep_contents)
         File.write(source_path('assets/app.js'), app_contents)
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'source_dir: _assets/scripts', 'source_dir: assets')
+
         generate_site(:development)
 
         assert_equal dep_contents, File.read(destination_path('assets/dependency.js'))
@@ -56,6 +58,7 @@ module Jekyll::Minibundle::Test
         File.write(source_path('assets/dependency.js'), dep_contents)
         File.write(source_path('assets/app.js'), app_contents)
         find_and_gsub_in_file(source_path('_layouts/default.html'), 'source_dir: _assets/scripts', 'source_dir: assets')
+
         generate_site(:production)
 
         asset_files = Dir[destination_path('assets/site-*.js')]
