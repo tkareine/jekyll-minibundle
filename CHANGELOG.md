@@ -1,4 +1,4 @@
-# Upcoming
+# 1.6.0 / 2016-03-26
 
 * Log the last 2000 bytes of minifier's STDOUT output if the minifier
   command fails. Pull Request #6 by Martin Nordholts (@Enselic).
