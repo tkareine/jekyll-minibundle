@@ -1,3 +1,5 @@
+require 'jekyll/minibundle/hashes'
+
 module Jekyll::Minibundle
   module Environment
     class << self
@@ -12,18 +14,9 @@ module Jekyll::Minibundle
       end
 
       def find_site_config(site, keys, type)
-        value = traverse_keys(site.config, keys)
+        value = Hashes.dig(site.config, *keys)
         if value && !value.is_a?(type)
           raise "Invalid site configuration for key #{keys.join('.')}; expecting type #{type}"
-        end
-        value
-      end
-
-      def traverse_keys(obj, keys)
-        value = obj
-        keys.each do |key|
-          return nil unless value
-          value = value[key]
         end
         value
       end
