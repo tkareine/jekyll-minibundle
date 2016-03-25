@@ -4,7 +4,7 @@
   command fails. Pull Request #6 by Martin Nordholts (@Enselic).
 * Allow prepending base URL for the destination path of `minibundle`
   block
-* Drop Ruby MRI 1.9 support
+* Drop Ruby MRI 1.9 support because Jekyll 3 does not support it
 * Fix issues in asset reloading in Jekyll's watch (auto-regeneration)
   mode, doing bundling and asset fingerprinting again
 
