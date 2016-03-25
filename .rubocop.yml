@@ -5,26 +5,26 @@ AllCops:
 Metrics/AbcSize:
   Max: 40
 Metrics/ClassLength:
-  Max: 400
+  Enabled: false  # test classes are big
 Metrics/LineLength:
   Max: 200
 Metrics/MethodLength:
   Max: 50
 Performance/RedundantBlockCall:
-  Enabled: false
+  Enabled: false  # prefer named block arguments for documentation
 Style/ClassAndModuleChildren:
-  Enabled: false
+  Enabled: false  # we use both compact and nested style, preferring compact
 Style/ClassVars:
-  Enabled: false
+  Enabled: false  # it's ok when knowing it's limitations, easy to access from class instance scope
 Style/CollectionMethods:
   Enabled: true
 Style/Copyright:
-  Enabled: false
+  Enabled: false  # we have copyright in the readme
 Style/Documentation:
-  Enabled: false
+  Enabled: false  # we have documentation in the readme
 Style/ExtraSpacing:
   Enabled: false  # does not work with trailing comments
 Style/PercentLiteralDelimiters:
-  Enabled: false
+  Enabled: false  # it's better to use `%w{}` syntax, because the braces are the same as in `%r{}`
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
