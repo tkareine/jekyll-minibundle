@@ -75,13 +75,14 @@ If you just want to have a fingerprint in your asset's path, use
 `ministamp` tag:
 
 ``` html
-<link href="{% ministamp _assets/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
+<link href="{{ site.baseurl }}{% ministamp _assets/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
 ```
 
-Output, containing the MD5 digest of the file in the filename:
+Output, when `site.baseurl` is `/`, containing the MD5 digest of the
+file in the filename:
 
 ``` html
-<link href="assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
+<link href="/assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
 ```
 
 Jekyll's output directory will have the asset file at that path.
@@ -93,7 +94,7 @@ to take inputs from `_assets/styles/*.scss` and to produce output to
 fingerprint to Jekyll's output directory:
 
 ``` html
-<link href="{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
+<link href="{{ site.baseurl }}{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
 ```
 
 ## Asset bundling
@@ -114,6 +115,7 @@ a set of JavaScript sources:
 {% minibundle js %}
 source_dir: _assets/scripts
 destination_path: assets/site
+baseurl: {{ site.baseurl }}
 assets:
   - dependency
   - app
@@ -125,6 +127,8 @@ attributes:
 Then, specify the command for launching your favorite minifier in `_config.yml`:
 
 ``` yaml
+baseurl: /
+
 minibundle:
   minifier_commands:
     js: node_modules/.bin/uglifyjs --
@@ -133,7 +137,7 @@ minibundle:
 Output in the content file:
 
 ``` html
-<script src="assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
+<script src="/assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
 ```
 
 You can pass custom attributes, like `id="my-scripts"` above, to the
@@ -146,6 +150,7 @@ For bundling CSS assets, you use `css` as the argument to the
 {% minibundle css %}
 source_dir: _assets/styles
 destination_path: assets/site
+baseurl: {{ site.baseurl }}
 assets:
   - reset
   - common
@@ -216,7 +221,7 @@ asset source to `ministamp` tag:
 
 ``` html
 <!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to output directory -->
-<link href="{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
+<link href="{{ site.baseurl }}{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
 ```
 
 By default, Jekyll includes this file to the output directory. As a
