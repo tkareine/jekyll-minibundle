@@ -207,6 +207,34 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_changing_minifier_cmd_rewrites_destination
+      with_site_dir do
+        generate_site(:production)
+
+        assert_equal 0, get_minifier_cmd_count
+        destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        org_mtime = mtime_of(destination)
+
+        match_snippet = <<-END
+    {% minibundle js %}
+        END
+
+        replacement_snippet = <<-END
+    {% minibundle js %}
+    minifier_cmd: #{minifier_cmd_to_remove_comments_and_count}
+        END
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        assert_equal 1, get_minifier_cmd_count
+        assert_operator mtime_of(destination), :>, org_mtime
+      end
+    end
+
     def test_supports_relative_and_absolute_destination_paths
       with_site_dir do
         generate_site(:production)
