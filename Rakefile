@@ -26,7 +26,7 @@ namespace :gem do
   CLEAN.include "#{gem_name}-*.gem"
 
   desc 'Package the software as a gem'
-  task build: :test do
+  task build: :default do
     sh "gem build #{gem_name}.gemspec"
   end
 
