@@ -4,6 +4,9 @@
   command fails. Pull Request #6 by Martin Nordholts (@Enselic).
 * Allow prepending base URL for the destination path of `minibundle`
   block
+* Drop Ruby MRI 1.9 support
+* Fix issues in asset reloading in Jekyll's watch (auto-regeneration)
+  mode, doing bundling and asset fingerprinting again
 
 # 1.5.1 / 2015-01-29
 
