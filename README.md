@@ -29,11 +29,11 @@ feeding asset file contents to it in desired order via standard input,
 and reads the result from standard output.
 
 Why is this good? A fingerprint in asset's path is the
-[recommended way][GoogleCachingBestPractices] to handle caching of
-static resources, because you can allow caching the asset
-forever. Calculating MD5 digest over the contents of the asset is fast
-and the resulting digest is reasonably unique to be generated
-automatically.
+[recommended way][GoogleWebFundamentalsHttpCaching] to handle caching
+of static resources, because you can allow browsers and intermediate
+proxies to cache the asset for a very long time. Calculating MD5
+digest over the contents of the asset is fast and the resulting digest
+is reasonably unique to be generated automatically.
 
 Asset bundling is good for reducing the number of requests to the
 backend upon page load. The minification of stylesheets and JavaScript
@@ -271,7 +271,7 @@ MIT. See `LICENSE.txt`.
 
 [Compass]: http://compass-style.org/
 [GemBundler]: http://bundler.io/
-[GoogleCachingBestPractices]: https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
+[GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating-and-updating-cached-responses
 [MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
 [MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
 [Jekyll]: https://jekyllrb.com/
