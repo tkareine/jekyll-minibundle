@@ -51,31 +51,10 @@ module Jekyll::Minibundle::Test
     end
 
     [
-      {desc: 'changing', action: ->(source) { File.write(source, 'h1 {}') }},
-      {desc: 'touching', action: ->(source) { FileUtils.touch(source) }}
-    ].each do |spec|
-      define_method :"test_#{spec.fetch(:desc)}_css_asset_source_file_rewrites_destination" do
-        with_site_dir do
-          generate_site(:development)
-
-          destination = destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')
-          org_mtime = mtime_of(destination)
-          source = source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css')
-          ensure_file_mtime_changes { spec.fetch(:action).call(source) }
-
-          generate_site(:development, clear_cache: false)
-
-          assert_equal File.read(destination), File.read(source)
-          assert_operator mtime_of(destination), :>, org_mtime
-        end
-      end
-    end
-
-    [
       {desc: 'changing', action: ->(source) { File.write(source, '(function() {})()') }},
       {desc: 'touching', action: ->(source) { FileUtils.touch(source) }}
     ].each do |spec|
-      define_method :"test_#{spec.fetch(:desc)}_js_asset_source_file_rewrites_destination" do
+      define_method :"test_#{spec.fetch(:desc)}_asset_source_file_rewrites_destination" do
         with_site_dir do
           generate_site(:development)
 
@@ -92,37 +71,35 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_source_list_rewrites_destination
+    def test_changing_asset_source_directory_rewrites_destination
       with_site_dir do
         generate_site(:development)
 
-        org_mtime = mtime_of(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'reset.css'))
+        destination = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        org_mtime = mtime_of(destination)
 
         match_snippet = <<-END
-    assets:
-      - reset
-      - common
+    {% minibundle js %}
+    source_dir: _assets/scripts
         END
 
         replacement_snippet = <<-END
-    assets:
-      - reset
+    {% minibundle js %}
+    source_dir: _assets/scripts2
         END
 
         ensure_file_mtime_changes do
+          FileUtils.mv(source_path('_assets/scripts'), source_path('_assets/scripts2'))
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
         end
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal [File.join(CSS_BUNDLE_DESTINATION_PATH, 'reset.css')], find_css_paths_from_index
-
-        new_mtime = mtime_of(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'reset.css'))
-        assert_operator new_mtime, :>, org_mtime
+        assert_operator mtime_of(destination), :>, org_mtime
       end
     end
 
-    def test_changing_js_asset_source_list_rewrites_destination
+    def test_changing_asset_source_list_rewrites_destination
       with_site_dir do
         generate_site(:development)
 
@@ -152,36 +129,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_destination_path_rewrites_destination
-      with_site_dir do
-        generate_site(:development)
-
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'reset.css'))
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css'))
-
-        match_snippet = <<-END
-    {% minibundle css %}
-    source_dir: _assets/styles
-    destination_path: assets/site
-        END
-
-        replacement_snippet = <<-END
-    {% minibundle css %}
-    source_dir: _assets/styles
-    destination_path: assets/site2
-        END
-
-        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
-
-        generate_site(:development, clear_cache: false)
-
-        assert_equal ['assets/site2/reset.css', 'assets/site2/common.css'], find_css_paths_from_index
-        assert File.exist?(destination_path('assets/site2/reset.css'))
-        assert File.exist?(destination_path('assets/site2/common.css'))
-      end
-    end
-
-    def test_changing_js_asset_destination_path_rewrites_destination
+    def test_changing_asset_destination_path_rewrites_destination
       with_site_dir do
         generate_site(:development)
 
@@ -276,7 +224,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rewrite_destination_when_nonsource_files_change
+    def test_does_not_rewrite_destination_when_changing_nonsource_files
       with_site_dir do
         generate_site(:development)
 
@@ -289,6 +237,40 @@ module Jekyll::Minibundle::Test
         assert_equal org_mtime, mtime_of(expected_js_path)
 
         ensure_file_mtime_changes { FileUtils.touch('index.html') }
+
+        generate_site(:development, clear_cache: false)
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
+      end
+    end
+
+    def test_does_not_rewrite_destination_when_changing_attributes
+      with_site_dir do
+        generate_site(:development)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        org_mtime = mtime_of(expected_js_path)
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(source_path('_layouts/default.html'), 'id: my-scripts', 'id: my-scripts2')
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
+      end
+    end
+
+    def test_does_not_rebundle_assets_when_changing_baseurl
+      with_site_dir do
+        generate_site(:development)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        org_mtime = mtime_of(expected_js_path)
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+        end
 
         generate_site(:development, clear_cache: false)
 

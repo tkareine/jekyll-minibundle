@@ -1,7 +1,8 @@
-require 'jekyll/minibundle/asset_file_registry'
-require 'jekyll/minibundle/asset_tag_markup'
+require 'jekyll/minibundle/hashes'
 require 'jekyll/minibundle/compatibility'
 require 'jekyll/minibundle/environment'
+require 'jekyll/minibundle/asset_file_registry'
+require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
@@ -14,21 +15,11 @@ module Jekyll::Minibundle
     def render(context)
       site = context.registers.fetch(:site)
       bundle_config = get_current_bundle_config(Compatibility.load_yaml(super), site)
+      baseurl = bundle_config.fetch('baseurl')
+      attributes = bundle_config.fetch('attributes')
 
-      files =
-        if Environment.development?(site)
-          AssetFileRegistry.register_development_file_collection(site, bundle_config).files
-        else
-          [AssetFileRegistry.register_bundle_file(site, bundle_config)]
-        end
-
-      files.map do |file|
-        AssetTagMarkup.make_markup(
-          @type,
-          bundle_config.fetch('baseurl'),
-          file.destination_path_for_markup,
-          bundle_config.fetch('attributes')
-        )
+      register_asset_files(site, bundle_config).map do |file|
+        AssetTagMarkup.make_markup(@type, baseurl, file.destination_path_for_markup, attributes)
       end.join("\n")
     end
 
@@ -72,6 +63,23 @@ module Jekyll::Minibundle
       normalized_destination_path = destination_path.sub(%r{\A/+}, '')
 
       [normalized_baseurl, normalized_destination_path]
+    end
+
+    def register_asset_files(site, bundle_config)
+      registry_config = Hashes.pick(
+        bundle_config,
+        'type',
+        'source_dir',
+        'destination_path',
+        'assets',
+        'minifier_cmd'
+      )
+
+      if Environment.development?(site)
+        AssetFileRegistry.register_development_file_collection(site, registry_config).files
+      else
+        [AssetFileRegistry.register_bundle_file(site, registry_config)]
+      end
     end
   end
 end

@@ -48,6 +48,30 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_changing_asset_source_path_rewrites_destination
+      with_site_dir do
+        generate_site(:development)
+
+        org_mtime = mtime_of(destination_path(STAMP_DESTINATION_PATH))
+
+        ensure_file_mtime_changes do
+          FileUtils.mv(source_path('_tmp/site.css'), source_path('_tmp/site2.css'))
+
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen.css',
+            '{% ministamp _tmp/site2.css assets/screen.css'
+          )
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        new_mtime = mtime_of(destination_path(STAMP_DESTINATION_PATH))
+
+        assert_operator new_mtime, :>, org_mtime
+      end
+    end
+
     def test_changing_asset_destination_path_rewrites_destination
       with_site_dir do
         generate_site(:development)

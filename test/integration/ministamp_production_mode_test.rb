@@ -52,6 +52,30 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_changing_asset_source_path_rewrites_destination
+      with_site_dir do
+        generate_site(:production)
+
+        org_mtime = mtime_of(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+
+        ensure_file_mtime_changes do
+          FileUtils.mv(source_path('_tmp/site.css'), source_path('_tmp/site2.css'))
+
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen.css',
+            '{% ministamp _tmp/site2.css assets/screen.css'
+          )
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        new_mtime = mtime_of(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+
+        assert_operator new_mtime, :>, org_mtime
+      end
+    end
+
     def test_changing_asset_destination_path_rewrites_destination
       with_site_dir do
         generate_site(:production)
@@ -65,6 +89,7 @@ module Jekyll::Minibundle::Test
             '{% ministamp _tmp/site.css assets/screen2.css'
           )
         end
+
         generate_site(:production, clear_cache: false)
 
         refute File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
@@ -95,7 +120,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rewrite_destination_when_nonsource_files_change
+    def test_does_not_rewrite_destination_when_changing_nonsource_files
       with_site_dir do
         generate_site(:production)
 

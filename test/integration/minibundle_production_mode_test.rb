@@ -81,24 +81,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_source_file_rewrites_destination
-      with_site_dir do
-        generate_site(:production)
-
-        ensure_file_mtime_changes { File.write(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css'), 'h1 {}') }
-
-        generate_site(:production, clear_cache: false)
-
-        refute File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-
-        new_destination = 'assets/site-9fd3995d6f0fce425db81c3691dfe93f.css'
-
-        assert_equal new_destination, find_css_path_from_index
-        assert File.exist?(destination_path(new_destination))
-      end
-    end
-
-    def test_changing_js_asset_source_file_rewrites_destination
+    def test_changing_asset_source_file_rewrites_destination
       with_site_dir do
         generate_site(:production)
 
@@ -115,22 +98,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_touching_css_asset_source_file_rewrites_destination
-      with_site_dir do
-        generate_site(:production)
-
-        org_mtime = mtime_of(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        ensure_file_mtime_changes { FileUtils.touch(source_path(CSS_BUNDLE_SOURCE_DIR, 'common.css')) }
-
-        generate_site(:production, clear_cache: false)
-
-        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        assert_operator mtime_of(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)), :>, org_mtime
-      end
-    end
-
-    def test_touching_js_asset_source_file_rewrites_destination
+    def test_touching_asset_source_file_rewrites_destination
       with_site_dir do
         generate_site(:production)
 
@@ -145,39 +113,36 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_source_list_rewrites_destination
+    def test_changing_asset_source_directory_rewrites_destination
       with_site_dir do
         generate_site(:production)
 
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        org_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         match_snippet = <<-END
-    assets:
-      - reset
-      - common
+    {% minibundle js %}
+    source_dir: _assets/scripts
         END
 
         replacement_snippet = <<-END
-    assets:
-      - reset
+    {% minibundle js %}
+    source_dir: _assets/scripts2
         END
 
         ensure_file_mtime_changes do
+          FileUtils.mv(source_path('_assets/scripts'), source_path('_assets/scripts2'))
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
         end
 
         generate_site(:production, clear_cache: false)
 
-        refute File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        new_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
-        new_destination = 'assets/site-ae2a00e8f0123193e24a3308a9fabecb.css'
-
-        assert_equal new_destination, find_css_path_from_index
-        assert File.exist?(destination_path(new_destination))
+        assert_operator new_mtime, :>, org_mtime
       end
     end
 
-    def test_changing_js_asset_source_list_rewrites_destination
+    def test_changing_asset_source_list_rewrites_destination
       with_site_dir do
         generate_site(:production)
 
@@ -209,40 +174,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_css_asset_destination_path_rewrites_destination
-      with_site_dir do
-        generate_site(:production)
-
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-
-        match_snippet = <<-END
-    {% minibundle css %}
-    source_dir: _assets/styles
-    destination_path: assets/site
-        END
-
-        replacement_snippet = <<-END
-    {% minibundle css %}
-    source_dir: _assets/styles
-    destination_path: assets/site2
-        END
-
-        ensure_file_mtime_changes do
-          find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
-        end
-
-        generate_site(:production, clear_cache: false)
-
-        refute File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-
-        new_destination = "assets/site2-#{CSS_BUNDLE_FINGERPRINT}.css"
-
-        assert_equal new_destination, find_css_path_from_index
-        assert File.exist?(destination_path(new_destination))
-      end
-    end
-
-    def test_changing_js_asset_destination_path_rewrites_destination
+    def test_changing_asset_destination_path_rewrites_destination
       with_site_dir do
         generate_site(:production)
 
@@ -354,12 +286,12 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rebundle_assets_when_nonsource_files_change
+    def test_does_not_rebundle_assets_when_changing_nonsource_files
       with_site_dir do
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        last_mtime = mtime_of(expected_js_path)
+        org_mtime = mtime_of(expected_js_path)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -367,14 +299,54 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal last_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
 
         ensure_file_mtime_changes { FileUtils.touch('index.html') }
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal last_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal 1, get_minifier_cmd_count
+      end
+    end
+
+    def test_does_not_rebundle_assets_when_changing_attributes
+      with_site_dir do
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        org_mtime = mtime_of(expected_js_path)
+
+        assert_equal 1, get_minifier_cmd_count
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(source_path('_layouts/default.html'), 'id: my-scripts', 'id: my-scripts2')
+        end
+
+        generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal 1, get_minifier_cmd_count
+      end
+    end
+
+    def test_does_not_rebundle_assets_when_changing_baseurl
+      with_site_dir do
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        org_mtime = mtime_of(expected_js_path)
+
+        assert_equal 1, get_minifier_cmd_count
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+        end
+
+        generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        assert_equal org_mtime, mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
       end
     end
