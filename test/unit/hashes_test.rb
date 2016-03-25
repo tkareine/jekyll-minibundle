@@ -27,5 +27,15 @@ module Jekyll::Minibundle::Test
       assert_nil Hashes.dig(nil, :no_such_key)
       assert_nil Hashes.dig(nil, 0)
     end
+
+    def test_pick_returns_hash_with_specified_keys
+      assert_equal({}, Hashes.pick(a: 1, 'b' => 2, 'c' => 3))
+      assert_equal({}, Hashes.pick({}))
+      assert_equal({a: 1, 'c' => 3}, Hashes.pick({a: 1, 'b' => 2, 'c' => 3}, :a, 'c'))
+    end
+
+    def test_pick_raises_exception_if_key_does_not_exist
+      assert_raises(KeyError) { Hashes.pick({}, :no_such) }
+    end
   end
 end
