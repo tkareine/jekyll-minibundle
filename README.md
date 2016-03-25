@@ -270,6 +270,10 @@ wins.
 
 See the contents of `test/fixture/site` directory.
 
+# Known caveats
+
+See `test/integration/known_caveats_test.rb`.
+
 # License
 
 MIT. See `LICENSE.txt`.
