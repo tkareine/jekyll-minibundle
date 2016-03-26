@@ -2,7 +2,7 @@ require 'support/test_case'
 require 'support/fixture_config'
 
 module Jekyll::Minibundle::Test
-  class MiniBundleDevelopmentModeTest < TestCase
+  class MinibundleDevelopmentModeTest < TestCase
     include FixtureConfig
 
     CSS_ASSET_DESTINATION_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }

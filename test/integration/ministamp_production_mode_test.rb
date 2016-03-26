@@ -2,7 +2,7 @@ require 'support/test_case'
 require 'support/fixture_config'
 
 module Jekyll::Minibundle::Test
-  class MiniStampProductionModeTest < TestCase
+  class MinistampProductionModeTest < TestCase
     include FixtureConfig
 
     def test_asset_destination_path_has_stamp
