@@ -15,7 +15,7 @@ The plugin works with Jekyll's watch (auto-regeneration) mode.
 [![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
 [![Build status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)][MinibundleBuild]
 
-# Features
+## Features
 
 There are two features: asset fingerprinting with MD5 digest over the
 contents of the asset, and asset bundling combined with the first
@@ -40,7 +40,7 @@ backend upon page load. The minification of stylesheets and JavaScript
 sources makes asset sizes smaller and thus faster to load over
 network.
 
-# Usage
+## Usage
 
 The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
@@ -69,7 +69,7 @@ require 'jekyll/minibundle'
 You must allow Jekyll to use custom plugins. That is, do not enable
 Jekyll's `safe` setting.
 
-## Asset fingerprinting
+### Asset fingerprinting
 
 If you just want to have a fingerprint in your asset's path, use
 `ministamp` tag:
@@ -97,7 +97,7 @@ fingerprint to Jekyll's output directory:
 <link href="{{ site.baseurl }}{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
 ```
 
-## Asset bundling
+### Asset bundling
 
 This is a straightforward way to bundle assets with any minification
 tool that supports reading input from STDIN and writing the output to
@@ -210,7 +210,7 @@ specific one wins. For example, the `minifier_cmd` setting inside
 `minibundle js` block overrides the setting in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable.
 
-## Recommended directory layout
+### Recommended directory layout
 
 It's recommended that you exclude the files you use as asset sources
 from Jekyll itself. Otherwise, you end up with duplicate files in the
@@ -242,7 +242,7 @@ character (`_`), consider using the following directory layout:
 See [Jekyll configuration][JekyllConf] for more about excluding files
 and directories.
 
-## Development mode
+### Development mode
 
 The plugin has one more trick in its sleeves. If you set
 `$JEKYLL_MINIBUNDLE_MODE` environment variable to `development`, then
@@ -266,15 +266,15 @@ minibundle:
 Should both be defined, the setting from the environment variable
 wins.
 
-# Example site
+## Example site
 
 See the contents of `test/fixture/site` directory.
 
-# Known caveats
+## Known caveats
 
 See `test/integration/known_caveats_test.rb`.
 
-# License
+## License
 
 MIT. See `LICENSE.txt`.
 
