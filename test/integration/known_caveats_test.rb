@@ -2,8 +2,8 @@ require 'support/test_case'
 require 'support/fixture_config'
 
 module Jekyll::Minibundle::Test
-  # Known software caveats that won't be fixed in the current design
-  # of the software.
+  # Known caveats that won't be fixed in the current design of the
+  # plugin.
   class KnownCaveatsTest < TestCase
     include FixtureConfig
 
