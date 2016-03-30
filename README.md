@@ -8,7 +8,8 @@ for cache busting.
 There are no runtime dependencies, except for the minification tool
 used for bundling (fingerprinting has no dependencies).
 
-Tested with Ruby MRI 2.x. Ruby 1.9 and 1.8 are *not* supported.
+The plugin requires Jekyll version 3.x. It is tested with Ruby MRI
+2.x. Ruby 1.8 and 1.9 are *not* supported.
 
 The plugin works with Jekyll's watch (auto-regeneration) mode.
 

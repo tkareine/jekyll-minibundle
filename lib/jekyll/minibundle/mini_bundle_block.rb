@@ -1,5 +1,4 @@
 require 'jekyll/minibundle/hashes'
-require 'jekyll/minibundle/compatibility'
 require 'jekyll/minibundle/environment'
 require 'jekyll/minibundle/asset_file_registry'
 require 'jekyll/minibundle/asset_tag_markup'
@@ -14,7 +13,7 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers.fetch(:site)
-      bundle_config = get_current_bundle_config(Compatibility.load_yaml(super), site)
+      bundle_config = get_current_bundle_config(::SafeYAML.load(super), site)
       baseurl = bundle_config.fetch('baseurl')
       attributes = bundle_config.fetch('attributes')
 

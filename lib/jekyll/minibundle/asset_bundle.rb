@@ -1,6 +1,6 @@
 require 'tempfile'
-require 'jekyll/minibundle/compatibility'
 require 'jekyll/minibundle/files'
+require 'jekyll/minibundle/log'
 
 module Jekyll::Minibundle
   class AssetBundle
@@ -30,9 +30,9 @@ Missing minification command for bundling #{@type} assets. Specify it in
     def make_bundle
       exit_status = spawn_minifier(@minifier_cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
-        Compatibility.log_info("Bundling #{@type} assets:")
+        Log.info("Bundling #{@type} assets:")
         @asset_paths.each do |asset|
-          Compatibility.log_info(relative_path_from(asset, @site_dir))
+          Log.info(relative_path_from(asset, @site_dir))
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
@@ -73,12 +73,12 @@ Missing minification command for bundling #{@type} assets. Specify it in
 
       return if last_bytes.empty?
 
-      Compatibility.log_error("#{message}, last #{last_bytes.size} bytes of minifier output:")
+      Log.error("#{message}, last #{last_bytes.size} bytes of minifier output:")
 
       last_bytes
         .gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }
         .split("\n")
-        .each { |line| Compatibility.log_error(line) }
+        .each { |line| Log.error(line) }
     end
   end
 end
