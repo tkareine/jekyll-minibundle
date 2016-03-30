@@ -3,13 +3,15 @@ AllCops:
   DisplayStyleGuide: true
   TargetRubyVersion: 2.0
 Metrics/AbcSize:
-  Max: 40
+  Max: 50
 Metrics/ClassLength:
   Enabled: false  # test classes are big
 Metrics/LineLength:
   Max: 200
 Metrics/MethodLength:
   Max: 50
+Metrics/ModuleLength:
+  Max: 200
 Performance/RedundantBlockCall:
   Enabled: false  # prefer named block arguments for documentation
 Style/ClassAndModuleChildren:
