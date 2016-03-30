@@ -174,26 +174,45 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_changing_asset_destination_path_rewrites_destination
+    def test_changing_asset_source_list_removes_old_temporary_bundle_file
       with_site_dir do
         generate_site(:production)
 
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         match_snippet = <<-END
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site
+    assets:
+      - dependency
+      - app
         END
 
         replacement_snippet = <<-END
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site2
+    assets:
+      - dependency
         END
+
+        org_tempfiles = find_tempfiles
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js'))
+        assert_equal 1, (org_tempfiles - find_tempfiles).size
+      end
+    end
+
+    def test_changing_asset_destination_path_rewrites_destination
+      with_site_dir do
+        generate_site(:production)
+
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
         end
 
         generate_site(:production, clear_cache: false)
@@ -204,6 +223,57 @@ module Jekyll::Minibundle::Test
 
         assert_equal new_destination, find_js_path_from_index
         assert File.exist?(destination_path(new_destination))
+      end
+    end
+
+    def test_changing_asset_destination_path_removes_old_temporary_bundle_file
+      with_site_dir do
+        generate_site(:production)
+
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        org_tempfiles = find_tempfiles
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"))
+        assert_equal 1, (org_tempfiles - find_tempfiles).size
+      end
+    end
+
+    def test_changing_asset_destination_path_to_new_value_and_back_to_original_rewrites_destination
+      with_site_dir do
+        generate_site(:production)
+
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        new_destination = "assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"
+
+        assert_equal new_destination, find_js_path_from_index
+        assert File.exist?(destination_path(new_destination))
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site2', 'assets/site')
+        end
+
+        generate_site(:production, clear_cache: false)
+
+        refute File.exist?(destination_path(new_destination))
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
       end
     end
 
@@ -471,6 +541,26 @@ title: Test
         .map { |f| File.read(site_fixture_path(source_subdir, "#{f}.#{type}")) }
         .join('')
         .size
+    end
+
+    def change_destination_path_in_minibundle_block(from, to)
+      match_snippet = <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: #{from}
+      END
+
+      replacement_snippet = <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: #{to}
+      END
+
+      find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+    end
+
+    def find_tempfiles
+      Dir[File.join(Dir.tmpdir, AssetBundle::TEMPFILE_PREFIX + '*')]
     end
   end
 end

@@ -7,8 +7,21 @@ require 'jekyll/minibundle/stamp_file'
 module Jekyll::Minibundle
   module AssetFileRegistry
     class << self
-      def clear
+      def clear_all
         @_files = {}
+      end
+
+      def clear_unused
+        @_files
+          .select { |_, cached| !cached.fetch(:is_used) }
+          .each do |asset_destination_path, cached|
+            cached.fetch(:file).cleanup
+            @_files.delete(asset_destination_path)
+          end
+
+        @_files.each_value do |cached|
+          cached[:is_used] = false
+        end
       end
 
       def register_bundle_file(site, bundle_config)
@@ -35,23 +48,40 @@ module Jekyll::Minibundle
         cached = @_files[asset_destination_path]
 
         if cached
-          raise "minibundle block has same destination path as a ministamp tag: #{asset_destination_path}" if cached.fetch(:type) != :bundle
+          if cached.fetch(:type) != :bundle
+            raise "minibundle block has the same destination path as a ministamp tag: '#{asset_destination_path}'"
+          end
 
           cached_file = cached.fetch(:file)
+          cached_config = cached.fetch(:config)
+          cached_is_used = cached.fetch(:is_used)
 
-          if bundle_config == cached.fetch(:config)
-            get_files.call(cached_file).each do |file|
-              site.static_files << file unless site.static_files.include?(file)
+          if bundle_config == cached_config
+            unless cached_is_used
+              cached[:is_used] = true
+              add_as_static_files_to_site(site, get_files.call(cached_file))
             end
+
             return cached_file
-          else
-            get_files.call(cached_file).each { |file| site.static_files.delete(file) }
           end
+
+          if cached_is_used
+            raise <<-END
+Two or more minibundle blocks with the same destination path '#{asset_destination_path}', but having different asset configuration: #{bundle_config.inspect} vs. #{cached_config.inspect}
+            END
+          end
+
+          cached_file.cleanup
         end
 
         new_file = file_class.new(site, bundle_config)
-        @_files[asset_destination_path] = {type: :bundle, file: new_file, config: bundle_config}
-        get_files.call(new_file).each { |file| site.static_files << file }
+        @_files[asset_destination_path] = {
+          type:    :bundle,
+          file:    new_file,
+          config:  bundle_config,
+          is_used: true
+        }
+        add_as_static_files_to_site(site, get_files.call(new_file))
         new_file
       end
 
@@ -59,25 +89,52 @@ module Jekyll::Minibundle
         cached = @_files[asset_destination_path]
 
         if cached
-          raise "ministamp tag has same destination path as a minibundle block: #{asset_destination_path}" if cached.fetch(:type) != :stamp
+          if cached.fetch(:type) != :stamp
+            raise "ministamp tag has the same destination path as a minibundle block: '#{asset_destination_path}'"
+          end
 
           cached_file = cached.fetch(:file)
+          cached_config = cached.fetch(:config)
+          cached_is_used = cached.fetch(:is_used)
 
-          if asset_source_path == cached.fetch(:config)
-            site.static_files << cached_file unless site.static_files.include?(cached_file)
+          if asset_source_path == cached_config
+            unless cached_is_used
+              cached[:is_used] = true
+              add_as_static_files_to_site(site, [cached_file])
+            end
+
             return cached_file
-          else
-            site.static_files.delete(cached_file)
           end
+
+          if cached_is_used
+            raise <<-END
+Two or more ministamp tags with the same destination path '#{asset_destination_path}', but different asset source paths: '#{asset_source_path}' vs. '#{cached_config}'
+            END
+          end
+
+          cached_file.cleanup
         end
 
         new_file = file_class.new(site, asset_source_path, asset_destination_path)
-        @_files[asset_destination_path] = {type: :stamp, file: new_file, config: asset_source_path}
-        site.static_files << new_file
+        @_files[asset_destination_path] = {
+          type:    :stamp,
+          file:    new_file,
+          config:  asset_source_path,
+          is_used: true
+        }
+        add_as_static_files_to_site(site, [new_file])
         new_file
+      end
+
+      def add_as_static_files_to_site(site, files)
+        files.each { |file| site.static_files << file }
       end
     end
 
-    clear
+    clear_all
   end
+end
+
+::Jekyll::Hooks.register(:site, :post_write) do
+  ::Jekyll::Minibundle::AssetFileRegistry.clear_unused
 end

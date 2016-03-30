@@ -97,6 +97,46 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_changing_asset_destination_path_to_new_value_and_back_to_original_rewrites_destination
+      with_site_dir do
+        generate_site(:development)
+
+        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen.css',
+            '{% ministamp _tmp/site.css assets/screen2.css'
+          )
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        refute File.exist?(destination_path(STAMP_DESTINATION_PATH))
+
+        new_destination = 'assets/screen2.css'
+
+        assert_equal new_destination, find_css_path_from_index
+        assert File.exist?(destination_path(new_destination))
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen2.css',
+            '{% ministamp _tmp/site.css assets/screen.css'
+          )
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        refute File.exist?(destination_path(new_destination))
+
+        assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
+        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+      end
+    end
+
     def test_supports_relative_and_absolute_destination_paths
       with_site_dir do
         generate_site(:development)

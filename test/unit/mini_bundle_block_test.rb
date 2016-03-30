@@ -41,7 +41,7 @@ module Jekyll::Minibundle::Test
       }
     ].each do |spec|
       define_method :"test_normalizing_baseurl_with_#{spec.fetch(:description)}" do
-        AssetFileRegistry.clear
+        AssetFileRegistry.clear_all
 
         template = Liquid::Template.parse(<<-END)
 {% minibundle css %}

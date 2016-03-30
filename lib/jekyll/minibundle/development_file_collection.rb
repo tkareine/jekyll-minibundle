@@ -17,5 +17,9 @@ module Jekyll::Minibundle
         DevelopmentFile.new(site, asset_source, asset_destination)
       end
     end
+
+    def cleanup
+      # no-op
+    end
   end
 end

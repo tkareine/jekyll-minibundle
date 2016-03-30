@@ -136,25 +136,53 @@ module Jekyll::Minibundle::Test
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
 
-        match_snippet = <<-END
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site
-        END
-
-        replacement_snippet = <<-END
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/site2
-        END
-
-        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
+        end
 
         generate_site(:development, clear_cache: false)
+
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
 
         assert_equal ['assets/site2/dependency.js', 'assets/site2/app.js'], find_js_paths_from_index
         assert File.exist?(destination_path('assets/site2/dependency.js'))
         assert File.exist?(destination_path('assets/site2/app.js'))
+      end
+    end
+
+    def test_changing_asset_destination_path_to_new_value_and_back_to_original_rewrites_destination
+      with_site_dir do
+        generate_site(:development)
+
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
+
+        assert_equal ['assets/site2/dependency.js', 'assets/site2/app.js'], find_js_paths_from_index
+        assert File.exist?(destination_path('assets/site2/dependency.js'))
+        assert File.exist?(destination_path('assets/site2/app.js'))
+
+        ensure_file_mtime_changes do
+          change_destination_path_in_minibundle_block('assets/site2', 'assets/site')
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        refute File.exist?(destination_path('assets/site2/dependency.js'))
+        refute File.exist?(destination_path('assets/site2/app.js'))
+
+        assert_equal ['assets/site/dependency.js', 'assets/site/app.js'], find_js_paths_from_index
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
       end
     end
 
@@ -319,6 +347,22 @@ module Jekyll::Minibundle::Test
     def expect_file_exists_and_is_equal_to(actual, expected)
       assert File.exist?(actual)
       assert_equal File.read(expected), File.read(actual)
+    end
+
+    def change_destination_path_in_minibundle_block(from, to)
+      match_snippet = <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: #{from}
+      END
+
+      replacement_snippet = <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: #{to}
+      END
+
+      find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
     end
   end
 end

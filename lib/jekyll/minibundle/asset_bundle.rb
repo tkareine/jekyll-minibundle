@@ -1,9 +1,12 @@
 require 'tempfile'
+require 'jekyll/minibundle/exceptions'
 require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/log'
 
 module Jekyll::Minibundle
   class AssetBundle
+    TEMPFILE_PREFIX = 'jekyll-minibundle-'.freeze
+
     def initialize(config)
       @type = config.fetch(:type)
       @asset_paths = config.fetch(:asset_paths)
@@ -19,15 +22,21 @@ Missing minification command for bundling #{@type} assets. Specify it in
         END
       end
 
-      @temp_file = Tempfile.new(['jekyll-minibundle-', ".#{@type}"])
-      at_exit { @temp_file.close! }
+      @tempfile = Tempfile.new([TEMPFILE_PREFIX, ".#{@type}"])
+    end
+
+    def close
+      @tempfile.close!
+      @tempfile = nil
     end
 
     def path
-      @temp_file.path
+      raise IllegalStateError, 'Cannot get path of closed AssetBundle' unless @tempfile
+      @tempfile.path
     end
 
     def make_bundle
+      raise IllegalStateError, 'Cannot make bundle with closed AssetBundle' unless @tempfile
       exit_status = spawn_minifier(@minifier_cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
         Log.info("Bundling #{@type} assets:")
@@ -55,7 +64,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
       pid = nil
       rd, wr = IO.pipe
       Dir.chdir(@site_dir) do
-        pid = spawn(cmd, out: [@temp_file.path, 'w'], in: rd)
+        pid = spawn(cmd, out: [@tempfile.path, 'w'], in: rd)
       end
       rd.close
       yield wr
@@ -69,7 +78,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
     end
 
     def log_minifier_error(message)
-      last_bytes = Files.read_last(@temp_file.path, 2000)
+      last_bytes = Files.read_last(@tempfile.path, 2000)
 
       return if last_bytes.empty?
 

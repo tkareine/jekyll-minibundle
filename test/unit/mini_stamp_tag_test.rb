@@ -21,7 +21,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_ignore_rest_arguments
-      AssetFileRegistry.clear
+      AssetFileRegistry.clear_all
       output = Liquid::Template
                .parse("{% ministamp #{STAMP_SOURCE_PATH} #{STAMP_DESTINATION_PATH} rest %}")
                .render({}, registers: {site: new_fake_site(site_fixture_path)})

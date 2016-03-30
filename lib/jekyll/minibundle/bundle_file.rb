@@ -19,6 +19,13 @@ module Jekyll::Minibundle
       @minifier_cmd = config.fetch('minifier_cmd')
       @stamped_at = nil
       @is_modified = false
+      @_asset_bundle = nil
+    end
+
+    def cleanup
+      return unless @_asset_bundle
+      @_asset_bundle.close
+      @_asset_bundle = nil
     end
 
     def destination_path_for_markup
