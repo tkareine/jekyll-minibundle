@@ -1,3 +1,7 @@
+# Upcoming
+
+* Drop support for Jekyll versions below 3
+
 # 1.6.0 / 2016-03-26
 
 * Log the last 2000 bytes of minifier's STDOUT output if the minifier
