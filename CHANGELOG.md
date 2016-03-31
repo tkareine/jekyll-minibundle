@@ -1,6 +1,10 @@
-# Upcoming
+# 2.0.0 / 2016-04-01
 
 * Drop support for Jekyll versions below 3
+* Remove unused asset cache entries and temporary files when Jekyll
+  rebuilds the site
+* Document a known caveat: the plugin doesn't work with Jekyll's
+  incremental rebuild feature.
 
 # 1.6.0 / 2016-03-26
 
