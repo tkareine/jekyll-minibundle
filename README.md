@@ -11,7 +11,9 @@ used for bundling (fingerprinting has no dependencies).
 The plugin requires Jekyll version 3.x. It is tested with Ruby MRI
 2.x. Ruby 1.8 and 1.9 are *not* supported.
 
-The plugin works with Jekyll's watch (auto-regeneration) mode.
+The plugin works with Jekyll's watch mode (auto-regeneration, Jekyll
+option `--watch`), but not with incremental feature enabled (Jekyll
+option `--incremental`).
 
 [![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
 [![Build status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)][MinibundleBuild]
@@ -270,6 +272,11 @@ wins.
 ## Example site
 
 See the contents of `test/fixture/site` directory.
+
+## Known caveats
+
+The plugin does not work with Jekyll's incremental rebuild feature (Jekyll
+option `--incremental`).
 
 ## License
 
