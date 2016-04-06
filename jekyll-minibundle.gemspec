@@ -27,7 +27,7 @@ minification tool (not even other gems).
 
   s.test_files = `git ls-files -- test`.split("\n")
 
-  s.add_development_dependency 'jekyll',   '~> 3.0.0'
+  s.add_development_dependency 'jekyll',   '~> 3.0'
   s.add_development_dependency 'minitest', '~> 5.8'
   s.add_development_dependency 'nokogiri', '~> 1.6'
   s.add_development_dependency 'rake',     '~> 11.1'
