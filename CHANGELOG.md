@@ -1,3 +1,7 @@
+# 2.0.1 / 2016-04-06
+
+* Fix Jekyll version requirement check to be more reliable
+
 # 2.0.0 / 2016-04-01
 
 * Drop support for Jekyll versions below 3
