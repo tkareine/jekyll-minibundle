@@ -20,7 +20,11 @@ module Jekyll::Minibundle
       end
 
       def make_attribute(name, value)
-        %{ #{name}="#{CGI.escape_html(value)}"}
+        unless value.nil?
+          %{ #{name}="#{CGI.escape_html(value)}"}
+        else
+          %{ #{name} }
+        end
       end
 
       def make_url(baseurl, path)
