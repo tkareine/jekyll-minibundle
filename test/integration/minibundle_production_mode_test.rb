@@ -29,6 +29,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:production) do
         element = find_js_element_from_index
         assert_equal 'my-scripts', element['id']
+        assert_equal '', element['async']
       end
     end
 

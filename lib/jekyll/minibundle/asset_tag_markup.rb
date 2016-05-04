@@ -20,10 +20,10 @@ module Jekyll::Minibundle
       end
 
       def make_attribute(name, value)
-        unless value.nil?
-          %{ #{name}="#{CGI.escape_html(value)}"}
+        if value.nil?
+          %{ #{name}}
         else
-          %{ #{name} }
+          %{ #{name}="#{CGI.escape_html(value)}"}
         end
       end
 

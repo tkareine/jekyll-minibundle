@@ -10,6 +10,12 @@ module Jekyll::Minibundle::Test
       assert_equal expected, actual
     end
 
+    def test_outputs_just_attribute_name_for_nil_value
+      actual = AssetTagMarkup.make_markup(:css, '', '/asset.css', async: nil)
+      expected = %{<link rel="stylesheet" href="/asset.css" async>}
+      assert_equal expected, actual
+    end
+
     def test_raise_exception_if_unknown_type
       err = assert_raises(ArgumentError) do
         AssetTagMarkup.make_markup(:unknown, '', '/asset', {})

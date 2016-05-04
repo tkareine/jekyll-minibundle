@@ -29,8 +29,8 @@ module Jekyll::Minibundle::Test
 
     def test_js_assets_have_configured_attributes
       with_precompiled_site(:development) do
-        elements = find_js_elements_from_index.map { |el| el['id'] }.uniq
-        assert_equal ['my-scripts'], elements
+        elements = find_js_elements_from_index.map { |el| [el['id'], el['async']] }.uniq
+        assert_equal [['my-scripts', '']], elements
       end
     end
 
