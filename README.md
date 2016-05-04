@@ -124,6 +124,7 @@ assets:
   - app
 attributes:
   id: my-scripts
+  async:
 {% endminibundle %}
 ```
 
@@ -140,14 +141,15 @@ minibundle:
 Output in the content file:
 
 ``` html
-<script src="/assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts"></script>
+<script src="/assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts" async></script>
 ```
 
-You can pass custom attributes, like `id="my-scripts"` above, to the
-generated markup with `attributes` map inside the `minibundle` block.
+You can pass custom attributes, like `id="my-scripts"` and `async`
+above, to the generated markup with `attributes` map inside the
+`minibundle` block.
 
-For bundling CSS assets, you use `css` as the argument to the
-`minibundle` block:
+For bundling CSS assets, use `css` as the argument to the `minibundle`
+block:
 
 ``` text
 {% minibundle css %}
