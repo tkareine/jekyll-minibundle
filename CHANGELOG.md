@@ -1,3 +1,9 @@
+# 2.1.0 / 2016-05-04
+
+* Allow attributes without values. Useful for `async` attribute, for
+  example. Pull Request #7 by Sam (@codewisdom).
+* Ensure attribute value conversion to string
+
 # 2.0.1 / 2016-04-06
 
 * Fix Jekyll version requirement check to be more reliable
