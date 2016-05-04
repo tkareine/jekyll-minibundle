@@ -241,6 +241,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
+        sleep 1  # wait for unlinked temp files to actually disappear
+
         refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         assert File.exist?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"))
         assert_equal 1, (org_tempfiles - find_tempfiles).size
