@@ -23,7 +23,7 @@ module Jekyll::Minibundle
         if value.nil?
           %{ #{name}}
         else
-          %{ #{name}="#{CGI.escape_html(value)}"}
+          %{ #{name}="#{CGI.escape_html(value.to_s)}"}
         end
       end
 
