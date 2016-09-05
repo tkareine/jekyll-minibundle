@@ -26,6 +26,8 @@ Style/Documentation:
   Enabled: false  # we have documentation in the readme
 Style/ExtraSpacing:
   Enabled: false  # does not work with trailing comments
+Style/NumericPredicate:
+  EnforcedStyle: comparison
 Style/PercentLiteralDelimiters:
   Enabled: false  # it's better to use `%w{}` syntax, because the braces are the same as in `%r{}`
 Style/SpaceInsideHashLiteralBraces:
