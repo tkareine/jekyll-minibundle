@@ -128,7 +128,8 @@ attributes:
 {% endminibundle %}
 ```
 
-Then, specify the command for launching your favorite minifier in `_config.yml`:
+Then, specify the command for launching your favorite minifier in
+`_config.yml`:
 
 ``` yaml
 baseurl: /
@@ -249,13 +250,12 @@ and directories.
 
 ### Development mode
 
-The plugin has one more trick in its sleeves. If you set
-`$JEKYLL_MINIBUNDLE_MODE` environment variable to `development`, then
-the plugin will copy asset files as is to Jekyll's output directory
-and omit fingerprinting. The `destination_path` setting in
-`minibundle` block sets the destination directory for bundled
-files. This is useful in development workflow, where you need the
-filenames and line numbers of the original asset sources.
+If you set `$JEKYLL_MINIBUNDLE_MODE` environment variable to
+`development`, then the plugin will copy asset files as is to Jekyll's
+output directory and omit fingerprinting. The `destination_path`
+setting in `minibundle` block sets the destination directory for
+bundled files. This is useful in development workflow, where you need
+the filenames and line numbers of the original asset sources.
 
 ``` bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
@@ -270,6 +270,25 @@ minibundle:
 
 Should both be defined, the setting from the environment variable
 wins.
+
+### Capturing output
+
+Use Liquid `capture` block to store output rendered inside the block
+to a variable, as a string. Then you can process the string.
+
+For example:
+
+``` html
+{% capture sitecss %}{% ministamp _assets/site.css assets/site.css %}{% endcapture %}
+<link href="{{ site.cdnbaseurl }}{{ sitecss | remove_first: "assets/"}}" rel="stylesheet" media="screen, projection">
+```
+
+Output, provided `site.cdnbaseurl` is set to
+`https://cdn.example.com/`:
+
+``` html
+<link href="https://cdn.example.com/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
+```
 
 ## Example site
 
