@@ -271,9 +271,9 @@ minibundle:
 Should both be defined, the setting from the environment variable
 wins.
 
-### Capturing output
+### Capturing Liquid output
 
-Use Liquid `capture` block to store output rendered inside the block
+Use Liquid's `capture` block to store output rendered inside the block
 to a variable, as a string. Then you can process the string.
 
 For example:
