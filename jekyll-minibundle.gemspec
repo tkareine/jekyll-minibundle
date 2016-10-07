@@ -30,6 +30,7 @@ minification tool (not even other gems).
   s.add_development_dependency 'jekyll',   '~> 3.0'
   s.add_development_dependency 'minitest', '~> 5.8'
   s.add_development_dependency 'nokogiri', '~> 1.6'
+  s.add_development_dependency 'pry',      '~> 0.10'
   s.add_development_dependency 'rake',     '~> 11.1'
   s.add_development_dependency 'rubocop',  '~> 0.43.0'
 
