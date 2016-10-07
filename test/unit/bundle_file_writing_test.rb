@@ -6,7 +6,7 @@ module Jekyll::Minibundle::Test
   class BundleFileWritingTest < TestCase
     include FixtureConfig
 
-    def test_calling_markup_determines_fingerprint_and_destination_write
+    def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
         bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
@@ -42,7 +42,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_many_consecutive_markup_calls_trigger_one_destination_write
+    def test_many_consecutive_destination_path_for_markup_calls_trigger_one_destination_write
       with_fake_site do |site|
         bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
