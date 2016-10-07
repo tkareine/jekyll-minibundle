@@ -8,14 +8,16 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFileProperties
 
-    attr_reader :stamped_at
+    attr_reader :asset_destination_dir, :stamped_at
 
     def initialize(site, config)
       @site = site
       @type = config.fetch('type')
       asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
       @asset_paths = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
-      @destination_path = config.fetch('destination_path')
+      destination_path = config.fetch('destination_path')
+      @asset_destination_dir = File.dirname(destination_path)
+      @asset_destination_filename_prefix = File.basename(destination_path)
       @minifier_cmd = config.fetch('minifier_cmd')
       @stamped_at = nil
       @is_modified = false
@@ -42,16 +44,12 @@ module Jekyll::Minibundle
       asset_destination_path
     end
 
-    def path
+    def asset_source_path
       asset_bundle.path
     end
 
-    def asset_destination_dir
-      File.dirname(@destination_path)
-    end
-
-    def asset_destination_path
-      "#{@destination_path}-#{asset_stamp}.#{@type}"
+    def asset_destination_filename
+      "#{@asset_destination_filename_prefix}-#{asset_stamp}#{extname}"
     end
 
     def extname
@@ -77,7 +75,7 @@ module Jekyll::Minibundle
     private
 
     def asset_stamp
-      @_asset_stamp ||= AssetStamp.from_file(path)
+      @_asset_stamp ||= AssetStamp.from_file(asset_source_path)
     end
 
     def asset_bundle

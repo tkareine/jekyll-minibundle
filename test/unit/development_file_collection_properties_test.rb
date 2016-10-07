@@ -28,6 +28,11 @@ module Jekyll::Minibundle::Test
       assert_equal 'assets/site', @@results.fetch(:app).fetch(:destination_rel_dir)
     end
 
+    def test_name
+      assert_equal 'dependency.js', @@results.fetch(:dependency).fetch(:name)
+      assert_equal 'app.js', @@results.fetch(:app).fetch(:name)
+    end
+
     def test_extname
       assert_equal '.js', @@results.fetch(:dependency).fetch(:extname)
       assert_equal '.js', @@results.fetch(:app).fetch(:extname)
@@ -58,11 +63,15 @@ module Jekyll::Minibundle::Test
 
     def test_to_liquid
       hash = @@results.fetch(:dependency).fetch(:to_liquid)
+      assert_equal 'dependency', hash.fetch('basename')
+      assert_equal 'dependency.js', hash.fetch('name')
       assert_equal '.js', hash.fetch('extname')
       assert_instance_of Time, hash.fetch('modified_time')
       assert_equal "/#{JS_BUNDLE_SOURCE_DIR}/dependency.js", hash.fetch('path')
 
       hash = @@results.fetch(:app).fetch(:to_liquid)
+      assert_equal 'app', hash.fetch('basename')
+      assert_equal 'app.js', hash.fetch('name')
       assert_equal '.js', hash.fetch('extname')
       assert_instance_of Time, hash.fetch('modified_time')
       assert_equal "/#{JS_BUNDLE_SOURCE_DIR}/app.js", hash.fetch('path')

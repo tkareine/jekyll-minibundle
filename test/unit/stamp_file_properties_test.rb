@@ -11,6 +11,7 @@ module Jekyll::Minibundle::Test
     def setup
       @@results ||= with_fake_site do |site|
         file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
+        file.destination_path_for_markup
         get_send_results(file, STATIC_FILE_API_PROPERTIES)
       end
     end
@@ -21,6 +22,10 @@ module Jekyll::Minibundle::Test
 
     def test_destination_rel_dir
       assert_equal 'assets', @@results.fetch(:destination_rel_dir)
+    end
+
+    def test_name
+      assert_equal "screen-#{STAMP_FINGERPRINT}.css", @@results.fetch(:name)
     end
 
     def test_extname
@@ -46,6 +51,8 @@ module Jekyll::Minibundle::Test
 
     def test_to_liquid
       hash = @@results.fetch(:to_liquid)
+      assert_equal "screen-#{STAMP_FINGERPRINT}", hash.fetch('basename')
+      assert_equal "screen-#{STAMP_FINGERPRINT}.css", hash.fetch('name')
       assert_equal '.css', hash.fetch('extname')
       assert_instance_of Time, hash.fetch('modified_time')
       assert_equal "/#{STAMP_SOURCE_PATH}", hash.fetch('path')

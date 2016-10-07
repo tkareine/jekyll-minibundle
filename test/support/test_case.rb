@@ -55,12 +55,16 @@ module Jekyll::Minibundle::Test
       org_env.each { |k, v| ENV[k] = v }
     end
 
-    def with_site_dir(&block)
+    def with_tmp_dir(&block)
       Dir.mktmpdir('jekyll-minibundle-test-site-') do |dir|
-        Dir.chdir(dir) do
-          _copy_fixture_site_dir(Dir.pwd)
-          block.call(dir)
-        end
+        Dir.chdir(dir, &block)
+      end
+    end
+
+    def with_site_dir(&block)
+      with_tmp_dir do |dir|
+        _copy_fixture_site_dir(dir)
+        block.call(dir)
       end
     end
 

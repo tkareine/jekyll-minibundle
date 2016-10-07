@@ -1,7 +1,7 @@
 module Jekyll::Minibundle
   module AssetFileProperties
     def asset_destination_path
-      File.join(asset_destination_dir, asset_destination_basename)
+      File.join(asset_destination_dir, asset_destination_filename)
     end
 
     # Conformance to remaining Jekyll StaticFile public API methods
@@ -22,6 +22,10 @@ module Jekyll::Minibundle
       asset_destination_path
     end
 
+    def name
+      asset_destination_filename
+    end
+
     def modified_time
       File.stat(path).mtime
     end
@@ -40,9 +44,11 @@ module Jekyll::Minibundle
 
     def to_liquid
       {
-        'path'          => relative_path,
+        'basename'      => File.basename(name, extname),
+        'name'          => name,
+        'extname'       => extname,
         'modified_time' => modified_time,
-        'extname'       => extname
+        'path'          => relative_path
       }
     end
 

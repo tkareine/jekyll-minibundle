@@ -6,20 +6,20 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFileProperties
 
-    attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_basename, :stamped_at
+    attr_reader :asset_source_path, :asset_destination_dir, :asset_destination_filename, :stamped_at
 
     def initialize(site, asset_source_path, asset_destination_path)
       @site = site
       @asset_source_path = asset_source_path
       @asset_destination_dir = File.dirname(asset_destination_path)
-      @asset_destination_basename = File.basename(asset_destination_path)
+      @asset_destination_filename = File.basename(asset_destination_path)
       @stamped_at = nil
     end
 
     alias destination_path_for_markup asset_destination_path
 
     def extname
-      File.extname(asset_destination_basename)
+      File.extname(asset_destination_filename)
     end
 
     def write(site_destination_dir)

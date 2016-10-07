@@ -11,6 +11,7 @@ module Jekyll::Minibundle::Test
     def setup
       @@results ||= with_fake_site do |site|
         file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments))
+        capture_io { file.destination_path_for_markup }
         get_send_results(file, STATIC_FILE_API_PROPERTIES)
       end
     end
@@ -21,6 +22,10 @@ module Jekyll::Minibundle::Test
 
     def test_destination_rel_dir
       assert_equal 'assets', @@results.fetch(:destination_rel_dir)
+    end
+
+    def test_name
+      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", @@results.fetch(:name)
     end
 
     def test_extname
@@ -46,6 +51,8 @@ module Jekyll::Minibundle::Test
 
     def test_to_liquid
       hash = @@results.fetch(:to_liquid)
+      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}", hash.fetch('basename')
+      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", hash.fetch('name')
       assert_equal '.js', hash.fetch('extname')
       assert_instance_of Time, hash.fetch('modified_time')
       assert_match(%r{/jekyll-minibundle-.+\.js\z}, hash.fetch('path'))

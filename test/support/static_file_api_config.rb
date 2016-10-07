@@ -3,6 +3,7 @@ module Jekyll::Minibundle::Test
     STATIC_FILE_API_PROPERTIES = [
       :defaults,
       :destination_rel_dir,
+      :name,
       :extname,
       :modified_time,
       :mtime,
