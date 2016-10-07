@@ -20,9 +20,9 @@ module Jekyll::Minibundle
     end
 
     def destination_path_for_markup
-      # we must regenerate the fingerprint here, if at all, in order
-      # to make sure markup destination and generated file paths have
-      # the same fingerprint
+      # we must rebundle here, if at all, in order to make sure the
+      # destination path in the markup and the generated file path
+      # have the same fingerprint
       if modified?
         @stamped_at = mtime
         @is_modified = true
@@ -36,7 +36,8 @@ module Jekyll::Minibundle
       @asset_destination_extension
     end
 
-    # writes destination only after `markup` has been called
+    # allows writing destination only after
+    # `destination_path_for_markup` has been called
     def write(site_destination_dir)
       if @is_modified
         write_destination(site_destination_dir)
