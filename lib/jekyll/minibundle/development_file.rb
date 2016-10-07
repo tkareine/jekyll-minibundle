@@ -19,7 +19,7 @@ module Jekyll::Minibundle
     alias destination_path_for_markup asset_destination_path
 
     def extname
-      File.extname(asset_destination_path)
+      File.extname(asset_destination_basename)
     end
 
     def write(site_destination_dir)
