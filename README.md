@@ -20,9 +20,9 @@ option `--incremental`).
 
 ## Features
 
-There are two features: asset fingerprinting with MD5 digest over the
-contents of the asset, and asset bundling combined with the first
-feature.
+There are two features: asset fingerprinting with [MD5 digest][MD5]
+over the contents of the asset, and asset bundling combined with the
+first feature.
 
 Asset bundling consists of concatenation and minification. The plugin
 implements concatenation and leaves choosing the minification tool up
@@ -74,27 +74,30 @@ Jekyll's `safe` setting.
 
 ### Asset fingerprinting
 
-If you just want to have a fingerprint in your asset's path, use
-`ministamp` tag:
+If you just want to have an MD5 fingerprint in your asset's path, use
+`ministamp` [Liquid][Liquid] tag. For example:
 
 ``` html
 <link href="{{ site.baseurl }}{% ministamp _assets/site.css assets/site.css %}" rel="stylesheet" media="screen, projection">
 ```
 
-Output, when `site.baseurl` is `/`, containing the MD5 digest of the
-file in the filename:
+When it's time to render the `ministamp` tag, the plugin copies the
+source file (`_assets/site.css`, the first tag argument) to the
+specified destination path (`assets/site.css`, the second tag
+argument) in Jekyll's output directory. The filename will contain a
+fingerprint.
+
+Tag output, when `site.baseurl` is `/`:
 
 ``` html
 <link href="/assets/site-390be921ee0eff063817bb5ef2954300.css" rel="stylesheet" media="screen, projection">
 ```
 
-Jekyll's output directory will have the asset file at that path.
-
 This feature is useful when combined with asset generation tools
 external to Jekyll. For example, you can configure [Compass][Compass]
-to take inputs from `_assets/styles/*.scss` and to produce output to
-`_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
-fingerprint to Jekyll's output directory:
+to take input files from `_assets/styles/*.scss` and to produce output
+to `_tmp/site.css`. Then, you use `ministamp` tag to copy the file
+with a fingerprint to Jekyll's output directory:
 
 ``` html
 <link href="{{ site.baseurl }}{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
@@ -106,13 +109,14 @@ This is a straightforward way to bundle assets with any minification
 tool that supports reading input from STDIN and writing the output to
 STDOUT. You write the configuration for input sources directly into
 the content file where you want the markup tag for the bundle file to
-appear. The outcome will be a markup tag containing the path to the
-bundle file, and the Jekyll's output directory will have the bundle
-file at that path. The path will contain a fingerprint.
+appear. The markup tag contains the path to the bundle file, and the
+Jekyll's output directory will have the bundle file at that path. The
+path will contain an MD5 fingerprint.
 
-Place `minibundle` block with configuration into your content file
-where you want the generated markup to appear. For example, to bundle
-a set of JavaScript sources:
+Place `minibundle` [Liquid][Liquid] block into your content file where
+you want the generated markup to appear. Write bundling configuration
+inside the block in [YAML][YAML] syntax. For example, to bundle a set
+of JavaScript sources:
 
 ``` text
 {% minibundle js %}
@@ -139,7 +143,16 @@ minibundle:
     js: node_modules/.bin/uglifyjs -
 ```
 
-Output in the content file:
+When it's time to render the `minibundle` block, the plugin launches
+the minifier and connects to it with a Unix pipe. The plugin feeds the
+contents of the asset files in `source_dir` directory as input to the
+minifier (STDIN). The feeding order is the order of the files in the
+`assets` key in the block configuration. The plugin expects the
+minifier to produce output (STDOUT) and writes it to the file at
+`destination_path` in Jekyll's output directory. The filename will
+contain a fingerprint.
+
+Block output in the content file:
 
 ``` html
 <script src="/assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts" async></script>
@@ -306,8 +319,11 @@ MIT. See `LICENSE.txt`.
 [Compass]: http://compass-style.org/
 [GemBundler]: http://bundler.io/
 [GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating-and-updating-cached-responses
-[MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
-[MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
-[Jekyll]: https://jekyllrb.com/
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
+[Jekyll]: https://jekyllrb.com/
+[Liquid]: https://shopify.github.io/liquid/
+[MD5]: https://en.wikipedia.org/wiki/MD5
+[MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
+[MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
 [UglifyJS2]: https://github.com/mishoo/UglifyJS2
+[YAML]: http://www.yaml.org/
