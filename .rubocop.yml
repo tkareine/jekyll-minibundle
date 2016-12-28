@@ -4,6 +4,8 @@ AllCops:
   TargetRubyVersion: 2.0
 Metrics/AbcSize:
   Max: 50
+Metrics/BlockLength:
+  Max: 200
 Metrics/ClassLength:
   Enabled: false  # test classes are big
 Metrics/LineLength:

@@ -32,7 +32,7 @@ minification tool (not even other gems).
   s.add_development_dependency 'nokogiri', '~> 1.6'
   s.add_development_dependency 'pry',      '~> 0.10'
   s.add_development_dependency 'rake',     '~> 11.1'
-  s.add_development_dependency 'rubocop',  '~> 0.43.0'
+  s.add_development_dependency 'rubocop',  '~> 0.46.0'
 
   s.required_ruby_version = '>= 2.0.0'
 
