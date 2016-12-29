@@ -12,9 +12,9 @@ Gem::Specification.new do |s|
   s.description = <<-END
 A straightforward asset bundling plugin for Jekyll, utilizing external
 minification tool of your choice. It provides asset concatenation for
-bundling and asset fingerprinting with MD5 digest for cache
-busting. There are no other runtime dependencies besides the
-minification tool (not even other gems).
+bundling and asset fingerprinting with MD5 digest for cache busting.
+There are no other runtime dependencies besides the minification tool
+(not even other gems).
   END
 
   s.files = %w{
