@@ -59,14 +59,14 @@ module Jekyll::Minibundle::Test
           generate_site(:development)
 
           destination = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
-          org_mtime = mtime_of(destination)
+          org_mtime = file_mtime_of(destination)
           source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
           ensure_file_mtime_changes { spec.fetch(:action).call(source) }
 
           generate_site(:development, clear_cache: false)
 
           assert_equal File.read(destination), File.read(source)
-          assert_operator mtime_of(destination), :>, org_mtime
+          assert_operator file_mtime_of(destination), :>, org_mtime
         end
       end
     end
@@ -76,7 +76,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development)
 
         destination = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
-        org_mtime = mtime_of(destination)
+        org_mtime = file_mtime_of(destination)
 
         match_snippet = <<-END
     {% minibundle js %}
@@ -95,7 +95,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        assert_operator mtime_of(destination), :>, org_mtime
+        assert_operator file_mtime_of(destination), :>, org_mtime
       end
     end
 
@@ -103,7 +103,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:development)
 
-        org_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        org_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
 
         match_snippet = <<-END
     assets:
@@ -124,7 +124,7 @@ module Jekyll::Minibundle::Test
 
         assert_equal [File.join(JS_BUNDLE_DESTINATION_PATH, 'dependency.js')], find_js_paths_from_index
 
-        new_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+        new_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
         assert_operator new_mtime, :>, org_mtime
       end
     end
@@ -257,18 +257,18 @@ module Jekyll::Minibundle::Test
         generate_site(:development)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
         ensure_file_mtime_changes { File.write(source_path(JS_BUNDLE_SOURCE_DIR, 'dependency.js'), '(function() {})()') }
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
 
         ensure_file_mtime_changes { FileUtils.touch('index.html') }
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
       end
     end
 
@@ -277,7 +277,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), 'id: my-scripts', 'id: my-scripts2')
@@ -285,7 +285,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
       end
     end
 
@@ -294,7 +294,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
@@ -302,7 +302,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
       end
     end
 

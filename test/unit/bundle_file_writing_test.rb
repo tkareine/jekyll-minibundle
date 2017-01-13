@@ -16,7 +16,7 @@ module Jekyll::Minibundle::Test
 
         assert bundle_file.write('_site')
 
-        org_mtime = mtime_of(old_destination)
+        org_mtime = file_mtime_of(old_destination)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -26,7 +26,7 @@ module Jekyll::Minibundle::Test
         # preserve fingerprint and content seen in last markup phase
         refute bundle_file.write('_site')
         assert_equal org_markup_path, last_markup_path
-        assert_equal org_mtime, mtime_of(old_destination)
+        assert_equal org_mtime, file_mtime_of(old_destination)
         assert_equal 1, get_minifier_cmd_count
 
         capture_io { last_markup_path = bundle_file.destination_path_for_markup }
@@ -37,7 +37,7 @@ module Jekyll::Minibundle::Test
 
         # see updated fingerprint in the next round
         refute_equal org_markup_path, last_markup_path
-        assert_operator mtime_of(new_destination), :>, org_mtime
+        assert_operator file_mtime_of(new_destination), :>, org_mtime
         assert_equal 2, get_minifier_cmd_count
       end
     end
@@ -53,7 +53,7 @@ module Jekyll::Minibundle::Test
 
         assert bundle_file.write('_site')
 
-        org_mtime = mtime_of(destination)
+        org_mtime = file_mtime_of(destination)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -63,7 +63,7 @@ module Jekyll::Minibundle::Test
 
         assert bundle_file.write('_site')
         assert_equal org_markup_path, last_markup_path
-        assert_operator mtime_of(destination), :>, org_mtime
+        assert_operator file_mtime_of(destination), :>, org_mtime
         assert_equal 2, get_minifier_cmd_count
       end
     end

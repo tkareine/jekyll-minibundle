@@ -40,7 +40,7 @@ module Jekyll::Minibundle::Test
       IO.write(file, YAML.load_file(file).merge(hash).to_yaml)
     end
 
-    def mtime_of(path)
+    def file_mtime_of(path)
       File.stat(path).mtime
     end
 

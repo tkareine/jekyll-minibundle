@@ -103,14 +103,14 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        org_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        org_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         ensure_file_mtime_changes { FileUtils.touch(source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')) }
 
         generate_site(:production, clear_cache: false)
 
         assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        assert_operator mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)), :>, org_mtime
+        assert_operator file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)), :>, org_mtime
       end
     end
 
@@ -118,7 +118,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        org_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        org_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         match_snippet = <<-END
     {% minibundle js %}
@@ -137,7 +137,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        new_mtime = mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        new_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
         assert_operator new_mtime, :>, org_mtime
       end
@@ -284,7 +284,7 @@ module Jekyll::Minibundle::Test
 
         assert_equal 0, get_minifier_cmd_count
         destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        org_mtime = mtime_of(destination)
+        org_mtime = file_mtime_of(destination)
 
         match_snippet = <<-END
     {% minibundle js %}
@@ -302,7 +302,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, clear_cache: false)
 
         assert_equal 1, get_minifier_cmd_count
-        assert_operator mtime_of(destination), :>, org_mtime
+        assert_operator file_mtime_of(destination), :>, org_mtime
       end
     end
 
@@ -390,7 +390,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -398,14 +398,14 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
 
         ensure_file_mtime_changes { FileUtils.touch('index.html') }
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
       end
     end
@@ -415,7 +415,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -425,7 +425,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
       end
     end
@@ -435,7 +435,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
         expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        org_mtime = mtime_of(expected_js_path)
+        org_mtime = file_mtime_of(expected_js_path)
 
         assert_equal 1, get_minifier_cmd_count
 
@@ -445,7 +445,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
 
-        assert_equal org_mtime, mtime_of(expected_js_path)
+        assert_equal org_mtime, file_mtime_of(expected_js_path)
         assert_equal 1, get_minifier_cmd_count
       end
     end
