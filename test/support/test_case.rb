@@ -44,6 +44,10 @@ module Jekyll::Minibundle::Test
       File.stat(path).mtime
     end
 
+    def file_permissions_of(path)
+      File.stat(path).mode & 0o777
+    end
+
     def with_env(env)
       org_env = {}
       env.each do |k, v|
@@ -53,6 +57,14 @@ module Jekyll::Minibundle::Test
       yield
     ensure
       org_env.each { |k, v| ENV[k] = v }
+    end
+
+    def with_umask(cmask)
+      org_cmask = File.umask
+      File.umask(cmask)
+      yield
+    ensure
+      File.umask(org_cmask)
     end
 
     def with_tmp_dir(&block)

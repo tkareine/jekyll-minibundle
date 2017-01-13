@@ -64,7 +64,11 @@ module Jekyll::Minibundle
     # `destination_path_for_markup` has been called
     def write(site_destination_dir)
       if @is_modified
-        write_destination(site_destination_dir)
+        dst_path = write_destination(site_destination_dir)
+
+        # respect user's umask; Ruby's tempfile has mode 0o600
+        File.chmod(0o666 & ~File.umask, dst_path)
+
         @is_modified = false
         true
       else

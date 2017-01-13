@@ -515,6 +515,15 @@ title: Test
       end
     end
 
+    def test_destination_file_respects_umask
+      with_site_dir do
+        with_umask(0o027) do
+          generate_site(:production)
+          assert_equal 0o640, file_permissions_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        end
+      end
+    end
+
     private
 
     def find_css_element_from_index
