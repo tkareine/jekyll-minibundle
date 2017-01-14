@@ -177,6 +177,8 @@ module Jekyll::Minibundle::Test
 
     def test_changing_asset_source_list_removes_old_temporary_bundle_file
       with_site_dir do
+        other_tempfiles = find_tempfiles('*.js')
+
         generate_site(:production)
 
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
@@ -192,7 +194,7 @@ module Jekyll::Minibundle::Test
       - dependency
         END
 
-        org_tempfiles = find_tempfiles
+        old_tempfiles = find_tempfiles('*.js') - other_tempfiles
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
@@ -202,7 +204,7 @@ module Jekyll::Minibundle::Test
 
         refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         assert File.exist?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js'))
-        assert_equal 1, (org_tempfiles - find_tempfiles).size
+        assert((find_tempfiles('*.js') & old_tempfiles).empty?)
       end
     end
 
@@ -229,11 +231,13 @@ module Jekyll::Minibundle::Test
 
     def test_changing_asset_destination_path_removes_old_temporary_bundle_file
       with_site_dir do
+        other_tempfiles = find_tempfiles('*.js')
+
         generate_site(:production)
 
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
-        org_tempfiles = find_tempfiles
+        old_tempfiles = find_tempfiles('*.js') - other_tempfiles
 
         ensure_file_mtime_changes do
           change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
@@ -243,7 +247,7 @@ module Jekyll::Minibundle::Test
 
         refute File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         assert File.exist?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"))
-        assert_equal 1, (org_tempfiles - find_tempfiles).size
+        assert((find_tempfiles('*.js') & old_tempfiles).empty?)
       end
     end
 
@@ -569,9 +573,8 @@ title: Test
       find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
     end
 
-    def find_tempfiles
-      sleep 1  # wait for unlinked temp files to actually disappear
-      Dir[File.join(Dir.tmpdir, AssetBundle::TEMPFILE_PREFIX + '*')]
+    def find_tempfiles(glob)
+      Dir[File.join(Dir.tmpdir, AssetBundle::TEMPFILE_PREFIX + glob)]
     end
   end
 end
