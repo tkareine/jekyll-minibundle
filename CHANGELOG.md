@@ -1,3 +1,9 @@
+# 2.1.1 / 2017-01-14
+
+* Fix the file permissions of `minibundle` block's output file to
+  respect umask setting. Bug report from Alfonse Surigao.
+* Compatibility: conform to Jekyll 3.3's StaticFile public API
+
 # 2.1.0 / 2016-05-04
 
 * Allow attributes without values. Useful for `async` attribute, for
