@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>{{ page.title }}</title>
     <link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">
     {% minibundle css %}
     source_dir: _assets/styles
@@ -25,5 +26,4 @@
       async:
     {% endminibundle %}
   </body>
-  <title>{{ page.title }}</title>
 </html>

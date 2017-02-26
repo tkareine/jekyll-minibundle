@@ -505,7 +505,6 @@ title: Test
     minifier_cmd: #{minifier_cmd_to_remove_comments_and_count('minifier_cmd_local_count')}
     {% endminibundle %}
   </body>
-  <title>{{ page.title }}</title>
 </html>
         END
 
