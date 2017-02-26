@@ -1,3 +1,4 @@
+require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_file_registry'
 
 module Jekyll::Minibundle
@@ -26,7 +27,7 @@ module Jekyll::Minibundle
         else
           AssetFileRegistry.register_stamp_file(site, @source_path, @destination_path)
         end
-      @baseurl + file.destination_path_for_markup
+      @baseurl + Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
     end
 
     private

@@ -314,16 +314,31 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        destination_css = destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        destination_js = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        org_mtime_css = file_mtime_of(destination_css)
+        org_mtime_js = file_mtime_of(destination_js)
+
+        assert File.exist?(destination_css)
+        assert File.exist?(destination_js)
 
         assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
         assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
 
-        find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site')
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            'destination_path: assets/site',
+            'destination_path: /assets/site'
+          )
+        end
 
         generate_site(:production, clear_cache: false)
 
+        assert File.exist?(destination_css)
+        assert File.exist?(destination_js)
+        assert_equal org_mtime_css, file_mtime_of(destination_css)
+        assert_equal org_mtime_js, file_mtime_of(destination_js)
         assert_equal "/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
         assert_equal "/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index
       end
@@ -362,6 +377,96 @@ module Jekyll::Minibundle::Test
 
         assert_equal "/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
         assert_equal "/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_dot_baseurl
+      with_site_dir do
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle css %}', "{% minibundle css %}\n    baseurl: .")
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: .")
+
+        generate_site(:production)
+
+        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+
+        generate_site(:production, clear_cache: false)
+
+        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_dot_slash_baseurl
+      with_site_dir do
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle css %}', "{% minibundle css %}\n    baseurl: ./")
+        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: ./")
+
+        generate_site(:production)
+
+        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+
+        generate_site(:production, clear_cache: false)
+
+        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
+        assert_equal CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+        assert_equal JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_relative_destination_path
+      with_site_dir do
+        find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: site')
+
+        generate_site(:production)
+
+        assert File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css"))
+        assert File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js"))
+
+        assert_equal "site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index
+        assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index
+
+        generate_site(:production, clear_cache: false)
+
+        assert File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css"))
+        assert File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js"))
+
+        assert_equal "site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index
+        assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_dot_slash_destination_path
+      with_site_dir do
+        find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: ./site')
+
+        generate_site(:production)
+
+        assert File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css"))
+        assert File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js"))
+
+        assert_equal "site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index
+        assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index
+
+        generate_site(:production, clear_cache: false)
+
+        assert File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css"))
+        assert File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js"))
+
+        assert_equal "site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index
+        assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index
       end
     end
 

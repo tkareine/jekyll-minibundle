@@ -15,7 +15,7 @@ module Jekyll::Minibundle
     end
 
     def destination(site_destination_dir)
-      File.join(site_destination_dir, asset_destination_path)
+      File.expand_path(File.join(site_destination_dir, asset_destination_path), '/')
     end
 
     def url

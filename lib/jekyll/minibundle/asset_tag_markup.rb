@@ -3,13 +3,12 @@ require 'cgi'
 module Jekyll::Minibundle
   module AssetTagMarkup
     class << self
-      def make_markup(type, baseurl, path, attributes)
-        url = make_url(baseurl, path)
+      def make_markup(type, path, attributes)
         case type
         when :js
-          %{<script type="text/javascript" src="#{url}"#{make_attributes(attributes)}></script>}
+          %{<script type="text/javascript" src="#{path}"#{make_attributes(attributes)}></script>}
         when :css
-          %{<link rel="stylesheet" href="#{url}"#{make_attributes(attributes)}>}
+          %{<link rel="stylesheet" href="#{path}"#{make_attributes(attributes)}>}
         else
           raise ArgumentError, "Unknown type for generating bundle markup: #{type}, #{path}"
         end
@@ -24,14 +23,6 @@ module Jekyll::Minibundle
           %{ #{name}}
         else
           %{ #{name}="#{CGI.escape_html(value.to_s)}"}
-        end
-      end
-
-      def make_url(baseurl, path)
-        if baseurl.empty?
-          path
-        else
-          File.join(baseurl, path)
         end
       end
     end

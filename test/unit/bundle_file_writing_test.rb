@@ -12,31 +12,45 @@ module Jekyll::Minibundle::Test
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
         old_destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         org_markup_path, last_markup_path = nil
+
+        # the call to destination_path_for_markup determines the
+        # fingerprint
+
         capture_io { org_markup_path = bundle_file.destination_path_for_markup }
 
-        assert bundle_file.write('_site')
+        assert write_file(bundle_file)
 
         org_mtime = file_mtime_of(old_destination)
 
         assert_equal 1, get_minifier_cmd_count
 
         last_markup_path = bundle_file.destination_path_for_markup
+
+        assert_equal org_markup_path, last_markup_path
+        assert_equal 1, get_minifier_cmd_count
+
+        # change content, but don't call destination_path_for_markup yet
+
         ensure_file_mtime_changes { File.write(source, '(function() {})()') }
 
-        # preserve fingerprint and content seen in last markup phase
-        refute bundle_file.write('_site')
-        assert_equal org_markup_path, last_markup_path
+        # preserve content's fingerprint
+
+        refute write_file(bundle_file)
+
         assert_equal org_mtime, file_mtime_of(old_destination)
         assert_equal 1, get_minifier_cmd_count
 
+        # see content's fingerprint to update after calling
+        # destination_path_for_markup
+
         capture_io { last_markup_path = bundle_file.destination_path_for_markup }
 
-        assert bundle_file.write('_site')
+        refute_equal org_markup_path, last_markup_path
+
+        assert write_file(bundle_file)
 
         new_destination = destination_path('assets/site-375a0b430b0c5555d0edd2205d26c04d.js')
 
-        # see updated fingerprint in the next round
-        refute_equal org_markup_path, last_markup_path
         assert_operator file_mtime_of(new_destination), :>, org_mtime
         assert_equal 2, get_minifier_cmd_count
       end
@@ -51,7 +65,7 @@ module Jekyll::Minibundle::Test
         capture_io { org_markup_path = bundle_file.destination_path_for_markup }
         bundle_file.destination_path_for_markup
 
-        assert bundle_file.write('_site')
+        assert write_file(bundle_file)
 
         org_mtime = file_mtime_of(destination)
 
@@ -61,7 +75,7 @@ module Jekyll::Minibundle::Test
         capture_io { last_markup_path = bundle_file.destination_path_for_markup }
         bundle_file.destination_path_for_markup
 
-        assert bundle_file.write('_site')
+        assert write_file(bundle_file)
         assert_equal org_markup_path, last_markup_path
         assert_operator file_mtime_of(destination), :>, org_mtime
         assert_equal 2, get_minifier_cmd_count
@@ -72,13 +86,13 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
 
-        refute bundle_file.write('_site')
+        refute write_file(bundle_file)
         assert_empty Dir[destination_path('assets/*.js')]
         assert_equal 0, get_minifier_cmd_count
 
         capture_io { bundle_file.destination_path_for_markup }
 
-        assert bundle_file.write('_site')
+        assert write_file(bundle_file)
         assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
         assert_equal 1, get_minifier_cmd_count
       end
@@ -94,6 +108,10 @@ module Jekyll::Minibundle::Test
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
         'minifier_cmd'     => minifier_cmd
       }
+    end
+
+    def write_file(file)
+      file.write(File.join(Dir.pwd, '_site'))
     end
   end
 end

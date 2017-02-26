@@ -141,17 +141,24 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:development)
 
-        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        destination = destination_path(STAMP_DESTINATION_PATH)
+        org_mtime = file_mtime_of(destination)
+
+        assert File.exist?(destination)
         assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
 
-        find_and_gsub_in_file(
-          source_path('_layouts/default.html'),
-          '{% ministamp _tmp/site.css assets/screen.css',
-          '{% ministamp _tmp/site.css /assets/screen.css'
-        )
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen.css',
+            '{% ministamp _tmp/site.css /assets/screen.css'
+          )
+        end
 
         generate_site(:development, clear_cache: false)
 
+        assert File.exist?(destination)
+        assert_equal org_mtime, file_mtime_of(destination)
         assert_equal "/#{STAMP_DESTINATION_PATH}", find_css_path_from_index
       end
     end

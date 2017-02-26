@@ -145,18 +145,77 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+        destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
+        org_mtime = file_mtime_of(destination)
+
+        assert File.exist?(destination)
         assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
 
-        find_and_gsub_in_file(
-          source_path('_layouts/default.html'),
-          '{% ministamp _tmp/site.css assets/screen.css',
-          '{% ministamp _tmp/site.css /assets/screen.css'
-        )
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '{% ministamp _tmp/site.css assets/screen.css',
+            '{% ministamp _tmp/site.css /assets/screen.css'
+          )
+        end
 
         generate_site(:production, clear_cache: false)
 
+        assert File.exist?(destination)
+        assert_equal org_mtime, file_mtime_of(destination)
         assert_equal "/#{STAMP_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_relative_destination_path
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '{% ministamp _tmp/site.css assets/screen.css',
+          '{% ministamp _tmp/site.css screen.css'
+        )
+
+        generate_site(:production)
+
+        destination = destination_path("screen-#{STAMP_FINGERPRINT}.css")
+        org_mtime = file_mtime_of(destination)
+
+        assert File.exist?(destination)
+        assert_equal "screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index
+
+        ensure_file_mtime_changes do
+          generate_site(:production, clear_cache: false)
+        end
+
+        assert File.exist?(destination)
+        assert_equal org_mtime, file_mtime_of(destination)
+        assert_equal "screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index
+      end
+    end
+
+    def test_strips_dot_slash_from_destination_path
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '{% ministamp _tmp/site.css assets/screen.css',
+          '{% ministamp _tmp/site.css ./screen.css'
+        )
+
+        generate_site(:production)
+
+        destination = destination_path("screen-#{STAMP_FINGERPRINT}.css")
+        org_mtime = file_mtime_of(destination)
+
+        assert File.exist?(destination)
+        assert_equal "screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index
+
+        ensure_file_mtime_changes do
+          generate_site(:production, clear_cache: false)
+        end
+
+        assert File.exist?(destination)
+        assert_equal org_mtime, file_mtime_of(destination)
+        assert_equal "screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index
       end
     end
 

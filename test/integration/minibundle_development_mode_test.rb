@@ -190,16 +190,31 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:development)
 
-        assert File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css'))
-        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js'))
+        destination_css = destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')
+        destination_js = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        org_mtime_css = file_mtime_of(destination_css)
+        org_mtime_js = file_mtime_of(destination_js)
+
+        assert File.exist?(destination_css)
+        assert File.exist?(destination_js)
 
         assert_equal 'assets/site/common.css', find_css_paths_from_index.last
         assert_equal 'assets/site/app.js', find_js_paths_from_index.last
 
-        find_and_gsub_in_file(source_path('_layouts/default.html'), 'destination_path: assets/site', 'destination_path: /assets/site')
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            'destination_path: assets/site',
+            'destination_path: /assets/site'
+          )
+        end
 
         generate_site(:development, clear_cache: false)
 
+        assert File.exist?(destination_css)
+        assert File.exist?(destination_js)
+        assert_equal org_mtime_css, file_mtime_of(destination_css)
+        assert_equal org_mtime_js, file_mtime_of(destination_js)
         assert_equal '/assets/site/common.css', find_css_paths_from_index.last
         assert_equal '/assets/site/app.js', find_js_paths_from_index.last
       end

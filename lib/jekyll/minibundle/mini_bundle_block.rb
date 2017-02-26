@@ -1,4 +1,5 @@
 require 'jekyll/minibundle/hashes'
+require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/environment'
 require 'jekyll/minibundle/asset_file_registry'
 require 'jekyll/minibundle/asset_tag_markup'
@@ -18,7 +19,16 @@ module Jekyll::Minibundle
       attributes = bundle_config.fetch('attributes')
 
       register_asset_files(site, bundle_config).map do |file|
-        AssetTagMarkup.make_markup(@type, baseurl, file.destination_path_for_markup, attributes)
+        dst_path = Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
+
+        full_path =
+          if baseurl.empty?
+            dst_path
+          else
+            File.join(baseurl, dst_path)
+          end
+
+        AssetTagMarkup.make_markup(@type, full_path, attributes)
       end.join("\n")
     end
 
@@ -52,16 +62,10 @@ module Jekyll::Minibundle
     end
 
     def normalize_baseurl_and_destination_path(baseurl, destination_path)
-      baseurl = '' if baseurl.nil?
+      baseurl = '' if baseurl.nil? || baseurl == '.'
+      baseurl = '/' if destination_path.start_with?('/') && baseurl.empty?
 
-      unless destination_path.start_with?('/')
-        return [baseurl, destination_path]
-      end
-
-      normalized_baseurl = baseurl.empty? ? '/' : baseurl
-      normalized_destination_path = destination_path.sub(%r{\A/+}, '')
-
-      [normalized_baseurl, normalized_destination_path]
+      [Files.strip_dot_slash_from_path_start(baseurl), destination_path.sub(%r{\A/+}, '')]
     end
 
     def register_asset_files(site, bundle_config)

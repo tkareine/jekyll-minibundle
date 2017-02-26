@@ -14,5 +14,9 @@ module Jekyll::Minibundle
         end
       end
     end
+
+    def self.strip_dot_slash_from_path_start(path)
+      path.sub(%r{\A\./+}, '')
+    end
   end
 end

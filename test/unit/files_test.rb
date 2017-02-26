@@ -42,5 +42,9 @@ module Jekyll::Minibundle::Test
         assert_equal '', Files.read_last(file.path, -1)
       end
     end
+
+    def test_strip_dot_slash_from_path_start
+      assert_equal 'path', Files.strip_dot_slash_from_path_start('./path')
+    end
   end
 end
