@@ -26,10 +26,13 @@ module Jekyll::Minibundle
 
     def destination_path_for_markup
       # we must rebundle here, if at all, in order to make sure the
-      # destination path in the markup and the generated file path
-      # have the same fingerprint
-      if modified?
-        @stamped_at = mtime
+      # destination path in the markup and the generated file path have
+      # the same fingerprint
+
+      source_mtime = mtime
+
+      if @stamped_at != source_mtime
+        @stamped_at = source_mtime
         @is_modified = true
         @_asset_stamp = nil
       end
