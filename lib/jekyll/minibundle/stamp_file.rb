@@ -7,7 +7,9 @@ module Jekyll::Minibundle
     include AssetFileOperations
     include AssetFileProperties
 
-    attr_reader :asset_source_path, :asset_destination_dir, :stamped_at
+    attr_reader :asset_source_path,
+                :asset_destination_dir,
+                :stamped_at
 
     def initialize(site, asset_source_path, asset_destination_path)
       @site = site
