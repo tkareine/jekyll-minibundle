@@ -3,6 +3,15 @@ require 'jekyll/minibundle/files'
 
 module Jekyll::Minibundle::Test
   class FilesTest < TestCase
+    def test_copy_p
+      with_tmp_dir do
+        File.write('foo', 'content')
+        Files.copy_p('foo', 'bar/zap')
+        copied = File.read('bar/zap')
+        assert_equal 'content', copied
+      end
+    end
+
     def test_read_last_with_non_existing_file_raises_exception
       assert_raises(Errno::ENOENT) { Files.read_last('no-such-file', 4) }
     end

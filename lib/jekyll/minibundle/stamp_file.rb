@@ -1,10 +1,9 @@
-require 'jekyll/minibundle/asset_file_operations'
+require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_file_properties'
 require 'jekyll/minibundle/asset_stamp'
 
 module Jekyll::Minibundle
   class StampFile
-    include AssetFileOperations
     include AssetFileProperties
 
     attr_reader :asset_source_path,
@@ -19,6 +18,10 @@ module Jekyll::Minibundle
       @asset_destination_filename_prefix = File.basename(asset_destination_path)[0..-(@asset_destination_extension.size + 1)]
       @stamped_at = nil
       @is_modified = false
+    end
+
+    def cleanup
+      # no-op
     end
 
     def destination_path_for_markup
@@ -46,7 +49,7 @@ module Jekyll::Minibundle
     # `destination_path_for_markup` has been called
     def write(site_destination_dir)
       if @is_modified
-        write_destination(site_destination_dir)
+        Files.copy_p(path, destination(site_destination_dir))
         @is_modified = false
         true
       else

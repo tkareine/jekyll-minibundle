@@ -1,9 +1,8 @@
-require 'jekyll/minibundle/asset_file_operations'
+require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_file_properties'
 
 module Jekyll::Minibundle
   class DevelopmentFile
-    include AssetFileOperations
     include AssetFileProperties
 
     attr_reader :asset_source_path,
@@ -19,6 +18,10 @@ module Jekyll::Minibundle
       @stamped_at = nil
     end
 
+    def cleanup
+      # no-op
+    end
+
     alias destination_path_for_markup asset_destination_path
 
     def extname
@@ -28,7 +31,7 @@ module Jekyll::Minibundle
     def write(site_destination_dir)
       if modified?
         @stamped_at = mtime
-        write_destination(site_destination_dir)
+        Files.copy_p(path, destination(site_destination_dir))
         true
       else
         false

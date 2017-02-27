@@ -1,11 +1,10 @@
+require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_bundle'
-require 'jekyll/minibundle/asset_file_operations'
 require 'jekyll/minibundle/asset_file_properties'
 require 'jekyll/minibundle/asset_stamp'
 
 module Jekyll::Minibundle
   class BundleFile
-    include AssetFileOperations
     include AssetFileProperties
 
     attr_reader :asset_destination_dir,
@@ -65,7 +64,8 @@ module Jekyll::Minibundle
     # `destination_path_for_markup` has been called
     def write(site_destination_dir)
       if @is_modified
-        dst_path = write_destination(site_destination_dir)
+        dst_path = destination(site_destination_dir)
+        Files.copy_p(path, dst_path)
 
         # respect user's umask; Ruby's tempfile has mode 0o600
         File.chmod(0o666 & ~File.umask, dst_path)
