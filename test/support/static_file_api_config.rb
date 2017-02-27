@@ -7,6 +7,7 @@ module Jekyll::Minibundle::Test
       :extname,
       :modified_time,
       :mtime,
+      :path,
       :placeholders,
       :relative_path,
       :to_liquid,

@@ -51,6 +51,11 @@ module Jekyll::Minibundle::Test
       assert_equal app_mtime.to_i, @@results.fetch(:app).fetch(:mtime)
     end
 
+    def test_path
+      assert_match(%r{/#{JS_BUNDLE_SOURCE_DIR}/dependency.js\z}, @@results.fetch(:dependency).fetch(:relative_path))
+      assert_match(%r{/#{JS_BUNDLE_SOURCE_DIR}/app.js\z}, @@results.fetch(:app).fetch(:relative_path))
+    end
+
     def test_placeholders
       assert_equal({}, @@results.fetch(:dependency).fetch(:placeholders))
       assert_equal({}, @@results.fetch(:app).fetch(:placeholders))

@@ -41,6 +41,10 @@ module Jekyll::Minibundle::Test
       assert_equal mtime.to_i, @@results.fetch(:mtime)
     end
 
+    def test_path
+      assert_match(%r{/jekyll-minibundle-.+\.js\z}, @@results.fetch(:path))
+    end
+
     def test_placeholders
       assert_equal({}, @@results.fetch(:placeholders))
     end
