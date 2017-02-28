@@ -1,4 +1,4 @@
-# Upcoming
+# 2.1.2 / 2017-02-28
 
 * Bug fix: remove unnecessary '.' path component from asset destination
   path. This manifested when the asset destination had no subdirectory.
