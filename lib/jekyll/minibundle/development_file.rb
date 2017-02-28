@@ -28,6 +28,10 @@ module Jekyll::Minibundle
       File.extname(asset_destination_filename)
     end
 
+    def modified?
+      stamped_at != mtime
+    end
+
     def write(site_destination_dir)
       if modified?
         @stamped_at = mtime

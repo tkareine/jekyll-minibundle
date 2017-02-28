@@ -89,6 +89,23 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_modified_property_determines_if_write_would_succeed
+      with_fake_site do |site|
+        stamp_file = make_stamp_file(site)
+
+        refute stamp_file.modified?
+        refute write_file(stamp_file)
+
+        stamp_file.destination_path_for_markup
+
+        assert stamp_file.modified?
+        assert write_file(stamp_file)
+
+        refute stamp_file.modified?
+        refute write_file(stamp_file)
+      end
+    end
+
     private
 
     def make_stamp_file(site)

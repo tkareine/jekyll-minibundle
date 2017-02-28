@@ -48,10 +48,14 @@ module Jekyll::Minibundle
       @asset_destination_extension
     end
 
+    def modified?
+      @is_modified
+    end
+
     # allows writing destination only after
     # `destination_path_for_markup` has been called
     def write(site_destination_dir)
-      if @is_modified
+      if modified?
         Files.copy_p(path, destination(site_destination_dir))
         @is_modified = false
         true

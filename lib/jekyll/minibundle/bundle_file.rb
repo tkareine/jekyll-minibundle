@@ -63,10 +63,14 @@ module Jekyll::Minibundle
       @asset_paths.map { |f| File.stat(f).mtime }.max
     end
 
+    def modified?
+      @is_modified
+    end
+
     # allows writing destination only after
     # `destination_path_for_markup` has been called
     def write(site_destination_dir)
-      if @is_modified
+      if modified?
         dst_path = destination(site_destination_dir)
         Files.copy_p(path, dst_path)
 

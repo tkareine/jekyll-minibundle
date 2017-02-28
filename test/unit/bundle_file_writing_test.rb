@@ -98,6 +98,23 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_modified_property_determines_if_write_would_succeed
+      with_fake_site do |site|
+        bundle_file = make_bundle_file(site)
+
+        refute bundle_file.modified?
+        refute write_file(bundle_file)
+
+        capture_io { bundle_file.destination_path_for_markup }
+
+        assert bundle_file.modified?
+        assert write_file(bundle_file)
+
+        refute bundle_file.modified?
+        refute write_file(bundle_file)
+      end
+    end
+
     private
 
     def make_bundle_file(site)

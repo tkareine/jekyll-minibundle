@@ -34,10 +34,6 @@ module Jekyll::Minibundle
       modified_time.to_i
     end
 
-    def modified?
-      stamped_at != mtime
-    end
-
     def destination_rel_dir
       asset_destination_dir
     end
