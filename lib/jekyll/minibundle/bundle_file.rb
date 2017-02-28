@@ -15,9 +15,9 @@ module Jekyll::Minibundle
       @type = config.fetch('type')
       asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
       @asset_paths = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
-      destination_path = config.fetch('destination_path')
-      @asset_destination_dir = File.dirname(destination_path)
-      @asset_destination_filename_prefix = File.basename(destination_path)
+      @destination_path = config.fetch('destination_path')
+      @asset_destination_dir = File.dirname(@destination_path)
+      @asset_destination_filename_prefix = File.basename(@destination_path)
       @minifier_cmd = config.fetch('minifier_cmd')
       @stamped_at = nil
       @is_modified = false
@@ -92,10 +92,11 @@ module Jekyll::Minibundle
 
     def asset_bundle
       @_asset_bundle ||= AssetBundle.new(
-        type: @type,
-        asset_paths: @asset_paths,
-        site_dir: @site.source,
-        minifier_cmd: @minifier_cmd
+        type:             @type,
+        asset_paths:      @asset_paths,
+        destination_path: @destination_path,
+        site_dir:         @site.source,
+        minifier_cmd:     @minifier_cmd
       )
     end
   end

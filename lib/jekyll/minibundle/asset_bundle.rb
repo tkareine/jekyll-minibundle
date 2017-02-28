@@ -10,12 +10,13 @@ module Jekyll::Minibundle
     def initialize(config)
       @type = config.fetch(:type)
       @asset_paths = config.fetch(:asset_paths)
+      @destination_path = config.fetch(:destination_path)
       @site_dir = config.fetch(:site_dir)
       @minifier_cmd = config.fetch(:minifier_cmd)
 
       unless @minifier_cmd
         raise <<-END
-Missing minification command for bundling #{@type} assets. Specify it in
+Missing minification command for bundling #{bundle_destination_path}. Specify it in
 1) minibundle.minifier_commands.#{@type} setting in _config.yml,
 2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
 3) minifier_cmd setting inside minibundle block.
@@ -39,15 +40,15 @@ Missing minification command for bundling #{@type} assets. Specify it in
       raise IllegalStateError, 'Cannot make bundle with closed AssetBundle' unless @tempfile
       exit_status = spawn_minifier(@minifier_cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
-        Log.info("Bundling #{@type} assets:")
+        Log.info("Bundling #{bundle_destination_path}:")
         @asset_paths.each do |asset|
-          Log.info(relative_path_from(asset, @site_dir))
+          Log.info(' ' + relative_path_from(asset, @site_dir))
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
       end
       if exit_status != 0
-        msg = "Bundling #{@type} assets failed with exit status #{exit_status}, command: '#{@minifier_cmd}'"
+        msg = "Bundling #{bundle_destination_path} failed with exit status #{exit_status}, command: '#{@minifier_cmd}'"
         log_minifier_error(msg)
         raise msg
       end
@@ -72,7 +73,7 @@ Missing minification command for bundling #{@type} assets. Specify it in
       _, status = Process.waitpid2(pid)
       status.exitstatus
     rescue => e
-      raise "Bundling #{@type} assets failed: #{e}"
+      raise "Bundling #{bundle_destination_path} failed: #{e}"
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }
     end
@@ -88,6 +89,10 @@ Missing minification command for bundling #{@type} assets. Specify it in
         .gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }
         .split("\n")
         .each { |line| Log.error(line) }
+    end
+
+    def bundle_destination_path
+      "#{@destination_path}.#{@type}"
     end
   end
 end
