@@ -25,6 +25,7 @@
 * Bug fix (related to above): don't let Jekyll's watch mode
   (auto-regenration) remove asset from generated site directory when
   asset destination path has no subdirectory.
+* Show bundle destination path in bundling log message
 
 # 2.1.1 / 2017-01-14
 
