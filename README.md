@@ -303,8 +303,12 @@ See the sources of [an example site][JekyllMinibundleExampleSite].
 
 ## Known caveats
 
-The plugin does not work with Jekyll's incremental rebuild feature
-(Jekyll option `--incremental`).
+1. The plugin does not work with Jekyll's incremental rebuild feature
+   (Jekyll option `--incremental`).
+
+2. `ministamp` tag does not interpret Liquid variables, as the tag just
+   takes in string literals. Improving this would require new syntax for
+   tag arguments.
 
 ## License
 

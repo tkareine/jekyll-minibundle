@@ -1,3 +1,31 @@
+# Upcoming
+
+* Bug fix: remove unnecessary '.' path component from asset destination
+  path. This manifested when the asset destination had no subdirectory.
+  Affects `ministamp` tag and `minibundle` block.
+
+  Example situation:
+
+  ```
+  <link href="{{ site.baseurl }}/{% ministamp _assets/site.css site.css %}" rel="stylesheet">
+  ```
+
+  Generation result, before the fix:
+
+  ```
+  <link href="/./site-6a204bd89f3c8348afd5c77c717a097a.css" rel="stylesheet">
+  ```
+
+  Generation result, after the fix:
+
+  ```
+  <link href="/site-6a204bd89f3c8348afd5c77c717a097a.css" rel="stylesheet">
+  ```
+
+* Bug fix (related to above): don't let Jekyll's watch mode
+  (auto-regenration) remove asset from generated site directory when
+  asset destination path has no subdirectory.
+
 # 2.1.1 / 2017-01-14
 
 * Fix the file permissions of `minibundle` block's output file to
