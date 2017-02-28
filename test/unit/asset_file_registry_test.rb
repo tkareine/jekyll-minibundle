@@ -5,7 +5,7 @@ module Jekyll::Minibundle::Test
   class AssetFileRegistryTest < TestCase
     def setup
       AssetFileRegistry.clear_all
-      @site = new_site
+      @site = make_site
     end
 
     def test_register_returns_same_bundle_file_for_same_bundle_config
@@ -195,8 +195,8 @@ Two or more ministamp tags with the same destination path 'assets/dest1.css', bu
       AssetFileRegistry.instance_variable_get(:@_files).size
     end
 
-    def new_site
-      new_fake_site('.')
+    def make_site
+      make_fake_site('.')
     end
   end
 end

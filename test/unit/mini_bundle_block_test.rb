@@ -57,7 +57,7 @@ minifier_cmd: #{minifier_cmd_to_remove_comments}
 
         actual_output = nil
         capture_io do
-          actual_output = template.render({}, registers: {site: new_fake_site(site_fixture_path)})
+          actual_output = template.render({}, registers: {site: make_fake_site(site_fixture_path)})
         end
         expected_output = %{<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n}
 

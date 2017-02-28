@@ -80,11 +80,11 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def new_fake_site(dir)
+    def make_fake_site(dir)
       OpenStruct.new(source: dir, static_files: [])
     end
 
-    def new_real_site
+    def make_real_site
       config = nil
       capture_io do
         config = Jekyll.configuration('source' => Dir.pwd, 'destination' => '_site')
@@ -94,7 +94,7 @@ module Jekyll::Minibundle::Test
 
     def with_fake_site(&block)
       with_site_dir do |dir|
-        block.call(new_fake_site(dir))
+        block.call(make_fake_site(dir))
       end
     end
 
@@ -163,7 +163,7 @@ module Jekyll::Minibundle::Test
 
     def _generate_site(test_options)
       AssetFileRegistry.clear_all if test_options.fetch(:clear_cache, true)
-      site = new_real_site
+      site = make_real_site
       capture_io { site.process }
     end
   end

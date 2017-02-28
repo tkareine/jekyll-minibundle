@@ -62,7 +62,7 @@ module Jekyll::Minibundle::Test
 
     def with_empty_site(&block)
       with_tmp_dir do |dir|
-        block.call(new_fake_site(dir))
+        block.call(make_fake_site(dir))
       end
     end
 

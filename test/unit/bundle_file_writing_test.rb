@@ -8,7 +8,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
-        bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
+        bundle_file = make_bundle_file(site)
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
         old_destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         org_markup_path, last_markup_path = nil
@@ -58,7 +58,7 @@ module Jekyll::Minibundle::Test
 
     def test_many_consecutive_destination_path_for_markup_calls_trigger_one_destination_write
       with_fake_site do |site|
-        bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
+        bundle_file = make_bundle_file(site)
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
         destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         org_markup_path, last_markup_path = nil
@@ -84,7 +84,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_write_before_destination_path_for_markup_has_no_effect
       with_fake_site do |site|
-        bundle_file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments_and_count))
+        bundle_file = make_bundle_file(site)
 
         refute write_file(bundle_file)
         assert_empty Dir[destination_path('assets/*.js')]
@@ -100,14 +100,15 @@ module Jekyll::Minibundle::Test
 
     private
 
-    def bundle_config(minifier_cmd)
-      {
+    def make_bundle_file(site)
+      BundleFile.new(
+        site,
         'type'             => :js,
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
         'assets'           => %w{dependency app},
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-        'minifier_cmd'     => minifier_cmd
-      }
+        'minifier_cmd'     => minifier_cmd_to_remove_comments_and_count
+      )
     end
 
     def write_file(file)

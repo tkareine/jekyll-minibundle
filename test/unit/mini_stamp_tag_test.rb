@@ -24,7 +24,7 @@ module Jekyll::Minibundle::Test
       AssetFileRegistry.clear_all
       output = Liquid::Template
                .parse("{% ministamp #{STAMP_SOURCE_PATH} #{STAMP_DESTINATION_PATH} rest %}")
-               .render({}, registers: {site: new_fake_site(site_fixture_path)})
+               .render({}, registers: {site: make_fake_site(site_fixture_path)})
       assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, output
     end
   end

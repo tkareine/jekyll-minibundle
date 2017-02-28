@@ -8,7 +8,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
-        stamp_file = new_stamp_file(site)
+        stamp_file = make_stamp_file(site)
         source = source_path(STAMP_SOURCE_PATH)
         old_destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
 
@@ -55,7 +55,7 @@ module Jekyll::Minibundle::Test
 
     def test_many_consecutive_destination_path_for_markup_calls_trigger_one_destination_write
       with_fake_site do |site|
-        stamp_file = new_stamp_file(site)
+        stamp_file = make_stamp_file(site)
         source = source_path(STAMP_SOURCE_PATH)
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_markup = stamp_file.destination_path_for_markup
@@ -77,7 +77,7 @@ module Jekyll::Minibundle::Test
 
     def test_calling_write_before_destination_path_for_markup_has_no_effect
       with_fake_site do |site|
-        stamp_file = new_stamp_file(site)
+        stamp_file = make_stamp_file(site)
 
         refute write_file(stamp_file)
         assert_empty Dir[destination_path('assets/*.css')]
@@ -91,7 +91,7 @@ module Jekyll::Minibundle::Test
 
     private
 
-    def new_stamp_file(site)
+    def make_stamp_file(site)
       StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
     end
 
