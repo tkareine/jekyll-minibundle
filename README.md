@@ -82,7 +82,8 @@ If you just want to have an MD5 fingerprint in your asset's path, use
 When it's time to render the `ministamp` tag, the plugin copies the
 source file (`_assets/site.css`, the first tag argument) to the
 specified destination path (`assets/site.css`, the second tag argument)
-in Jekyll's output directory. The filename will contain a fingerprint.
+in Jekyll's site destination directory. The filename will contain a
+fingerprint.
 
 Tag output, when `site.baseurl` is `/`:
 
@@ -94,7 +95,7 @@ This feature is useful when combined with asset generation tools
 external to Jekyll. For example, you can configure [Sass][Sass] to take
 input files from `_assets/styles/*.scss` and to produce output to
 `_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
-fingerprint to Jekyll's output directory:
+fingerprint to Jekyll's site destination directory:
 
 ``` html
 <link href="{{ site.baseurl }}{% ministamp _tmp/site.css assets/site.css %}" rel="stylesheet">
@@ -107,8 +108,8 @@ tool that supports reading input from STDIN and writing the output to
 STDOUT. You write the configuration for input sources directly into the
 content file where you want the markup tag for the bundle file to
 appear. The markup tag contains the path to the bundle file, and the
-Jekyll's output directory will have the bundle file at that path. The
-path will contain an MD5 fingerprint.
+Jekyll's site destination directory will have the bundle file at that
+path. The path will contain an MD5 fingerprint.
 
 Place `minibundle` [Liquid][Liquid] block into your content file where
 you want the generated markup to appear. Write bundling configuration
@@ -146,8 +147,8 @@ contents of the asset files in `source_dir` directory as input to the
 minifier (STDIN). The feeding order is the order of the files in the
 `assets` key in the block configuration. The plugin expects the minifier
 to produce output (STDOUT) and writes it to the file at
-`destination_path` in Jekyll's output directory. The filename will
-contain a fingerprint.
+`destination_path` in Jekyll's site destination directory. The filename
+will contain a fingerprint.
 
 Block output in the content file:
 
@@ -230,29 +231,52 @@ specific one wins. For example, the `minifier_cmd` setting inside
 
 It's recommended that you exclude the files you use as asset sources
 from Jekyll itself. Otherwise, you end up with duplicate files in the
-output directory.
+site destination directory.
 
 For example, in the following snippet we're using `assets/src.css` as
 asset source to `ministamp` tag:
 
 ``` html
-<!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to output directory -->
+<!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to site destination directory -->
 <link href="{{ site.baseurl }}{% ministamp assets/src.css assets/dest.css %}" rel="stylesheet" media="screen, projection">
 ```
 
-By default, Jekyll includes this file to the output directory. As a
-result, there will be both `src.css` and `dest-<md5>.css` files in
-`_site/assets/` directory, which you probably do not want.
+By default, Jekyll includes this file to the site destination
+directory. As a result, there will be both `src.css` and
+`dest-<md5>.css` files in `_site/assets/` directory, which you probably
+do not want.
 
-In order to avoid this, exclude the asset source file from
-Jekyll. Because Jekyll excludes directories beginning with underscore
-character (`_`), consider using the following directory layout:
+In order to avoid this, exclude the asset source file from Jekyll.
+Because Jekyll's site generation excludes underscore directories (that
+is, directories whose name begins with underscore character), consider
+using the following directory layout:
 
 * `_assets/` for JavaScript and CSS assets handled by the plugin that
   are in version control
 * `_tmp/` for temporary JavaScript and CSS assets handled by the plugin
   that are not in version control (for example, Sass output files)
 * `assets/` for images and other assets handled by Jekyll directly
+
+However, Jekyll's watch mode (auto-regeneration) does monitor files
+inside underscore directories. If such a file is modified, the watch
+mode triggers site generation. For Minibundle's functionality, this is
+beneficial: it allows the plugin to check if assets need to be updated
+to the site destination directory.
+
+The `exclude` [Jekyll configuration][JekyllConf] setting affects
+Jekyll's watch mode. Given the recommended directory layout above, if
+you set the following in `_config.yml`:
+
+``` yaml
+exclude:
+  - _assets
+  - _tmp
+```
+
+Then Jekyll won't see if files inside those directories have changed and
+the plugin won't get the chance to update assets to the site destination
+directory. So, don't explicitly exclude `_assets` and `_tmp`
+directories.
 
 See [Jekyll configuration][JekyllConf] for more about excluding files
 and directories.
@@ -261,10 +285,11 @@ and directories.
 
 If you set `$JEKYLL_MINIBUNDLE_MODE` environment variable to
 `development`, then the plugin will copy asset files as is to Jekyll's
-output directory and omit fingerprinting. The `destination_path` setting
-in `minibundle` block sets the destination directory for bundled
-files. This is useful in development workflow, where you need the
-filenames and line numbers of the original asset sources.
+site destination directory and omit fingerprinting. The
+`destination_path` setting in `minibundle` block sets the destination
+directory for bundled files. This is useful in development workflow,
+where you need the filenames and line numbers of the original asset
+sources.
 
 ``` bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
