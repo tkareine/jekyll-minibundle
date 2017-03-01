@@ -219,6 +219,41 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_yaml_hash_argument_with_text_source_and_destination_paths
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          Regexp.new(Regexp.escape('<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">')),
+          %(<link rel="stylesheet" href="{% ministamp { source: _tmp/site.css, destination: assets/screen.css } %}" media="screen">)
+        )
+
+        generate_site(:production)
+        destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
+
+        assert File.exist?(destination)
+        assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+      end
+    end
+
+    def test_supports_yaml_hash_argument_with_variable_source_and_destination_paths
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          Regexp.new(Regexp.escape('<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">')),
+          <<-END)
+{% assign stamp_source_filename = 'site' %}
+{% assign stamp_destination_url = 'assets/screen.css' %}
+<link rel="stylesheet" href="{% ministamp { source: '_tmp/{{ stamp_source_filename }}.css', destination: '{{ stamp_destination_url }}' } %}" media="screen">
+          END
+
+        generate_site(:production)
+        destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
+
+        assert File.exist?(destination)
+        assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index
+      end
+    end
+
     def test_does_not_rewrite_destination_when_changing_nonsource_files
       with_site_dir do
         generate_site(:production)

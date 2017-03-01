@@ -162,7 +162,10 @@ module Jekyll::Minibundle::Test
     end
 
     def _generate_site(test_options)
-      AssetFileRegistry.clear_all if test_options.fetch(:clear_cache, true)
+      if test_options.fetch(:clear_cache, true)
+        AssetFileRegistry.clear_all
+        VariableTemplateRegistry.clear
+      end
       site = make_real_site
       capture_io { site.process }
     end
