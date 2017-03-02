@@ -20,6 +20,22 @@ def run_jekyll_in_fixture_site(command)
   sh env, jekyll_cmd
 end
 
+desc 'Run benchmarks; BM=<benchmark_suite_path>'
+task :benchmark do
+  run_single_bm = ENV.key?('BM')
+
+  bm_sources =
+    if run_single_bm
+      [ENV['BM']]
+    else
+      Dir['benchmark/*_bm.rb']
+    end
+
+  bm_sources.each do |bm_source|
+    sh "ruby -I lib #{bm_source}"
+  end
+end
+
 namespace :gem do
   gem_name = 'jekyll-minibundle'
 
