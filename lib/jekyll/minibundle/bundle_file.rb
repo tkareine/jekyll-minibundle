@@ -14,7 +14,12 @@ module Jekyll::Minibundle
       @site = site
       @type = config.fetch('type')
       asset_source_dir = File.join(@site.source, config.fetch('source_dir'))
-      @asset_paths = config.fetch('assets').map { |asset_path| File.join(asset_source_dir, "#{asset_path}.#{@type}") }
+      raise ArgumentError, "Bundle source directory does not exist: #{asset_source_dir}" unless File.directory?(asset_source_dir)
+      @asset_paths = config.fetch('assets').map do |asset_path|
+        path = File.join(asset_source_dir, "#{asset_path}.#{@type}")
+        raise ArgumentError, "Bundle asset source file does not exist: #{path}" unless File.file?(path)
+        path
+      end
       @destination_path = config.fetch('destination_path')
       @asset_destination_dir = File.dirname(@destination_path)
       @asset_destination_filename_prefix = File.basename(@destination_path)

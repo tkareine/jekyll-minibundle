@@ -13,6 +13,7 @@ module Jekyll::Minibundle
     def initialize(site, asset_source_path, asset_destination_path)
       @site = site
       @asset_source_path = File.join(@site.source, asset_source_path)
+      raise ArgumentError, "Stamp source file does not exist: #{@asset_source_path}" unless File.file?(@asset_source_path)
       @asset_destination_dir = File.dirname(asset_destination_path)
       @asset_destination_extension = File.extname(asset_destination_path)
       @asset_destination_filename_prefix = File.basename(asset_destination_path)[0..-(@asset_destination_extension.size + 1)]

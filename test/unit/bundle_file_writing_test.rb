@@ -6,6 +6,24 @@ module Jekyll::Minibundle::Test
   class BundleFileWritingTest < TestCase
     include FixtureConfig
 
+    def test_raise_error_if_source_directory_does_not_exist
+      err = assert_raises(ArgumentError) do
+        with_fake_site do |site|
+          make_bundle_file(site, 'source_dir' => STAMP_SOURCE_PATH)
+        end
+      end
+      assert_match(%r{\ABundle source directory does not exist: .+/#{Regexp.escape(STAMP_SOURCE_PATH)}\z}, err.to_s)
+    end
+
+    def test_raise_error_if_asset_source_file_does_not_exist
+      err = assert_raises(ArgumentError) do
+        with_fake_site do |site|
+          make_bundle_file(site, 'assets' => %w{no-such})
+        end
+      end
+      assert_match(%r{\ABundle asset source file does not exist: .+/#{Regexp.escape(JS_BUNDLE_SOURCE_DIR)}/no-such.js\z}, err.to_s)
+    end
+
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
         bundle_file = make_bundle_file(site)
@@ -117,15 +135,15 @@ module Jekyll::Minibundle::Test
 
     private
 
-    def make_bundle_file(site)
-      BundleFile.new(
-        site,
+    def make_bundle_file(site, config = {})
+      bundle_config = {
         'type'             => :js,
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
         'assets'           => %w{dependency app},
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
         'minifier_cmd'     => minifier_cmd_to_remove_comments_and_count
-      )
+      }
+      BundleFile.new(site, bundle_config.merge(config))
     end
 
     def write_file(file)

@@ -6,6 +6,15 @@ module Jekyll::Minibundle::Test
   class StampFileWritingTest < TestCase
     include FixtureConfig
 
+    def test_raise_error_if_source_file_does_not_exist
+      err = assert_raises(ArgumentError) do
+        with_fake_site do |site|
+          StampFile.new(site, '_tmp', STAMP_DESTINATION_PATH)
+        end
+      end
+      assert_match(%r{\AStamp source file does not exist: .+/_tmp\z}, err.to_s)
+    end
+
     def test_calling_destination_path_for_markup_determines_fingerprint_and_destination_write
       with_fake_site do |site|
         stamp_file = make_stamp_file(site)
