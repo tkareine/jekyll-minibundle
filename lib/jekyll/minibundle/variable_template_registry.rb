@@ -2,14 +2,12 @@ require 'jekyll/minibundle/variable_template'
 
 module Jekyll::Minibundle
   module VariableTemplateRegistry
-    class << self
-      def clear
-        @_templates = {}
-      end
+    def self.clear
+      @_templates = {}
+    end
 
-      def register_template(template)
-        @_templates[template] ||= VariableTemplate.compile(template)
-      end
+    def self.register_template(template)
+      @_templates[template] ||= VariableTemplate.compile(template)
     end
 
     clear
