@@ -25,7 +25,7 @@ module Jekyll::Minibundle::Test
       output = Liquid::Template
                .parse("{% ministamp #{STAMP_SOURCE_PATH} #{STAMP_DESTINATION_PATH} rest %}")
                .render({}, registers: {site: make_fake_site(site_fixture_path)})
-      assert_equal STAMP_DESTINATION_FINGERPRINT_PATH, output
+      assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, output)
     end
 
     def test_raise_exception_if_failed_parsing_argument_syntax

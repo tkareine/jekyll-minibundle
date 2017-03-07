@@ -20,18 +20,18 @@ module Jekyll::Minibundle::Test
         dev_file = make_development_file(site)
         source = source_path(STAMP_SOURCE_PATH)
 
-        assert dev_file.modified?
-        assert write_file(dev_file)
+        assert(dev_file.modified?)
+        assert(write_file(dev_file))
 
         ensure_file_mtime_changes do
           FileUtils.touch(source)
         end
 
-        assert dev_file.modified?
-        assert write_file(dev_file)
+        assert(dev_file.modified?)
+        assert(write_file(dev_file))
 
-        refute dev_file.modified?
-        refute write_file(dev_file)
+        refute(dev_file.modified?)
+        refute(write_file(dev_file))
       end
     end
 

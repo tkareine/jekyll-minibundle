@@ -6,15 +6,15 @@ require 'jekyll/minibundle/stamp_file'
 module Jekyll::Minibundle::Test
   class JekyllStaticFileAPITest < TestCase
     def test_development_file_conforms_to_static_file_api
-      assert_empty missing_api_methods(DevelopmentFile)
+      assert_empty(missing_api_methods(DevelopmentFile))
     end
 
     def test_bundle_file_conforms_to_static_file_api
-      assert_empty missing_api_methods(BundleFile)
+      assert_empty(missing_api_methods(BundleFile))
     end
 
     def test_stamp_file_conforms_to_static_file_api
-      assert_empty missing_api_methods(StampFile)
+      assert_empty(missing_api_methods(StampFile))
     end
 
     def test_development_file_has_same_to_liquid_hash_keys_as_static_file
@@ -25,7 +25,7 @@ module Jekyll::Minibundle::Test
         expected_keys = make_static_file(site, 'static.txt').to_liquid.keys.sort
         actual_keys = make_development_file(site, 'dev.js').to_liquid.keys.sort
 
-        assert_equal expected_keys, actual_keys
+        assert_equal(expected_keys, actual_keys)
       end
     end
 
@@ -38,7 +38,7 @@ module Jekyll::Minibundle::Test
         expected_keys = make_static_file(site, 'static.txt').to_liquid.keys.sort
         actual_keys = make_bundle_file(site, %w{dependency app}).to_liquid.keys.sort
 
-        assert_equal expected_keys, actual_keys
+        assert_equal(expected_keys, actual_keys)
       end
     end
 
@@ -50,7 +50,7 @@ module Jekyll::Minibundle::Test
         expected_keys = make_static_file(site, 'static.txt').to_liquid.keys.sort
         actual_keys = make_stamp_file(site, 'stamp.js').to_liquid.keys.sort
 
-        assert_equal expected_keys, actual_keys
+        assert_equal(expected_keys, actual_keys)
       end
     end
 

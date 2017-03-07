@@ -7,8 +7,8 @@ module Jekyll::Minibundle::Test
 
     def test_asset_destination_path_has_no_stamp
       with_precompiled_site(:development) do
-        assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
-        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        assert_equal(STAMP_DESTINATION_PATH, find_css_path_from_index)
+        assert(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
       end
     end
 
@@ -16,7 +16,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:development) do
         source_contents = File.read(site_fixture_path(STAMP_SOURCE_PATH))
         destination_contents = File.read(destination_path(STAMP_DESTINATION_PATH))
-        assert_equal source_contents, destination_contents
+        assert_equal(source_contents, destination_contents)
       end
     end
 
@@ -30,7 +30,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_PATH))
-        assert_operator new_mtime, :>, org_mtime
+        assert_operator(new_mtime, :>, org_mtime)
       end
     end
 
@@ -44,7 +44,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_PATH))
-        assert_operator new_mtime, :>, org_mtime
+        assert_operator(new_mtime, :>, org_mtime)
       end
     end
 
@@ -68,7 +68,7 @@ module Jekyll::Minibundle::Test
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_PATH))
 
-        assert_operator new_mtime, :>, org_mtime
+        assert_operator(new_mtime, :>, org_mtime)
       end
     end
 
@@ -76,7 +76,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:development)
 
-        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        assert(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -88,12 +88,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        refute File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        refute(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
 
         new_destination = 'assets/screen2.css'
 
-        assert_equal new_destination, find_css_path_from_index
-        assert File.exist?(destination_path(new_destination))
+        assert_equal(new_destination, find_css_path_from_index)
+        assert(File.exist?(destination_path(new_destination)))
       end
     end
 
@@ -101,7 +101,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:development)
 
-        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        assert(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -113,12 +113,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        refute File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        refute(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
 
         new_destination = 'assets/screen2.css'
 
-        assert_equal new_destination, find_css_path_from_index
-        assert File.exist?(destination_path(new_destination))
+        assert_equal(new_destination, find_css_path_from_index)
+        assert(File.exist?(destination_path(new_destination)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -130,10 +130,10 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        refute File.exist?(destination_path(new_destination))
+        refute(File.exist?(destination_path(new_destination)))
 
-        assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
-        assert File.exist?(destination_path(STAMP_DESTINATION_PATH))
+        assert_equal(STAMP_DESTINATION_PATH, find_css_path_from_index)
+        assert(File.exist?(destination_path(STAMP_DESTINATION_PATH)))
       end
     end
 
@@ -144,8 +144,8 @@ module Jekyll::Minibundle::Test
         destination = destination_path(STAMP_DESTINATION_PATH)
         org_mtime = file_mtime_of(destination)
 
-        assert File.exist?(destination)
-        assert_equal STAMP_DESTINATION_PATH, find_css_path_from_index
+        assert(File.exist?(destination))
+        assert_equal(STAMP_DESTINATION_PATH, find_css_path_from_index)
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -157,9 +157,9 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        assert File.exist?(destination)
-        assert_equal org_mtime, file_mtime_of(destination)
-        assert_equal "/#{STAMP_DESTINATION_PATH}", find_css_path_from_index
+        assert(File.exist?(destination))
+        assert_equal(org_mtime, file_mtime_of(destination))
+        assert_equal("/#{STAMP_DESTINATION_PATH}", find_css_path_from_index)
       end
     end
 
@@ -173,13 +173,13 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, file_mtime_of(expected_path)
+        assert_equal(org_mtime, file_mtime_of(expected_path))
 
         ensure_file_mtime_changes { FileUtils.touch('index.html') }
 
         generate_site(:development, clear_cache: false)
 
-        assert_equal org_mtime, file_mtime_of(expected_path)
+        assert_equal(org_mtime, file_mtime_of(expected_path))
       end
     end
 

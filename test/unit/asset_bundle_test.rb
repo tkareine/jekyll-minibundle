@@ -20,12 +20,12 @@ Minibundle: Bundling "assets/site.js" failed with exit status 1, command: #{cmd.
 Minibundle: line 1\\x07
 Minibundle: line 2\\xa4
       END
-      assert_equal expected_stderr, actual_stderr.gsub(/\e\[\d+m/, '').gsub(/^ +/, '')
+      assert_equal(expected_stderr, actual_stderr.gsub(/\e\[\d+m/, '').gsub(/^ +/, ''))
     end
 
     def test_raise_exception_if_bundle_command_not_found
       err = assert_raises(RuntimeError) { make_bundle('no-such-jekyll-minibundle-cmd') }
-      assert_equal 'Bundling "assets/site.js" failed: No such file or directory - no-such-jekyll-minibundle-cmd', err.to_s
+      assert_equal('Bundling "assets/site.js" failed: No such file or directory - no-such-jekyll-minibundle-cmd', err.to_s)
     end
 
     def test_raise_exception_if_bundle_command_not_configured
@@ -36,7 +36,7 @@ Missing minification command for bundling "assets/site.js". Specify it in
 2) $JEKYLL_MINIBUNDLE_CMD_JS environment variable, or
 3) minifier_cmd setting inside minibundle block.
       END
-      assert_equal expected_errmsg, err.to_s
+      assert_equal(expected_errmsg, err.to_s)
     end
 
     private

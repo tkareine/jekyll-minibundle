@@ -13,7 +13,7 @@ module Jekyll::Minibundle::Test
           destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH),
           destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         ].sort
-        assert_equal expected, actual
+        assert_equal(expected, actual)
       end
     end
 
@@ -28,9 +28,9 @@ module Jekyll::Minibundle::Test
 
           asset_files = Dir[destination_path('assets') + '/screen*.css']
 
-          assert_equal 1, asset_files.size
-          assert_equal contents, File.read(destination_path('assets/shared.css'))
-          assert_equal contents, File.read(asset_files.first)
+          assert_equal(1, asset_files.size)
+          assert_equal(contents, File.read(destination_path('assets/shared.css')))
+          assert_equal(contents, File.read(asset_files.first))
         end
       end
     end
@@ -45,8 +45,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development)
 
-        assert_equal dep_contents, File.read(destination_path('assets/dependency.js'))
-        assert_equal app_contents, File.read(destination_path('assets/app.js'))
+        assert_equal(dep_contents, File.read(destination_path('assets/dependency.js')))
+        assert_equal(app_contents, File.read(destination_path('assets/app.js')))
       end
     end
 
@@ -63,10 +63,10 @@ module Jekyll::Minibundle::Test
 
         asset_files = Dir[destination_path('assets/site-*.js')]
 
-        assert_equal 1, asset_files.size
-        assert_equal dep_contents, File.read(destination_path('assets/dependency.js'))
-        assert_equal app_contents, File.read(destination_path('assets/app.js'))
-        assert_equal bundled_contents, File.read(asset_files.first)
+        assert_equal(1, asset_files.size)
+        assert_equal(dep_contents, File.read(destination_path('assets/dependency.js')))
+        assert_equal(app_contents, File.read(destination_path('assets/app.js')))
+        assert_equal(bundled_contents, File.read(asset_files.first))
       end
     end
   end

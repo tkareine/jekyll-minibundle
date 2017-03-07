@@ -21,24 +21,24 @@ module Jekyll::Minibundle::Test
     end
 
     def test_destination_rel_dir
-      assert_equal 'assets', @@results.fetch(:destination_rel_dir)
+      assert_equal('assets', @@results.fetch(:destination_rel_dir))
     end
 
     def test_name
-      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", @@results.fetch(:name)
+      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", @@results.fetch(:name))
     end
 
     def test_extname
-      assert_equal '.js', @@results.fetch(:extname)
+      assert_equal('.js', @@results.fetch(:extname))
     end
 
     def test_modified_time
-      assert_instance_of Time, @@results.fetch(:modified_time)
+      assert_instance_of(Time, @@results.fetch(:modified_time))
     end
 
     def test_mtime
       mtime = @@results.fetch(:modified_time)
-      assert_equal mtime.to_i, @@results.fetch(:mtime)
+      assert_equal(mtime.to_i, @@results.fetch(:mtime))
     end
 
     def test_path
@@ -55,19 +55,19 @@ module Jekyll::Minibundle::Test
 
     def test_to_liquid
       hash = @@results.fetch(:to_liquid)
-      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}", hash.fetch('basename')
-      assert_equal "site-#{JS_BUNDLE_FINGERPRINT}.js", hash.fetch('name')
-      assert_equal '.js', hash.fetch('extname')
-      assert_instance_of Time, hash.fetch('modified_time')
+      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}", hash.fetch('basename'))
+      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", hash.fetch('name'))
+      assert_equal('.js', hash.fetch('extname'))
+      assert_instance_of(Time, hash.fetch('modified_time'))
       assert_match(%r{/jekyll-minibundle-.+\.js\z}, hash.fetch('path'))
     end
 
     def test_type
-      assert_nil @@results.fetch(:type)
+      assert_nil(@@results.fetch(:type))
     end
 
     def test_write?
-      assert @@results.fetch(:write?)
+      assert(@@results.fetch(:write?))
     end
 
     private

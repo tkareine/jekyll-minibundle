@@ -36,16 +36,16 @@ module Jekyll::Minibundle::Test
 
         capture_io { org_markup_path = bundle_file.destination_path_for_markup }
 
-        assert write_file(bundle_file)
+        assert(write_file(bundle_file))
 
         org_mtime = file_mtime_of(old_destination)
 
-        assert_equal 1, get_minifier_cmd_count
+        assert_equal(1, get_minifier_cmd_count)
 
         last_markup_path = bundle_file.destination_path_for_markup
 
-        assert_equal org_markup_path, last_markup_path
-        assert_equal 1, get_minifier_cmd_count
+        assert_equal(org_markup_path, last_markup_path)
+        assert_equal(1, get_minifier_cmd_count)
 
         # change content, but don't call destination_path_for_markup yet
 
@@ -53,10 +53,10 @@ module Jekyll::Minibundle::Test
 
         # preserve content's fingerprint
 
-        refute write_file(bundle_file)
+        refute(write_file(bundle_file))
 
-        assert_equal org_mtime, file_mtime_of(old_destination)
-        assert_equal 1, get_minifier_cmd_count
+        assert_equal(org_mtime, file_mtime_of(old_destination))
+        assert_equal(1, get_minifier_cmd_count)
 
         # see content's fingerprint to update after calling
         # destination_path_for_markup
@@ -65,12 +65,12 @@ module Jekyll::Minibundle::Test
 
         refute_equal org_markup_path, last_markup_path
 
-        assert write_file(bundle_file)
+        assert(write_file(bundle_file))
 
         new_destination = destination_path('assets/site-375a0b430b0c5555d0edd2205d26c04d.js')
 
-        assert_operator file_mtime_of(new_destination), :>, org_mtime
-        assert_equal 2, get_minifier_cmd_count
+        assert_operator(file_mtime_of(new_destination), :>, org_mtime)
+        assert_equal(2, get_minifier_cmd_count)
       end
     end
 
@@ -83,20 +83,20 @@ module Jekyll::Minibundle::Test
         capture_io { org_markup_path = bundle_file.destination_path_for_markup }
         bundle_file.destination_path_for_markup
 
-        assert write_file(bundle_file)
+        assert(write_file(bundle_file))
 
         org_mtime = file_mtime_of(destination)
 
-        assert_equal 1, get_minifier_cmd_count
+        assert_equal(1, get_minifier_cmd_count)
 
         ensure_file_mtime_changes { FileUtils.touch(source) }
         capture_io { last_markup_path = bundle_file.destination_path_for_markup }
         bundle_file.destination_path_for_markup
 
-        assert write_file(bundle_file)
-        assert_equal org_markup_path, last_markup_path
-        assert_operator file_mtime_of(destination), :>, org_mtime
-        assert_equal 2, get_minifier_cmd_count
+        assert(write_file(bundle_file))
+        assert_equal(org_markup_path, last_markup_path)
+        assert_operator(file_mtime_of(destination), :>, org_mtime)
+        assert_equal(2, get_minifier_cmd_count)
       end
     end
 
@@ -104,15 +104,15 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         bundle_file = make_bundle_file(site)
 
-        refute write_file(bundle_file)
-        assert_empty Dir[destination_path('assets/*.js')]
-        assert_equal 0, get_minifier_cmd_count
+        refute(write_file(bundle_file))
+        assert_empty(Dir[destination_path('assets/*.js')])
+        assert_equal(0, get_minifier_cmd_count)
 
         capture_io { bundle_file.destination_path_for_markup }
 
-        assert write_file(bundle_file)
-        assert File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
-        assert_equal 1, get_minifier_cmd_count
+        assert(write_file(bundle_file))
+        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert_equal(1, get_minifier_cmd_count)
       end
     end
 
@@ -120,16 +120,16 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         bundle_file = make_bundle_file(site)
 
-        refute bundle_file.modified?
-        refute write_file(bundle_file)
+        refute(bundle_file.modified?)
+        refute(write_file(bundle_file))
 
         capture_io { bundle_file.destination_path_for_markup }
 
-        assert bundle_file.modified?
-        assert write_file(bundle_file)
+        assert(bundle_file.modified?)
+        assert(write_file(bundle_file))
 
-        refute bundle_file.modified?
-        refute write_file(bundle_file)
+        refute(bundle_file.modified?)
+        refute(write_file(bundle_file))
       end
     end
 

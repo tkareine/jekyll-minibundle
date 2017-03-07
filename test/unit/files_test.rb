@@ -8,7 +8,7 @@ module Jekyll::Minibundle::Test
         File.write('foo', 'content')
         Files.copy_p('foo', 'bar/zap')
         copied = File.read('bar/zap')
-        assert_equal 'content', copied
+        assert_equal('content', copied)
       end
     end
 
@@ -20,7 +20,7 @@ module Jekyll::Minibundle::Test
       Tempfile.open('test') do |file|
         file.close
 
-        assert_equal '', Files.read_last(file.path, 4)
+        assert_equal('', Files.read_last(file.path, 4))
       end
     end
 
@@ -29,7 +29,7 @@ module Jekyll::Minibundle::Test
         file.write("1\n2\n3\n4")
         file.close
 
-        assert_equal "\n3\n4", Files.read_last(file.path, 4)
+        assert_equal("\n3\n4", Files.read_last(file.path, 4))
       end
     end
 
@@ -38,7 +38,7 @@ module Jekyll::Minibundle::Test
         file.write("1\n2")
         file.close
 
-        assert_equal "1\n2", Files.read_last(file.path, 100)
+        assert_equal("1\n2", Files.read_last(file.path, 100))
       end
     end
 
@@ -47,13 +47,13 @@ module Jekyll::Minibundle::Test
         file.write("1\n2")
         file.close
 
-        assert_equal '', Files.read_last(file.path, 0)
-        assert_equal '', Files.read_last(file.path, -1)
+        assert_equal('', Files.read_last(file.path, 0))
+        assert_equal('', Files.read_last(file.path, -1))
       end
     end
 
     def test_strip_dot_slash_from_path_start
-      assert_equal 'path', Files.strip_dot_slash_from_path_start('./path')
+      assert_equal('path', Files.strip_dot_slash_from_path_start('./path'))
     end
   end
 end
