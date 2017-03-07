@@ -87,7 +87,7 @@ module Jekyll::Minibundle::Test
             AssetFileRegistry.register_bundle_file(site, second_config)
           end
           assert_equal <<-END, err.to_s
-Two or more minibundle blocks with the same destination path 'assets/site.js', but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
+Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
           END
           assert_equal 1, asset_file_registry_size
           assert_contains_only site.static_files, [first_file]
@@ -108,7 +108,7 @@ Two or more minibundle blocks with the same destination path 'assets/site.js', b
             AssetFileRegistry.register_development_file_collection(site, second_config)
           end
           assert_equal <<-END, err.to_s
-Two or more minibundle blocks with the same destination path 'assets/site.js', but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
+Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
           END
           assert_equal 1, asset_file_registry_size
           assert_contains_only site.static_files, first_file.files
@@ -151,7 +151,7 @@ Two or more minibundle blocks with the same destination path 'assets/site.js', b
             AssetFileRegistry.send(spec.fetch(:method), site, source_paths[1], 'assets/dest1.css')
           end
           assert_equal <<-END, err.to_s
-Two or more ministamp tags with the same destination path 'assets/dest1.css', but different asset source paths: '#{source_paths[1]}' vs. '#{source_paths[0]}'
+Two or more ministamp tags with the same destination path "assets/dest1.css", but different asset source paths: "#{source_paths[1]}" vs. "#{source_paths[0]}"
           END
           assert_equal 1, asset_file_registry_size
           assert_contains_only site.static_files, [first]
@@ -166,7 +166,7 @@ Two or more ministamp tags with the same destination path 'assets/dest1.css', bu
         err = assert_raises(RuntimeError) do
           AssetFileRegistry.register_stamp_file(site, '_assets/src.js', 'assets/dest.js')
         end
-        assert_equal "ministamp tag has the same destination path as a minibundle block: 'assets/dest.js'", err.to_s
+        assert_equal 'ministamp tag has the same destination path as a minibundle block: assets/dest.js', err.to_s
         assert_equal 1, asset_file_registry_size
         assert_contains_only site.static_files, [file]
       end
@@ -179,7 +179,7 @@ Two or more ministamp tags with the same destination path 'assets/dest1.css', bu
         err = assert_raises(RuntimeError) do
           AssetFileRegistry.register_bundle_file(site, bundle_config.merge('destination_path' => 'assets/dest'))
         end
-        assert_equal "minibundle block has the same destination path as a ministamp tag: 'assets/dest.js'", err.to_s
+        assert_equal 'minibundle block has the same destination path as a ministamp tag: assets/dest.js', err.to_s
         assert_equal 1, asset_file_registry_size
         assert_contains_only site.static_files, [file]
       end

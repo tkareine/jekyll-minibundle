@@ -49,7 +49,7 @@ module Jekyll::Minibundle
 
         if cached
           if cached.fetch(:type) != :bundle
-            raise "minibundle block has the same destination path as a ministamp tag: '#{asset_destination_path}'"
+            raise "minibundle block has the same destination path as a ministamp tag: #{asset_destination_path}"
           end
 
           cached_file = cached.fetch(:file)
@@ -67,7 +67,7 @@ module Jekyll::Minibundle
 
           if cached_is_used
             raise <<-END
-Two or more minibundle blocks with the same destination path '#{asset_destination_path}', but having different asset configuration: #{bundle_config.inspect} vs. #{cached_config.inspect}
+Two or more minibundle blocks with the same destination path #{asset_destination_path.inspect}, but having different asset configuration: #{bundle_config.inspect} vs. #{cached_config.inspect}
             END
           end
 
@@ -90,7 +90,7 @@ Two or more minibundle blocks with the same destination path '#{asset_destinatio
 
         if cached
           if cached.fetch(:type) != :stamp
-            raise "ministamp tag has the same destination path as a minibundle block: '#{asset_destination_path}'"
+            raise "ministamp tag has the same destination path as a minibundle block: #{asset_destination_path}"
           end
 
           cached_file = cached.fetch(:file)
@@ -108,7 +108,7 @@ Two or more minibundle blocks with the same destination path '#{asset_destinatio
 
           if cached_is_used
             raise <<-END
-Two or more ministamp tags with the same destination path '#{asset_destination_path}', but different asset source paths: '#{asset_source_path}' vs. '#{cached_config}'
+Two or more ministamp tags with the same destination path #{asset_destination_path.inspect}, but different asset source paths: #{asset_source_path.inspect} vs. #{cached_config.inspect}
             END
           end
 

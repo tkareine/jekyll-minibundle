@@ -16,7 +16,7 @@ module Jekyll::Minibundle
 
       unless @minifier_cmd
         raise <<-END
-Missing minification command for bundling #{bundle_destination_path}. Specify it in
+Missing minification command for bundling #{bundle_destination_path.inspect}. Specify it in
 1) minibundle.minifier_commands.#{@type} setting in _config.yml,
 2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
 3) minifier_cmd setting inside minibundle block.
@@ -48,7 +48,7 @@ Missing minification command for bundling #{bundle_destination_path}. Specify it
         end
       end
       if exit_status != 0
-        msg = "Bundling #{bundle_destination_path} failed with exit status #{exit_status}, command: '#{@minifier_cmd}'"
+        msg = "Bundling #{bundle_destination_path.inspect} failed with exit status #{exit_status}, command: #{@minifier_cmd.inspect}"
         log_minifier_error(msg)
         raise msg
       end
@@ -73,7 +73,7 @@ Missing minification command for bundling #{bundle_destination_path}. Specify it
       _, status = Process.waitpid2(pid)
       status.exitstatus
     rescue => e
-      raise "Bundling #{bundle_destination_path} failed: #{e}"
+      raise "Bundling #{bundle_destination_path.inspect} failed: #{e}"
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }
     end
