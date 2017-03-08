@@ -10,7 +10,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(ArgumentError) do
         Liquid::Template.parse('{% minibundle %} {% endminibundle %}')
       end
-      assert_equal("No asset type for minibundle block; pass value such as 'css' or 'js' as the argument", err.to_s)
+      assert_equal("Missing asset type for minibundle block; pass value such as 'css' or 'js' as the argument", err.to_s)
     end
 
     [
