@@ -736,6 +736,32 @@ title: Test
       end
     end
 
+    def test_escapes_destination_path_url_and_attributes_in_generated_html_element
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
+          <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: 'dst">'
+    assets:
+      - dependency
+      - app
+    attributes:
+      test: '"/><br>'
+    {% endminibundle %}
+          END
+        )
+
+        generate_site(:production)
+
+        assert(File.exist?(destination_path(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js})))
+        assert_equal(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js}, find_js_path_from_index)
+        assert_equal('"/><br>', find_js_element_from_index['test'])
+      end
+    end
+
     private
 
     def find_css_element_from_index
