@@ -248,9 +248,8 @@ module Jekyll::Minibundle::Test
         )
 
         generate_site(:production)
-        destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
 
-        assert(File.exist?(destination))
+        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
       end
     end
