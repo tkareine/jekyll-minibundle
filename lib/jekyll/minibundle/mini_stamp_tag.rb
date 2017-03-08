@@ -6,25 +6,38 @@ module Jekyll::Minibundle
   class MiniStampTag < Liquid::Tag
     def initialize(tag_name, text, _tokens)
       super
-      @args = parse_arguments(text.strip)
+      @local_stamp_config =
+        MiniStampTag
+        .default_stamp_config
+        .merge(parse_arguments(text.strip))
     end
 
     def render(context)
+      site = context.registers.fetch(:site)
+
       stamp_config = get_current_stamp_config(context)
       source_path = stamp_config.fetch('source_path')
       destination_path = stamp_config.fetch('destination_path')
-      baseurl = stamp_config.fetch('baseurl')
+      destination_baseurl = stamp_config.fetch('destination_baseurl')
 
-      site = context.registers.fetch(:site)
+      file = register_asset_file(site, source_path, destination_path)
+      dst_path = Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
 
-      file =
-        if Environment.development?(site)
-          AssetFileRegistry.register_development_file(site, source_path, destination_path)
-        else
-          AssetFileRegistry.register_stamp_file(site, source_path, destination_path)
-        end
+      if !destination_baseurl.empty?
+        destination_baseurl + File.basename(dst_path)
+      else
+        stamp_config.fetch('baseurl') + dst_path
+      end
+    end
 
-      baseurl + Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
+    def self.default_stamp_config
+      {
+        'source_path'         => '',
+        'destination_path'    => '',
+        'baseurl'             => '',
+        'destination_baseurl' => '',
+        'use_template'        => false
+      }
     end
 
     private
@@ -59,40 +72,44 @@ module Jekyll::Minibundle
 
       {
         'source_path'      => source_path,
-        'destination_path' => destination_path,
-        'use_template'     => false
+        'destination_path' => destination_path
       }
     end
 
     def parse_hash_argument(hash)
       source_path = hash.fetch('source_path', '').to_s
       destination_path = hash.fetch('destination_path', '').to_s
+      destination_baseurl = hash.fetch('destination_baseurl', '').to_s
 
       raise ArgumentError, 'Missing asset source path for ministamp tag; specify Hash entry such as "source_path: _assets/site.css"' if source_path.empty?
       raise ArgumentError, 'Missing asset destination path for ministamp tag; specify Hash entry such as "destination_path: assets/site.css"' if destination_path.empty?
 
       {
-        'source_path'      => source_path,
-        'destination_path' => destination_path,
-        'use_template'     => true
+        'source_path'         => source_path,
+        'destination_path'    => destination_path,
+        'destination_baseurl' => destination_baseurl,
+        'use_template'        => true
       }
     end
 
     def get_current_stamp_config(context)
-      source_path = @args.fetch('source_path')
-      destination_path = @args.fetch('destination_path')
+      source_path = @local_stamp_config.fetch('source_path')
+      destination_path = @local_stamp_config.fetch('destination_path')
+      destination_baseurl = @local_stamp_config.fetch('destination_baseurl')
 
-      if @args.fetch('use_template')
+      if @local_stamp_config.fetch('use_template')
         source_path = VariableTemplateRegistry.register_template(source_path).render(context)
         destination_path = VariableTemplateRegistry.register_template(destination_path).render(context)
+        destination_baseurl = VariableTemplateRegistry.register_template(destination_baseurl).render(context)
       end
 
       baseurl, destination_path = normalize_destination_path(destination_path)
 
       {
-        'baseurl'          => baseurl,
-        'source_path'      => source_path,
-        'destination_path' => destination_path
+        'source_path'         => source_path,
+        'destination_path'    => destination_path,
+        'baseurl'             => baseurl,
+        'destination_baseurl' => destination_baseurl
       }
     end
 
@@ -101,6 +118,14 @@ module Jekyll::Minibundle
         ['/', destination_path.sub(%r{\A/+}, '')]
       else
         ['', destination_path]
+      end
+    end
+
+    def register_asset_file(site, source_path, destination_path)
+      if Environment.development?(site)
+        AssetFileRegistry.register_development_file(site, source_path, destination_path)
+      else
+        AssetFileRegistry.register_stamp_file(site, source_path, destination_path)
       end
     end
   end

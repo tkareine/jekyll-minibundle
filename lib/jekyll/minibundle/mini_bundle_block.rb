@@ -1,3 +1,4 @@
+require 'pathname'
 require 'jekyll/minibundle/hashes'
 require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/environment'
@@ -14,31 +15,39 @@ module Jekyll::Minibundle
 
     def render(context)
       site = context.registers.fetch(:site)
+
       bundle_config = get_current_bundle_config(::SafeYAML.load(super), site)
       baseurl = bundle_config.fetch('baseurl')
+      destination_baseurl = bundle_config.fetch('destination_baseurl')
       attributes = bundle_config.fetch('attributes')
+
+      do_form_destination_baseurl = !destination_baseurl.empty?
+      destination_dir_path = Pathname.new(File.dirname(bundle_config.fetch('destination_path'))) if do_form_destination_baseurl
 
       register_asset_files(site, bundle_config).map do |file|
         dst_path = Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
 
-        full_path =
-          if baseurl.empty?
-            dst_path
-          else
+        url =
+          if do_form_destination_baseurl
+            destination_baseurl + Pathname.new(dst_path).relative_path_from(destination_dir_path).to_s
+          elsif !baseurl.empty?
             File.join(baseurl, dst_path)
+          else
+            dst_path
           end
 
-        AssetTagMarkup.make_markup(@type, full_path, attributes)
+        AssetTagMarkup.make_markup(@type, url, attributes)
       end.join("\n")
     end
 
     def self.default_bundle_config
       {
-        'source_dir'       => '_assets',
-        'destination_path' => 'assets/site',
-        'baseurl'          => '',
-        'assets'           => [],
-        'attributes'       => {}
+        'source_dir'          => '_assets',
+        'destination_path'    => 'assets/site',
+        'baseurl'             => '',
+        'destination_baseurl' => '',
+        'assets'              => [],
+        'attributes'          => {}
       }
     end
 

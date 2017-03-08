@@ -252,6 +252,48 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_destination_baseurl
+      with_site_dir do
+        merge_to_yaml_file(source_path('_config.yml'), 'cdn_baseurl' => 'https://cdn.example.com/?file=')
+
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '    {% minibundle css %}',
+          <<-END
+    {% minibundle css %}
+    baseurl: /ignored
+    destination_baseurl: {{ site.cdn_baseurl }}css/
+          END
+        )
+
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
+          <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: static
+    baseurl: /ignored
+    destination_baseurl: {{ site.cdn_baseurl }}
+    assets:
+      - dependency
+      - app
+    attributes:
+      id: my-scripts
+    {% endminibundle %}
+          END
+        )
+
+        generate_site(:development)
+
+        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')))
+        assert(File.exist?(destination_path('static/app.js')))
+
+        assert_equal('https://cdn.example.com/?file=css/site/common.css', find_css_paths_from_index.last)
+        assert_equal('https://cdn.example.com/?file=static/app.js', find_js_paths_from_index.last)
+      end
+    end
+
     def test_supports_changing_attributes
       with_site_dir do
         generate_site(:development)
@@ -338,6 +380,31 @@ module Jekyll::Minibundle::Test
 
         assert_equal(org_mtime, file_mtime_of(expected_js_path))
         assert_equal("/js-root/#{JS_BUNDLE_DESTINATION_PATH}/app.js", find_js_paths_from_index.last)
+      end
+    end
+
+    def test_does_not_rewrite_destination_when_changing_destination_baseurl
+      with_site_dir do
+        generate_site(:development)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
+        org_mtime = file_mtime_of(expected_js_path)
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '    {% minibundle js %}',
+            <<-END
+    {% minibundle js %}
+    destination_baseurl: /js-root/
+            END
+          )
+        end
+
+        generate_site(:development, clear_cache: false)
+
+        assert_equal(org_mtime, file_mtime_of(expected_js_path))
+        assert_equal('/js-root/site/app.js', find_js_paths_from_index.last)
       end
     end
 

@@ -496,6 +496,48 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_supports_destination_baseurl
+      with_site_dir do
+        merge_to_yaml_file(source_path('_config.yml'), 'cdn_baseurl' => 'https://cdn.example.com/?file=')
+
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '    {% minibundle css %}',
+          <<-END
+    {% minibundle css %}
+    baseurl: /ignored
+    destination_baseurl: {{ site.cdn_baseurl }}css/
+          END
+        )
+
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
+          <<-END
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: static
+    baseurl: /ignored
+    destination_baseurl: {{ site.cdn_baseurl }}
+    assets:
+      - dependency
+      - app
+    attributes:
+      id: my-scripts
+    {% endminibundle %}
+          END
+        )
+
+        generate_site(:production)
+
+        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.exist?(destination_path("static-#{JS_BUNDLE_FINGERPRINT}.js")))
+
+        assert_equal("https://cdn.example.com/?file=css/site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
+        assert_equal("https://cdn.example.com/?file=static-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
+      end
+    end
+
     def test_supports_changing_attributes
       with_site_dir do
         generate_site(:production)
@@ -590,6 +632,34 @@ module Jekyll::Minibundle::Test
         assert_equal(org_mtime, file_mtime_of(expected_js_path))
         assert_equal(1, get_minifier_cmd_count)
         assert_equal("/js-root/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
+      end
+    end
+
+    def test_does_not_rebundle_assets_when_changing_destination_baseurl
+      with_site_dir do
+        generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        expected_js_path = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
+        org_mtime = file_mtime_of(expected_js_path)
+
+        assert_equal(1, get_minifier_cmd_count)
+
+        ensure_file_mtime_changes do
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '    {% minibundle js %}',
+            <<-END
+    {% minibundle js %}
+    destination_baseurl: /root/
+            END
+          )
+        end
+
+        generate_site(:production, clear_cache: false, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
+        assert_equal(org_mtime, file_mtime_of(expected_js_path))
+        assert_equal(1, get_minifier_cmd_count)
+        assert_equal("/root/site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
       end
     end
 
