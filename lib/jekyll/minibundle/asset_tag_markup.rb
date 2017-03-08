@@ -2,14 +2,14 @@ require 'cgi'
 
 module Jekyll::Minibundle
   module AssetTagMarkup
-    def self.make_markup(type, path, attributes)
+    def self.make_markup(type, url, attributes)
       case type
       when :js
-        %{<script type="text/javascript" src="#{path}"#{make_attributes(attributes)}></script>}
+        %{<script type="text/javascript" src="#{url}"#{make_attributes(attributes)}></script>}
       when :css
-        %{<link rel="stylesheet" href="#{path}"#{make_attributes(attributes)}>}
+        %{<link rel="stylesheet" href="#{url}"#{make_attributes(attributes)}>}
       else
-        raise ArgumentError, "Unknown type for generating bundle markup: #{type}, #{path}"
+        raise ArgumentError, "Unknown type for generating bundle markup: #{type}, #{url}"
       end
     end
 
