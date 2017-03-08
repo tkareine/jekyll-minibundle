@@ -223,7 +223,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
-          Regexp.new(Regexp.escape('<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">')),
+          '<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
           %(<link rel="stylesheet" href="{% ministamp { source_path: _tmp/site.css, destination_path: assets/screen.css } %}" media="screen">)
         )
 
@@ -239,7 +239,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
-          Regexp.new(Regexp.escape('<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">')),
+          '<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
           <<-END)
 {% assign stamp_source_filename = 'site' %}
 {% assign stamp_destination_url = 'assets/screen.css' %}
