@@ -316,7 +316,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rebundle_assets_when_changing_baseurl
+    def test_does_not_rewrite_destination_when_changing_baseurl
       with_site_dir do
         generate_site(:development)
 

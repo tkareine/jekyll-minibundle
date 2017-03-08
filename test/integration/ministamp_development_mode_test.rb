@@ -163,7 +163,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rewrite_destination_when_nonsource_files_change
+    def test_does_not_rewrite_destination_when_changing_nonsource_files
       with_site_dir do
         generate_site(:development)
 
