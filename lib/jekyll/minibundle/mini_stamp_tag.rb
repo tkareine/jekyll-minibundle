@@ -30,7 +30,7 @@ module Jekyll::Minibundle
     private
 
     def parse_arguments(args)
-      raise ArgumentError, 'Missing asset source and destination for ministamp tag; specify value such as "_assets/source.css assets/destination.css" as the argument' if args.empty?
+      raise ArgumentError, 'Missing asset source and destination paths for ministamp tag; specify value such as "_assets/source.css assets/destination.css" as the argument' if args.empty?
 
       structure = parse_structure(args)
 
@@ -51,27 +51,29 @@ module Jekyll::Minibundle
     end
 
     def parse_string_argument(str)
-      source, destination = str.split(/\s+/, 3)[0, 2]
+      source_path, destination_path = str.split(/\s+/, 3)[0, 2]
 
-      raise ArgumentError, 'Missing asset destination for ministamp tag; specify value such as "assets/destination.css" after asset source argument, separated with a space' unless destination
+      unless destination_path
+        raise ArgumentError, 'Missing asset destination path for ministamp tag; specify value such as "assets/destination.css" after asset source path argument, separated with a space'
+      end
 
       {
-        'source_path'      => source,
-        'destination_path' => destination,
+        'source_path'      => source_path,
+        'destination_path' => destination_path,
         'use_template'     => false
       }
     end
 
     def parse_hash_argument(hash)
-      source = hash.fetch('source', '').to_s
-      destination = hash.fetch('destination', '').to_s
+      source_path = hash.fetch('source_path', '').to_s
+      destination_path = hash.fetch('destination_path', '').to_s
 
-      raise ArgumentError, 'Missing asset source for ministamp tag; specify Hash entry such as "source: _assets/site.css"' if source.empty?
-      raise ArgumentError, 'Missing asset destination for ministamp tag; specify Hash entry such as "destination: assets/site.css"' if destination.empty?
+      raise ArgumentError, 'Missing asset source path for ministamp tag; specify Hash entry such as "source_path: _assets/site.css"' if source_path.empty?
+      raise ArgumentError, 'Missing asset destination path for ministamp tag; specify Hash entry such as "destination_path: assets/site.css"' if destination_path.empty?
 
       {
-        'source_path'      => source,
-        'destination_path' => destination,
+        'source_path'      => source_path,
+        'destination_path' => destination_path,
         'use_template'     => true
       }
     end
