@@ -278,8 +278,6 @@ module Jekyll::Minibundle::Test
     assets:
       - dependency
       - app
-    attributes:
-      id: my-scripts
     {% endminibundle %}
           END
         )
