@@ -117,7 +117,7 @@ module Jekyll::Minibundle
     # Transforms array of tokens to Ruby interpolation string.
     #
     # Idea adapted from Mustache's
-    # [Generator](https://github.com/mustache/mustache/blob/master/lib/mustache/generator.rb>).
+    # [Generator](https://github.com/mustache/mustache/blob/master/lib/mustache/generator.rb).
     module Generator
       def self.compile(tokens)
         result = '"'
