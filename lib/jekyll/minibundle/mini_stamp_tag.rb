@@ -1,3 +1,4 @@
+require 'cgi/util'
 require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_file_registry'
 require 'jekyll/minibundle/variable_template_registry'
@@ -23,11 +24,14 @@ module Jekyll::Minibundle
       file = register_asset_file(site, source_path, destination_path)
       dst_path = Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
 
-      if !destination_baseurl.empty?
-        destination_baseurl + File.basename(dst_path)
-      else
-        stamp_config.fetch('baseurl') + dst_path
-      end
+      url =
+        if !destination_baseurl.empty?
+          destination_baseurl + File.basename(dst_path)
+        else
+          stamp_config.fetch('baseurl') + dst_path
+        end
+
+      CGI.escape_html(url)
     end
 
     def self.default_stamp_config

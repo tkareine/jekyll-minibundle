@@ -317,6 +317,23 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_escapes_generated_url
+      with_site_dir do
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '{% ministamp _tmp/site.css assets/screen.css %}',
+          %({% ministamp { source_path: '_tmp/site.css', destination_path: 'scre">en.css' } %})
+        )
+
+        generate_site(:production)
+
+        filename = %(scre">en-#{STAMP_FINGERPRINT}.css)
+
+        assert(File.exist?(destination_path(filename)))
+        assert_equal(filename, find_css_path_from_index)
+      end
+    end
+
     private
 
     def find_css_path_from_index
