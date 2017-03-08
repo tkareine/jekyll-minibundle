@@ -8,7 +8,7 @@ module Jekyll::Minibundle::Test
     def test_asset_destination_path_has_stamp
       with_precompiled_site(:production) do
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -28,12 +28,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = 'assets/screen-0f5dbd1e527a2bee267e85007b08d2a5.css'
 
         assert_equal(new_destination, find_css_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
       end
     end
 
@@ -80,7 +80,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -92,12 +92,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = "assets/screen2-#{STAMP_FINGERPRINT}.css"
 
         assert_equal(new_destination, find_css_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
       end
     end
 
@@ -105,7 +105,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -117,12 +117,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = "assets/screen2-#{STAMP_FINGERPRINT}.css"
 
         assert_equal(new_destination, find_css_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(
@@ -134,10 +134,10 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(new_destination)))
+        refute(File.file?(destination_path(new_destination)))
 
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -148,7 +148,7 @@ module Jekyll::Minibundle::Test
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_mtime = file_mtime_of(destination)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
 
         ensure_file_mtime_changes do
@@ -161,7 +161,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(org_mtime, file_mtime_of(destination))
         assert_equal("/#{STAMP_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
       end
@@ -180,14 +180,14 @@ module Jekyll::Minibundle::Test
         destination = destination_path("screen-#{STAMP_FINGERPRINT}.css")
         org_mtime = file_mtime_of(destination)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
 
         ensure_file_mtime_changes do
           generate_site(:production, clear_cache: false)
         end
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(org_mtime, file_mtime_of(destination))
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
       end
@@ -206,14 +206,14 @@ module Jekyll::Minibundle::Test
         destination = destination_path("screen-#{STAMP_FINGERPRINT}.css")
         org_mtime = file_mtime_of(destination)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
 
         ensure_file_mtime_changes do
           generate_site(:production, clear_cache: false)
         end
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(org_mtime, file_mtime_of(destination))
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
       end
@@ -229,7 +229,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
       end
     end
@@ -248,7 +248,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
       end
     end
@@ -265,7 +265,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)))
         assert_equal("https://cdn.example.com/?file=static/screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
       end
     end
@@ -297,7 +297,7 @@ module Jekyll::Minibundle::Test
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)
         org_mtime = file_mtime_of(destination)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
 
         ensure_file_mtime_changes do
@@ -310,7 +310,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination))
+        assert(File.file?(destination))
         assert_equal(org_mtime, file_mtime_of(destination))
         assert_equal("/root/screen-#{STAMP_FINGERPRINT}.css", find_css_path_from_index)
       end
@@ -328,7 +328,7 @@ module Jekyll::Minibundle::Test
 
         filename = %(scre">en-#{STAMP_FINGERPRINT}.css)
 
-        assert(File.exist?(destination_path(filename)))
+        assert(File.file?(destination_path(filename)))
         assert_equal(filename, find_css_path_from_index)
       end
     end

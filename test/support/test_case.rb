@@ -125,7 +125,7 @@ module Jekyll::Minibundle::Test
     end
 
     def get_minifier_cmd_count(count_file = 'minifier_cmd_count')
-      if File.exist?(count_file)
+      if File.file?(count_file)
         File.read(count_file).to_i
       else
         0

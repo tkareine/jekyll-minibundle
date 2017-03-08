@@ -35,13 +35,13 @@ module Jekyll::Minibundle::Test
 
     def test_copies_css_asset_bundle_to_destination_dir
       with_precompiled_site(:production) do
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
     def test_copies_js_asset_bundle_to_destination_dir
       with_precompiled_site(:production) do
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -90,12 +90,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = 'assets/site-375a0b430b0c5555d0edd2205d26c04d.js'
 
         assert_equal(new_destination, find_js_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
       end
     end
 
@@ -109,7 +109,7 @@ module Jekyll::Minibundle::Test
         generate_site(:production, clear_cache: false)
 
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert_operator(file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)), :>, org_mtime)
       end
     end
@@ -147,7 +147,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         match_snippet = <<-END
     assets:
@@ -166,12 +166,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = 'assets/site-71042d0b7c86c04e015fde694dd9f409.js'
 
         assert_equal(new_destination, find_js_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
       end
     end
 
@@ -181,7 +181,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         match_snippet = <<-END
     assets:
@@ -202,8 +202,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js')))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js')))
         assert((find_tempfiles('*.js') & old_tempfiles).empty?)
       end
     end
@@ -212,7 +212,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         ensure_file_mtime_changes do
           change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
@@ -220,12 +220,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = "assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"
 
         assert_equal(new_destination, find_js_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
       end
     end
 
@@ -235,7 +235,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         old_tempfiles = find_tempfiles('*.js') - other_tempfiles
 
@@ -245,8 +245,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js")))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js")))
         assert((find_tempfiles('*.js') & old_tempfiles).empty?)
       end
     end
@@ -255,7 +255,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         generate_site(:production)
 
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         ensure_file_mtime_changes do
           change_destination_path_in_minibundle_block('assets/site', 'assets/site2')
@@ -263,12 +263,12 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         new_destination = "assets/site2-#{JS_BUNDLE_FINGERPRINT}.js"
 
         assert_equal(new_destination, find_js_path_from_index)
-        assert(File.exist?(destination_path(new_destination)))
+        assert(File.file?(destination_path(new_destination)))
 
         ensure_file_mtime_changes do
           change_destination_path_in_minibundle_block('assets/site2', 'assets/site')
@@ -276,9 +276,9 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        refute(File.exist?(destination_path(new_destination)))
+        refute(File.file?(destination_path(new_destination)))
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -319,8 +319,8 @@ module Jekyll::Minibundle::Test
         org_mtime_css = file_mtime_of(destination_css)
         org_mtime_js = file_mtime_of(destination_js)
 
-        assert(File.exist?(destination_css))
-        assert(File.exist?(destination_js))
+        assert(File.file?(destination_css))
+        assert(File.file?(destination_js))
 
         assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
@@ -335,8 +335,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination_css))
-        assert(File.exist?(destination_js))
+        assert(File.file?(destination_css))
+        assert(File.file?(destination_js))
         assert_equal(org_mtime_css, file_mtime_of(destination_css))
         assert_equal(org_mtime_js, file_mtime_of(destination_js))
         assert_equal("/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
@@ -368,8 +368,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         assert_equal("/root/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
         assert_equal("/root/js/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
@@ -398,16 +398,16 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
@@ -436,16 +436,16 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
         assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
         assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
@@ -458,16 +458,16 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
-        assert(File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
+        assert(File.file?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
+        assert(File.file?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
 
         assert_equal("site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
         assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
-        assert(File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
+        assert(File.file?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
+        assert(File.file?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
 
         assert_equal("site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
         assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
@@ -480,16 +480,16 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
-        assert(File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
+        assert(File.file?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
+        assert(File.file?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
 
         assert_equal("site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
         assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
 
         generate_site(:production, clear_cache: false)
 
-        assert(File.exist?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
-        assert(File.exist?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
+        assert(File.file?(destination_path("site-#{CSS_BUNDLE_FINGERPRINT}.css")))
+        assert(File.file?(destination_path("site-#{JS_BUNDLE_FINGERPRINT}.js")))
 
         assert_equal("site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
         assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
@@ -528,8 +528,8 @@ module Jekyll::Minibundle::Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path("static-#{JS_BUNDLE_FINGERPRINT}.js")))
+        assert(File.file?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path("static-#{JS_BUNDLE_FINGERPRINT}.js")))
 
         assert_equal("https://cdn.example.com/?file=css/site-#{CSS_BUNDLE_FINGERPRINT}.css", find_css_path_from_index)
         assert_equal("https://cdn.example.com/?file=static-#{JS_BUNDLE_FINGERPRINT}.js", find_js_path_from_index)
@@ -672,7 +672,7 @@ module Jekyll::Minibundle::Test
 
         assert_equal(0, get_minifier_cmd_count)
         assert_equal(1, get_minifier_cmd_count('minifier_cmd_config_count'))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -687,7 +687,7 @@ module Jekyll::Minibundle::Test
 
         assert_equal(0, get_minifier_cmd_count('minifier_cmd_config_count'))
         assert_equal(1, get_minifier_cmd_count('minifier_cmd_env_count'))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -718,10 +718,10 @@ title: Test
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count'))
 
         assert_equal(1, get_minifier_cmd_count('minifier_cmd_local_count'))
-        assert(File.exist?(destination_path('assets/deps-71042d0b7c86c04e015fde694dd9f409.js')))
+        assert(File.file?(destination_path('assets/deps-71042d0b7c86c04e015fde694dd9f409.js')))
 
         assert_equal(1, get_minifier_cmd_count('minifier_cmd_global_count'))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
       end
     end
 
@@ -754,7 +754,7 @@ title: Test
 
         generate_site(:production)
 
-        assert(File.exist?(destination_path(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js})))
+        assert(File.file?(destination_path(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js})))
         assert_equal(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js}, find_js_path_from_index)
         assert_equal('"/><br>', find_js_element_from_index['test'])
       end

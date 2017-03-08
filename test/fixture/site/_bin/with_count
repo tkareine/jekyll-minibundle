@@ -3,7 +3,7 @@
 filename = ARGV.first
 
 count =
-  if File.exist?(filename)
+  if File.file?(filename)
     File.read(filename).strip.to_i
   else
     0
