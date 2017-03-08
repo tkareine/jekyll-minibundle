@@ -624,6 +624,7 @@ module Jekyll::Minibundle::Test
 
         assert_equal(org_mtime, file_mtime_of(expected_js_path))
         assert_equal(1, get_minifier_cmd_count)
+        assert_equal("/js-root/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
       end
     end
 
