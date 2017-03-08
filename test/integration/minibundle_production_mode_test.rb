@@ -346,42 +346,7 @@ module Jekyll::Minibundle::Test
 
     def test_supports_baseurl
       with_site_dir do
-        generate_site(:production)
-
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
-
-        assert_equal(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
-        assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
-
-        find_and_gsub_in_file(
-          source_path('_layouts/default.html'),
-          '    {% minibundle css %}',
-          <<-END
-    {% minibundle css %}
-    baseurl: /css-root
-          END
-        )
-
-        find_and_gsub_in_file(
-          source_path('_layouts/default.html'),
-          '    {% minibundle js %}',
-          <<-END
-    {% minibundle js %}
-    baseurl: /js-root
-          END
-        )
-
-        generate_site(:production, clear_cache: false)
-
-        assert_equal("/css-root/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
-        assert_equal("/js-root/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
-      end
-    end
-
-    def test_supports_baseurl_via_liquid_variable
-      with_site_dir do
-        merge_to_yaml_file(source_path('_config.yml'), 'baseurl' => '/')
+        merge_to_yaml_file(source_path('_config.yml'), 'baseurl' => '/root')
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
@@ -397,7 +362,7 @@ module Jekyll::Minibundle::Test
           '    {% minibundle js %}',
           <<-END
     {% minibundle js %}
-    baseurl: {{ site.baseurl }}
+    baseurl: {{ site.baseurl }}/js
           END
         )
 
@@ -406,8 +371,8 @@ module Jekyll::Minibundle::Test
         assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
-        assert_equal("/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
-        assert_equal("/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
+        assert_equal("/root/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_css_path_from_index)
+        assert_equal("/root/js/#{JS_BUNDLE_DESTINATION_FINGERPRINT_PATH}", find_js_path_from_index)
       end
     end
 

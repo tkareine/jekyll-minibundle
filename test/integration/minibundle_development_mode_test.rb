@@ -222,20 +222,14 @@ module Jekyll::Minibundle::Test
 
     def test_supports_baseurl
       with_site_dir do
-        generate_site(:development)
-
-        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')))
-        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')))
-
-        assert_equal('assets/site/common.css', find_css_paths_from_index.last)
-        assert_equal('assets/site/app.js', find_js_paths_from_index.last)
+        merge_to_yaml_file(source_path('_config.yml'), 'baseurl' => '/root')
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
           <<-END
     {% minibundle css %}
-    baseurl: /css-root
+    baseurl: {{ site.baseurl }}
           END
         )
 
@@ -244,14 +238,17 @@ module Jekyll::Minibundle::Test
           '    {% minibundle js %}',
           <<-END
     {% minibundle js %}
-    baseurl: /js-root
+    baseurl: {{ site.baseurl }}/js
           END
         )
 
-        generate_site(:development, clear_cache: false)
+        generate_site(:development)
 
-        assert_equal('/css-root/assets/site/common.css', find_css_paths_from_index.last)
-        assert_equal('/js-root/assets/site/app.js', find_js_paths_from_index.last)
+        assert(File.exist?(destination_path(CSS_BUNDLE_DESTINATION_PATH, 'common.css')))
+        assert(File.exist?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')))
+
+        assert_equal('/root/assets/site/common.css', find_css_paths_from_index.last)
+        assert_equal('/root/js/assets/site/app.js', find_js_paths_from_index.last)
       end
     end
 
