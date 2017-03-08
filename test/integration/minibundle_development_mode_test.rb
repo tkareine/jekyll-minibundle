@@ -337,6 +337,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         assert_equal(org_mtime, file_mtime_of(expected_js_path))
+        assert_equal("/js-root/#{JS_BUNDLE_DESTINATION_PATH}/app.js", find_js_paths_from_index.last)
       end
     end
 
