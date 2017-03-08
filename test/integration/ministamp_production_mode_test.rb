@@ -239,12 +239,13 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
-          '<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
-          <<-END)
-{% assign stamp_source_filename = 'site' %}
-{% assign stamp_destination_url = 'assets/screen.css' %}
-<link rel="stylesheet" href="{% ministamp { source_path: '_tmp/{{ stamp_source_filename }}.css', destination_path: '{{ stamp_destination_url }}' } %}" media="screen">
+          '    <link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
+          <<-END
+    {% assign stamp_source_filename = 'site' %}
+    {% assign stamp_destination_url = 'assets/screen.css' %}
+    <link rel="stylesheet" href="{% ministamp { source_path: '_tmp/{{ stamp_source_filename }}.css', destination_path: '{{ stamp_destination_url }}' } %}" media="screen">
           END
+        )
 
         generate_site(:production)
         destination = destination_path(STAMP_DESTINATION_FINGERPRINT_PATH)

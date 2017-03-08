@@ -230,8 +230,23 @@ module Jekyll::Minibundle::Test
         assert_equal('assets/site/common.css', find_css_paths_from_index.last)
         assert_equal('assets/site/app.js', find_js_paths_from_index.last)
 
-        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle css %}', "{% minibundle css %}\n    baseurl: /css-root")
-        find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '    {% minibundle css %}',
+          <<-END
+    {% minibundle css %}
+    baseurl: /css-root
+          END
+        )
+
+        find_and_gsub_in_file(
+          source_path('_layouts/default.html'),
+          '    {% minibundle js %}',
+          <<-END
+    {% minibundle js %}
+    baseurl: /js-root
+          END
+        )
 
         generate_site(:development, clear_cache: false)
 
@@ -312,7 +327,14 @@ module Jekyll::Minibundle::Test
         org_mtime = file_mtime_of(expected_js_path)
 
         ensure_file_mtime_changes do
-          find_and_gsub_in_file(source_path('_layouts/default.html'), '{% minibundle js %}', "{% minibundle js %}\n    baseurl: /js-root")
+          find_and_gsub_in_file(
+            source_path('_layouts/default.html'),
+            '    {% minibundle js %}',
+            <<-END
+    {% minibundle js %}
+    baseurl: /js-root
+            END
+          )
         end
 
         generate_site(:development, clear_cache: false)
