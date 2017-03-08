@@ -3,6 +3,12 @@ require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle::Test
   class AssetTagMarkupTest < TestCase
+    def test_escape_url
+      actual = AssetTagMarkup.make_markup(:css, 'https://example.com/path?a=this+"thing"&b=<br>', {})
+      expected = %{<link rel="stylesheet" href="https://example.com/path?a=this+&quot;thing&quot;&amp;b=&lt;br&gt;">}
+      assert_equal(expected, actual)
+    end
+
     def test_escape_attribute_value
       attributes = {media: 'screen, projection', extra: '">attack<br'}
       actual = AssetTagMarkup.make_markup(:css, '/asset.css', attributes)
