@@ -47,7 +47,8 @@ module Jekyll::Minibundle
         'baseurl'             => '',
         'destination_baseurl' => '',
         'assets'              => [],
-        'attributes'          => {}
+        'attributes'          => {},
+        'minifier_cmd'        => nil
       }
     end
 
