@@ -28,12 +28,12 @@ module Jekyll::Minibundle::Test
       assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, output)
     end
 
-    def test_raise_exception_if_failed_parsing_argument_syntax
+    def test_raise_exception_if_invalid_arguments_syntax
       err = assert_raises(ArgumentError) do
         Liquid::Template.parse('{% ministamp source_path: src, destination_path: dst %}')
       end
       expected =
-        'Failed parsing ministamp tag argument syntax in YAML: "source_path: src, destination_path: dst". ' \
+        'Failed parsing ministamp tag argument syntax as YAML: "source_path: src, destination_path: dst". ' \
         'Cause: (<unknown>): mapping values are not allowed in this context at line 1 column 35'
       assert_equal(expected, err.to_s)
     end
