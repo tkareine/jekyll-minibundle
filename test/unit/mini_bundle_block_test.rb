@@ -6,11 +6,46 @@ module Jekyll::Minibundle::Test
   class MiniBundleBlockTest < TestCase
     include FixtureConfig
 
+    def setup
+      AssetFileRegistry.clear_all
+    end
+
     def test_raise_exception_if_no_type_argument
       err = assert_raises(ArgumentError) do
         Liquid::Template.parse('{% minibundle %} {% endminibundle %}')
       end
       assert_equal("Missing asset type for minibundle block; pass value such as 'css' or 'js' as the argument", err.to_s)
+    end
+
+    def test_raise_exception_if_missing_block_contents
+      rendered = render_template(<<-END)
+{% minibundle css %}
+
+{% endminibundle %}
+        END
+      expected = "Liquid error: Missing configuration for minibundle block; pass configuration in YAML syntax\n"
+      assert_equal(expected, rendered)
+    end
+
+    def test_raise_exception_if_invalid_block_contents_syntax
+      rendered = render_template(<<-END)
+{% minibundle css %}
+}
+{% endminibundle %}
+        END
+      expected =
+        'Liquid error: Failed parsing minibundle block contents syntax as YAML: "}". ' \
+        "Cause: (<unknown>): did not find expected node content while parsing a block node at line 2 column 1\n"
+      assert_equal(expected, rendered)
+    end
+
+    def test_raise_exception_if_unsupported_block_contents_type
+      rendered = render_template(<<-END)
+{% minibundle css %}
+str
+{% endminibundle %}
+        END
+      assert_equal("Liquid error: Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n\n", rendered)
     end
 
     [
@@ -41,9 +76,7 @@ module Jekyll::Minibundle::Test
       }
     ].each do |spec|
       define_method :"test_normalizing_baseurl_with_#{spec.fetch(:description)}" do
-        AssetFileRegistry.clear_all
-
-        template = Liquid::Template.parse(<<-END)
+        actual_output = render_template(<<-END)
 {% minibundle css %}
 source_dir: _assets/styles
 destination_path: assets/site
@@ -55,14 +88,21 @@ minifier_cmd: #{minifier_cmd_to_remove_comments}
 {% endminibundle %}
         END
 
-        actual_output = nil
-        capture_io do
-          actual_output = template.render({}, registers: {site: make_fake_site(site_fixture_path)})
-        end
         expected_output = %{<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n}
 
         assert_equal(expected_output, actual_output)
       end
+    end
+
+    private
+
+    def render_template(template)
+      compiled = Liquid::Template.parse(template)
+      rendered = nil
+      capture_io do
+        rendered = compiled.render({}, registers: {site: make_fake_site(site_fixture_path)})
+      end
+      rendered
     end
   end
 end

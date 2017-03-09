@@ -16,7 +16,7 @@ module Jekyll::Minibundle
     def render(context)
       site = context.registers.fetch(:site)
 
-      bundle_config = get_current_bundle_config(::SafeYAML.load(super), site)
+      bundle_config = get_current_bundle_config(parse_contents(super), site)
       baseurl = bundle_config.fetch('baseurl')
       destination_baseurl = bundle_config.fetch('destination_baseurl')
       attributes = bundle_config.fetch('attributes')
@@ -52,6 +52,19 @@ module Jekyll::Minibundle
     end
 
     private
+
+    def parse_contents(contents)
+      raise ArgumentError, 'Missing configuration for minibundle block; pass configuration in YAML syntax' if contents =~ /\A\s+\z/
+      structure = parse_structure(contents)
+      raise ArgumentError, "Unsupported minibundle block contents type (#{structure.class}), only Hash is supported: #{contents}" unless structure.is_a?(Hash)
+      structure
+    end
+
+    def parse_structure(contents)
+      ::SafeYAML.load(contents)
+    rescue => e
+      raise ArgumentError, "Failed parsing minibundle block contents syntax as YAML: #{contents.strip.inspect}. Cause: #{e}"
+    end
 
     def get_current_bundle_config(local_bundle_config, site)
       config =
