@@ -73,6 +73,7 @@ module Jekyll::Minibundle
 
         tokens
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       def self.make_escape_sequence_regexp
         escape_chars = (OPEN_TAG + CLOSE_TAG).chars.uniq
