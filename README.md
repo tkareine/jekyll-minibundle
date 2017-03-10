@@ -130,7 +130,7 @@ The supported keys for the Hash argument are:
 | Key | Required? | Value type | Value example | Default value | Description |
 | --- | --- | --- | --- | --- | --- |
 | `source_path` | yes | string | `'_tmp/site.css'` | - | The source path of the asset file, relative to the site directory. |
-| `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `destination_baseurl` is empty, `ministamp`'s output will begin with `/`. |
+| `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `render_basename_only` is `false`, `ministamp`'s output will begin with `/`. |
 | `render_basename_only` | no | boolean | `true` | `false` | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 
 With Hash argument, the plugin processes `source_path` and
@@ -148,9 +148,10 @@ The above would use `assets/site.css` as the destination path.
 Note that you must quote `destination_path`'s value, otherwise YAML does
 not recognize it as a proper string.
 
-To refer to Jekyll's configuration options in the template, prefix the
-variable name with `site.`. For example, to refer to `baseurl` option,
-use syntax `{{ site.baseurl }}` in the template.
+To refer to Jekyll's configuration options ([`_config.yml`][JekyllConf])
+in the template, prefix the variable name with `site.`. For example, to
+refer to `baseurl` option, use syntax `{{ site.baseurl }}` in the
+template.
 
 See [Variable templating](#variable-templating) for details about the
 template syntax.
@@ -255,11 +256,11 @@ The block contents must be in [YAML][YAML] syntax. The supported keys are:
 | Key | Value type | Value example | Default value | Description |
 | --- | --- | --- | --- | --- |
 | `source_dir` | string | - | `'_assets'` | The source directory of `assets`, relative to the site directory. |
-| `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type suffix, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'`. |
+| `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type extension, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'` implicitly. |
 | `baseurl` | string | `{{ site.baseurl }}` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
-| `destination_baseurl` | string | `'https://cdn.example.com/` | `''` | If nonempty, the bundle destination URL inside `ministamp`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
-| `assets` | array of strings | `['dependency', 'app']` | `[]` | Array of the basenames of assets in `source_dir` directory, without type suffix. These are the asset files to be bundled, in order, into one bundle destination file. |
-| `attributes` | map of keys to string values | `{id: my-link, media: screen}` | `{}` | Custom HTML element attributes to be added to rendered HTML element. |
+| `destination_baseurl` | string | `'https://cdn.example.com/` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
+| `assets` | array of strings | `['dependency', 'app']` | `[]` | Array of the basenames of assets in `source_dir` directory, without type extension. These are the asset files to be bundled, in order, into one bundle destination file. |
+| `attributes` | map of keys to string values | `{id: my-link, media: screen}` | `{}` | Custom HTML element attributes to be added to `minibundle`'s rendered HTML element. |
 
 ### Minifier command specification
 
