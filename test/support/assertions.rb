@@ -17,7 +17,7 @@ module Jekyll::Minibundle::Test
       end
 
       assert(remaining.empty?, lambda do
-        "Expected #{mu_pp(collection)} to include only #{mu_pp(expected_elements)}"
+        "Expected\n\n#{mu_pp(collection)}\n\nto include only\n\n#{mu_pp(expected_elements)}"
       end)
     end
   end
