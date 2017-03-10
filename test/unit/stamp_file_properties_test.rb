@@ -24,6 +24,10 @@ module Jekyll::Minibundle::Test
       assert_equal('assets', @@results.fetch(:destination_rel_dir))
     end
 
+    def test_url
+      assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, @@results.fetch(:url))
+    end
+
     def test_name
       assert_equal("screen-#{STAMP_FINGERPRINT}.css", @@results.fetch(:name))
     end

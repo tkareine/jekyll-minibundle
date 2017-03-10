@@ -24,6 +24,10 @@ module Jekyll::Minibundle::Test
       assert_equal('assets', @@results.fetch(:destination_rel_dir))
     end
 
+    def test_url
+      assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, @@results.fetch(:url))
+    end
+
     def test_name
       assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", @@results.fetch(:name))
     end
