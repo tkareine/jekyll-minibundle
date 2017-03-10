@@ -41,7 +41,7 @@ module Jekyll::Minibundle
     end
 
     def destination_rel_dir
-      asset_destination_dir
+      "/#{asset_destination_dir}"
     end
 
     def to_liquid

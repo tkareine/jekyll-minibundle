@@ -27,7 +27,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_destination_rel_dir
-      assert_equal('assets', @@results.fetch(:destination_rel_dir))
+      assert_equal('/assets', @@results.fetch(:destination_rel_dir))
     end
 
     def test_extname
