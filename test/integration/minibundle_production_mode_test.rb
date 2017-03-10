@@ -353,7 +353,7 @@ module Jekyll::Minibundle::Test
           '    {% minibundle css %}',
           <<-END
     {% minibundle css %}
-    baseurl: {{ site.baseurl }}
+    baseurl: '{{ site.baseurl }}/'
           END
         )
 

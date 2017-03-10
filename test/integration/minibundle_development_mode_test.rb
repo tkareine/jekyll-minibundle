@@ -229,7 +229,7 @@ module Jekyll::Minibundle::Test
           '    {% minibundle css %}',
           <<-END
     {% minibundle css %}
-    baseurl: {{ site.baseurl }}
+    baseurl: '{{ site.baseurl }}/'
           END
         )
 
@@ -274,7 +274,7 @@ module Jekyll::Minibundle::Test
     source_dir: _assets/scripts
     destination_path: static
     baseurl: /ignored
-    destination_baseurl: {{ site.cdn_baseurl }}
+    destination_baseurl: '{{ site.cdn_baseurl }}'
     assets:
       - dependency
       - app

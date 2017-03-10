@@ -65,6 +65,16 @@ str
         expected_asset_url: "/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}"
       },
       {
+        description:        'dot_baseurl_results_in_asset_url_without_baseurl',
+        baseurl_config:     'baseurl: .',
+        expected_asset_url: CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH
+      },
+      {
+        description:        'dot_slash_baseurl_results_in_asset_url_without_baseurl',
+        baseurl_config:     'baseurl: ./',
+        expected_asset_url: CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH
+      },
+      {
         description:        'slash_root_baseurl_results_in_asset_url_with_baseurl',
         baseurl_config:     'baseurl: /root',
         expected_asset_url: "/root/#{CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH}"
