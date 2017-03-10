@@ -1,17 +1,16 @@
 require 'support/test_case'
 require 'support/fixture_config'
 require 'support/static_file_config'
-require 'jekyll/minibundle/bundle_file'
+require 'jekyll/minibundle/development_file'
 
 module Jekyll::Minibundle::Test
-  class BundleFilePropertiesTest < TestCase
+  class DevelopmentFilePropertiesTest < TestCase
     include FixtureConfig
     include StaticFileConfig
 
     def setup
       @@results ||= with_fake_site do |site|
-        file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments))
-        capture_io { file.destination_path_for_markup }
+        file = DevelopmentFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
         get_send_results(file, STATIC_FILE_PROPERTIES)
       end
     end
@@ -25,11 +24,11 @@ module Jekyll::Minibundle::Test
     end
 
     def test_name
-      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", @@results.fetch(:name))
+      assert_equal('screen.css', @@results.fetch(:name))
     end
 
     def test_extname
-      assert_equal('.js', @@results.fetch(:extname))
+      assert_equal('.css', @@results.fetch(:extname))
     end
 
     def test_modified_time
@@ -42,7 +41,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_path
-      assert_match(%r{/jekyll-minibundle-.+\.js\z}, @@results.fetch(:path))
+      assert_match(%r{/#{STAMP_SOURCE_PATH}\z}, @@results.fetch(:path))
     end
 
     def test_placeholders
@@ -50,16 +49,16 @@ module Jekyll::Minibundle::Test
     end
 
     def test_relative_path
-      assert_match(%r{/jekyll-minibundle-.+\.js\z}, @@results.fetch(:relative_path))
+      assert_equal("/#{STAMP_SOURCE_PATH}", @@results.fetch(:relative_path))
     end
 
     def test_to_liquid
       hash = @@results.fetch(:to_liquid)
-      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}", hash.fetch('basename'))
-      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", hash.fetch('name'))
-      assert_equal('.js', hash.fetch('extname'))
+      assert_equal('screen', hash.fetch('basename'))
+      assert_equal('screen.css', hash.fetch('name'))
+      assert_equal('.css', hash.fetch('extname'))
       assert_instance_of(Time, hash.fetch('modified_time'))
-      assert_match(%r{/jekyll-minibundle-.+\.js\z}, hash.fetch('path'))
+      assert_equal("/#{STAMP_SOURCE_PATH}", hash.fetch('path'))
     end
 
     def test_type
@@ -68,18 +67,6 @@ module Jekyll::Minibundle::Test
 
     def test_write?
       assert(@@results.fetch(:write?))
-    end
-
-    private
-
-    def bundle_config(minifier_cmd)
-      {
-        'type'             => :js,
-        'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-        'assets'           => %w{dependency app},
-        'destination_path' => JS_BUNDLE_DESTINATION_PATH,
-        'minifier_cmd'     => minifier_cmd
-      }
     end
   end
 end

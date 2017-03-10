@@ -1,18 +1,18 @@
 require 'support/test_case'
 require 'support/fixture_config'
-require 'support/static_file_api_config'
+require 'support/static_file_config'
 require 'jekyll/minibundle/stamp_file'
 
 module Jekyll::Minibundle::Test
   class StampFilePropertiesTest < TestCase
     include FixtureConfig
-    include StaticFileAPIConfig
+    include StaticFileConfig
 
     def setup
       @@results ||= with_fake_site do |site|
         file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
         file.destination_path_for_markup
-        get_send_results(file, STATIC_FILE_API_PROPERTIES)
+        get_send_results(file, STATIC_FILE_PROPERTIES)
       end
     end
 

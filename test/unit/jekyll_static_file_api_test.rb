@@ -5,16 +5,16 @@ require 'jekyll/minibundle/stamp_file'
 
 module Jekyll::Minibundle::Test
   class JekyllStaticFileAPITest < TestCase
-    def test_development_file_conforms_to_static_file_api
-      assert_empty(missing_api_methods(DevelopmentFile))
+    def test_development_file_has_static_file_methods
+      assert_empty(missing_static_file_methods(DevelopmentFile))
     end
 
-    def test_bundle_file_conforms_to_static_file_api
-      assert_empty(missing_api_methods(BundleFile))
+    def test_bundle_file_has_static_file_methods
+      assert_empty(missing_static_file_methods(BundleFile))
     end
 
-    def test_stamp_file_conforms_to_static_file_api
-      assert_empty(missing_api_methods(StampFile))
+    def test_stamp_file_has_static_file_methods
+      assert_empty(missing_static_file_methods(StampFile))
     end
 
     def test_development_file_has_same_to_liquid_hash_keys_as_static_file
@@ -56,7 +56,7 @@ module Jekyll::Minibundle::Test
 
     private
 
-    def missing_api_methods(clazz)
+    def missing_static_file_methods(clazz)
       Jekyll::StaticFile.public_instance_methods - clazz.public_instance_methods
     end
 

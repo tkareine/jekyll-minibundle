@@ -1,6 +1,6 @@
 module Jekyll::Minibundle::Test
-  module StaticFileAPIConfig
-    STATIC_FILE_API_PROPERTIES = [
+  module StaticFileConfig
+    STATIC_FILE_PROPERTIES = [
       :defaults,
       :destination_rel_dir,
       :name,
