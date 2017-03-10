@@ -5,6 +5,7 @@ module Jekyll::Minibundle::Test
       :destination_rel_dir,
       :url,
       :name,
+      :basename,
       :extname,
       :modified_time,
       :mtime,
@@ -12,6 +13,7 @@ module Jekyll::Minibundle::Test
       :placeholders,
       :relative_path,
       :to_liquid,
+      :data,
       :type,
       :write?
     ].freeze

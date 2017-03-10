@@ -106,8 +106,8 @@ module Jekyll::Minibundle::Test
       Jekyll::StaticFile.public_instance_methods - clazz.public_instance_methods
     end
 
-    def response_types_of_static_file_properties(file)
-      STATIC_FILE_PROPERTIES.each_with_object({}) do |method_name, acc|
+    def response_types_of_methods(file, methods)
+      methods.each_with_object({}) do |method_name, acc|
         acc[method_name] =
           begin
             value = file.send(method_name)
@@ -119,8 +119,10 @@ module Jekyll::Minibundle::Test
     end
 
     def diff_non_nil_response_types_of_static_file_properties(file_master, file_conforming)
-      master_response_types = response_types_of_static_file_properties(file_master)
-      conforming_response_types = response_types_of_static_file_properties(file_conforming)
+      methods = STATIC_FILE_PROPERTIES - [:to_liquid]
+
+      master_response_types = response_types_of_methods(file_master, methods)
+      conforming_response_types = response_types_of_methods(file_conforming, methods)
 
       master_to_compare = master_response_types.select do |_, value|
         value.key?(:returned_type) && value.fetch(:returned_type) != NilClass
@@ -135,12 +137,12 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def make_static_file(site, filename)
+    def make_static_file(site, path)
       ::Jekyll::StaticFile.new(
         site,
-        nil,
-        File.dirname(filename),
-        filename
+        site.source,
+        "/#{File.dirname(path)}",
+        File.basename(path)
       )
     end
 

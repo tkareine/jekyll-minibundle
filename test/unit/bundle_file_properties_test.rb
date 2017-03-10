@@ -9,9 +9,7 @@ module Jekyll::Minibundle::Test
     include StaticFileConfig
 
     def setup
-      @@results ||= with_fake_site do |site|
-        file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments))
-        capture_io { file.destination_path_for_markup }
+      @@results ||= with_bundle_file do |file|
         get_send_results(file, STATIC_FILE_PROPERTIES)
       end
     end
@@ -36,6 +34,10 @@ module Jekyll::Minibundle::Test
       assert_equal('.js', @@results.fetch(:extname))
     end
 
+    def test_basename
+      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}", @@results.fetch(:basename))
+    end
+
     def test_modified_time
       assert_instance_of(Time, @@results.fetch(:modified_time))
     end
@@ -58,12 +60,19 @@ module Jekyll::Minibundle::Test
     end
 
     def test_to_liquid
-      hash = @@results.fetch(:to_liquid)
-      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}", hash.fetch('basename'))
-      assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", hash.fetch('name'))
-      assert_equal('.js', hash.fetch('extname'))
-      assert_instance_of(Time, hash.fetch('modified_time'))
-      assert_match(%r{/jekyll-minibundle-.+\.js\z}, hash.fetch('path'))
+      with_bundle_file do |file|
+        drop = file.to_liquid
+        assert_equal("site-#{JS_BUNDLE_FINGERPRINT}.js", drop.name)
+        assert_equal('.js', drop.extname)
+        assert_equal("site-#{JS_BUNDLE_FINGERPRINT}", drop.basename)
+        assert_instance_of(Time, drop.modified_time)
+        assert_match(%r{/jekyll-minibundle-.+\.js\z}, drop.path)
+        assert_nil(drop.collection)
+      end
+    end
+
+    def test_data
+      assert_equal({}, @@results.fetch(:data))
     end
 
     def test_type
@@ -75,6 +84,14 @@ module Jekyll::Minibundle::Test
     end
 
     private
+
+    def with_bundle_file(&block)
+      with_fake_site do |site|
+        file = BundleFile.new(site, bundle_config(minifier_cmd_to_remove_comments))
+        capture_io { file.destination_path_for_markup }
+        block.call(file)
+      end
+    end
 
     def bundle_config(minifier_cmd)
       {

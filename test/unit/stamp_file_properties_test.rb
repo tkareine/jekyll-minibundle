@@ -9,9 +9,7 @@ module Jekyll::Minibundle::Test
     include StaticFileConfig
 
     def setup
-      @@results ||= with_fake_site do |site|
-        file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
-        file.destination_path_for_markup
+      @@results ||= with_stamp_file do |file|
         get_send_results(file, STATIC_FILE_PROPERTIES)
       end
     end
@@ -36,6 +34,10 @@ module Jekyll::Minibundle::Test
       assert_equal('.css', @@results.fetch(:extname))
     end
 
+    def test_basename
+      assert_equal("screen-#{STAMP_FINGERPRINT}", @@results.fetch(:basename))
+    end
+
     def test_modified_time
       assert_instance_of(Time, @@results.fetch(:modified_time))
     end
@@ -58,12 +60,19 @@ module Jekyll::Minibundle::Test
     end
 
     def test_to_liquid
-      hash = @@results.fetch(:to_liquid)
-      assert_equal("screen-#{STAMP_FINGERPRINT}", hash.fetch('basename'))
-      assert_equal("screen-#{STAMP_FINGERPRINT}.css", hash.fetch('name'))
-      assert_equal('.css', hash.fetch('extname'))
-      assert_instance_of(Time, hash.fetch('modified_time'))
-      assert_equal("/#{STAMP_SOURCE_PATH}", hash.fetch('path'))
+      with_stamp_file do |file|
+        drop = file.to_liquid
+        assert_equal("screen-#{STAMP_FINGERPRINT}.css", drop.name)
+        assert_equal('.css', drop.extname)
+        assert_equal("screen-#{STAMP_FINGERPRINT}", drop.basename)
+        assert_instance_of(Time, drop.modified_time)
+        assert_equal("/#{STAMP_SOURCE_PATH}", drop.path)
+        assert_nil(drop.collection)
+      end
+    end
+
+    def test_data
+      assert_equal({}, @@results.fetch(:data))
     end
 
     def test_type
@@ -72,6 +81,16 @@ module Jekyll::Minibundle::Test
 
     def test_write?
       assert(@@results.fetch(:write?))
+    end
+
+    private
+
+    def with_stamp_file(&block)
+      with_fake_site do |site|
+        file = StampFile.new(site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
+        file.destination_path_for_markup
+        block.call(file)
+      end
     end
   end
 end

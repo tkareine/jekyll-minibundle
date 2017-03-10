@@ -1,3 +1,5 @@
+require 'jekyll/minibundle/asset_file_drop'
+
 module Jekyll::Minibundle
   module AssetFileProperties
     def asset_destination_path
@@ -26,6 +28,10 @@ module Jekyll::Minibundle
       asset_destination_filename
     end
 
+    def basename
+      File.basename(name, extname)
+    end
+
     def modified_time
       File.stat(path).mtime
     end
@@ -39,13 +45,11 @@ module Jekyll::Minibundle
     end
 
     def to_liquid
-      {
-        'basename'      => File.basename(name, extname),
-        'name'          => name,
-        'extname'       => extname,
-        'modified_time' => modified_time,
-        'path'          => relative_path
-      }
+      AssetFileDrop.new(self)
+    end
+
+    def data
+      {}
     end
 
     def write?
