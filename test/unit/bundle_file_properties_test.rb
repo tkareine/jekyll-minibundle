@@ -48,7 +48,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_path
-      assert_match(%r{/jekyll-minibundle-.+\.js\z}, @@results.fetch(:path))
+      assert_match(%r{\A/.+/jekyll-minibundle-.+\.js\z}, @@results.fetch(:path))
     end
 
     def test_placeholders

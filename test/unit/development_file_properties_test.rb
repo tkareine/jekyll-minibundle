@@ -48,7 +48,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_path
-      assert_match(%r{/#{STAMP_SOURCE_PATH}\z}, @@results.fetch(:path))
+      assert_match(%r{\A/.+/#{STAMP_SOURCE_PATH}\z}, @@results.fetch(:path))
     end
 
     def test_placeholders
