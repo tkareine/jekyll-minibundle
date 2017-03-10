@@ -219,7 +219,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_supports_yaml_hash_argument_with_text_source_and_destination_paths
+    def test_supports_yaml_hash_argument_with_source_and_destination_paths
       with_site_dir do
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
@@ -234,7 +234,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_supports_yaml_hash_argument_with_variable_source_and_destination_paths
+    def test_supports_yaml_hash_argument_with_source_and_destination_paths_with_liquid_variables
       with_site_dir do
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
