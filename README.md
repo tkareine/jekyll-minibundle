@@ -128,7 +128,7 @@ The Hash argument allows expressing more options and quoting
 The supported keys for the Hash argument are:
 
 | Key | Required? | Value type | Value example | Default value | Description |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- |
 | `source_path` | yes | string | `'_tmp/site.css'` | - | The source path of the asset file, relative to the site directory. |
 | `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `destination_baseurl` is empty, `ministamp`'s output will begin with `/`. |
 | `render_basename_only` | no | boolean | `true` | `false` | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
@@ -253,7 +253,7 @@ Use `css` or `js` as the argument to the opening tag, for example `{% minibundle
 The block contents must be in [YAML][YAML] syntax. The supported keys are:
 
 | Key | Value type | Value example | Default value | Description |
-| --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | `source_dir` | string | - | `'_assets'` | The source directory of `assets`, relative to the site directory. |
 | `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type suffix, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'`. |
 | `baseurl` | string | `{{ site.baseurl }}` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
