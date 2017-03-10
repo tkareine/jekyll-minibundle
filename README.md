@@ -115,7 +115,7 @@ with certain keys. That is, in the following call:
 {% ministamp _tmp/site.css assets/site.css %}
 ```
 
-the argument is a String: `"_tmp/site.css assets/site.css"`. The call
+the argument is a String: `"_tmp/site.css assets/site.css"`. The call is
 equivalent to the following call with Hash argument:
 
 ``` liquid
@@ -123,19 +123,20 @@ equivalent to the following call with Hash argument:
 ```
 
 The Hash argument allows expressing more options and quoting
-`source_path` and `destination_path` values properly.
+`source_path` and `destination_path` values, if needed.
 
 The supported keys for the Hash argument are:
 
 | Key | Required? | Value type | Value example | Default value | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `source_path` | yes | string | `'_tmp/site.css'` | - | The source path of the asset file, relative to the site directory. |
 | `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `destination_baseurl` is empty, `ministamp`'s output will begin with `/`. |
 | `render_basename_only` | no | boolean | `true` | `false` | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 
-In the Hash argument, the values are processed through a tiny templating
-engine. This allows you to use Liquid's variables as input to
-`ministamp` tag. An example with Liquid's `assign` tag:
+With Hash argument, the plugin processes `source_path` and
+`destination_path` values through a tiny template engine. This allows
+you to use Liquid's variables as input to `ministamp` tag. An example
+with Liquid's [`assign`][LiquidAssignTag] tag:
 
 ``` liquid
 {% assign asset_dir = 'assets' %}
@@ -146,6 +147,10 @@ The above would use `assets/site.css` as the destination path.
 
 Note that you must quote `destination_path`'s value, otherwise YAML does
 not recognize it as a proper string.
+
+To refer to Jekyll's configuration options in the template, prefix the
+variable name with `site.`. For example, to refer to `baseurl` option,
+use syntax `{{ site.baseurl }}` in the template.
 
 See [Variable templating](#variable-templating) for details about the
 template syntax.
@@ -213,9 +218,8 @@ above, to the generated markup with `attributes` map inside the
 
 As shown above for the `baseurl` key, you can use Liquid template syntax
 inside the contents of the block. Liquid renders block contents before
-passing it for `minibundle` to render itself in turn. Just ensure that
-block contents is valid YAML when it's time for `minibundle` to render
-itself.
+`minibundle` block gets the turn to render itself. Just ensure that
+block contents will result in valid YAML.
 
 For bundling CSS assets, use `css` as the argument to the `minibundle`
 block:
@@ -249,7 +253,7 @@ Use `css` or `js` as the argument to the opening tag, for example `{% minibundle
 The block contents must be in [YAML][YAML] syntax. The supported keys are:
 
 | Key | Value type | Value example | Default value | Description |
-|---|---|---|
+| --- | --- | --- |
 | `source_dir` | string | - | `'_assets'` | The source directory of `assets`, relative to the site directory. |
 | `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type suffix, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'`. |
 | `baseurl` | string | `{{ site.baseurl }}` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
@@ -400,12 +404,16 @@ that the engine removes any leading and trailing whitespace from the
 name. For example, in the template `{{ var } }}`, `var }` is treated as
 the name of the variable.
 
+A reference to undefined variable results in empty string. For example,
+`begin{{ nosuch }}end` will output `beginend` if there's no variable
+named `nosuch`.
+
 ### Separating asset destination path from generated URL
 
 Use `render_basename_only: true` option of `ministamp` tag and
 `destination_baseurl` option of `minibundle` block to separate the
 destination path of the asset file from the generated URL of the
-asset. This allows you to serve the asset from separate domain, for
+asset. This allows you to serve the asset from a separate domain, for
 example.
 
 Example usage, with the following content in `_config.yml`:
@@ -420,7 +428,9 @@ For `ministamp` tag:
 <link rel="stylesheet" href="{{ site.cdn_baseurl }}css/{% ministamp { source_path: '_tmp/site.css', destination_path: assets/site.css, render_basename_only: true } %}">
 ```
 
-The asset file will be in Jekyll's site destination directory with path `assets/site-ff9c63f843b11f9c3666fe46caaddea8.css`, and Liquid rendering outcome will be:
+The asset file will be in Jekyll's site destination directory with path
+`assets/site-ff9c63f843b11f9c3666fe46caaddea8.css`, and Liquid's
+rendering will result in:
 
 ``` html
 <link rel="stylesheet" href="https://cdn.example.com/css/site-ff9c63f843b11f9c3666fe46caaddea8.css">
@@ -439,7 +449,9 @@ assets:
 {% endminibundle %}
 ```
 
-The bundle file will be in Jekyll's site destination directory with path `assets/site-4782a1f67803038d4f8351051e67deb8.js`, and Liquid rendering outcome will be:
+The bundle file will be in Jekyll's site destination directory with path
+`assets/site-4782a1f67803038d4f8351051e67deb8.js`, and Liquid's
+rendering will result in:
 
 ``` html
 <script type="text/javascript" src="https://cdn.example.com/js/site-4782a1f67803038d4f8351051e67deb8.js"></script>
@@ -447,8 +459,9 @@ The bundle file will be in Jekyll's site destination directory with path `assets
 
 ### Capturing Liquid output
 
-Use Liquid's `capture` block to store output rendered inside the block
-to a variable, as a string. Then you can process the string.
+Use Liquid's [`capture`][LiquidCaptureBlock] block to store output
+rendered inside the block to a variable, as a string. Then you can
+process the string as you like.
 
 For example:
 
@@ -482,6 +495,8 @@ MIT. See `LICENSE.txt`.
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
 [Jekyll]: https://jekyllrb.com/
 [Liquid]: https://shopify.github.io/liquid/
+[LiquidAssignTag]: https://shopify.github.io/liquid/tags/variable/#assign
+[LiquidCaptureBlock]: https://shopify.github.io/liquid/tags/variable/#capture
 [MD5]: https://en.wikipedia.org/wiki/MD5
 [MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
 [MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
