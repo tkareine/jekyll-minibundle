@@ -84,10 +84,10 @@ module Jekyll::Minibundle::Test
       OpenStruct.new(source: dir, static_files: [])
     end
 
-    def make_real_site
+    def make_real_site(dir = Dir.pwd)
       config = nil
       capture_io do
-        config = Jekyll.configuration('source' => Dir.pwd, 'destination' => '_site')
+        config = Jekyll.configuration('source' => dir, 'destination' => '_site')
       end
       Jekyll::Site.new(config)
     end
