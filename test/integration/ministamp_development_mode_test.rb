@@ -163,20 +163,18 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_supports_yaml_hash_argument_with_destination_baseurl
+    def test_supports_yaml_hash_argument_with_render_basename_only_option
       with_site_dir do
-        merge_to_yaml_file(source_path('_config.yml'), 'cdn_baseurl' => 'https://cdn.example.com/?file=')
-
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '{% ministamp _tmp/site.css assets/screen.css',
-          %({% ministamp { source_path: _tmp/site.css, destination_path: /assets/screen.css, destination_baseurl: '{{ site.cdn_baseurl }}static/' })
+          %({% ministamp { source_path: _tmp/site.css, destination_path: /assets/screen.css, render_basename_only: true })
         )
 
         generate_site(:development)
 
         assert(File.file?(destination_path(STAMP_DESTINATION_PATH)))
-        assert_equal('https://cdn.example.com/?file=static/screen.css', find_css_path_from_index)
+        assert_equal('screen.css', find_css_path_from_index)
       end
     end
 
@@ -200,7 +198,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_does_not_rewrite_destination_when_changing_destination_baseurl
+    def test_does_not_rewrite_destination_when_changing_render_basename_only_option
       with_site_dir do
         generate_site(:development)
 
@@ -214,7 +212,7 @@ module Jekyll::Minibundle::Test
           find_and_gsub_in_file(
             source_path('_layouts/default.html'),
             '<link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
-            %(<link rel="stylesheet" href="{% ministamp { source_path: _tmp/site.css, destination_path: assets/screen.css, destination_baseurl: /root/ } %}" media="screen">)
+            %(<link rel="stylesheet" href="{% ministamp { source_path: _tmp/site.css, destination_path: assets/screen.css, render_basename_only: true } %}" media="screen">)
           )
         end
 
@@ -222,7 +220,7 @@ module Jekyll::Minibundle::Test
 
         assert(File.file?(destination))
         assert_equal(org_mtime, file_mtime_of(destination))
-        assert_equal('/root/screen.css', find_css_path_from_index)
+        assert_equal('screen.css', find_css_path_from_index)
       end
     end
 

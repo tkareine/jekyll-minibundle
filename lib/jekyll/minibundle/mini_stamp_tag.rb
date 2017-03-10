@@ -19,14 +19,14 @@ module Jekyll::Minibundle
       stamp_config = get_current_stamp_config(context)
       source_path = stamp_config.fetch('source_path')
       destination_path = stamp_config.fetch('destination_path')
-      destination_baseurl = stamp_config.fetch('destination_baseurl')
+      render_basename_only = stamp_config.fetch('render_basename_only')
 
       file = register_asset_file(site, source_path, destination_path)
       dst_path = Files.strip_dot_slash_from_path_start(file.destination_path_for_markup)
 
       url =
-        if !destination_baseurl.empty?
-          destination_baseurl + File.basename(dst_path)
+        if render_basename_only
+          File.basename(dst_path)
         else
           stamp_config.fetch('baseurl') + dst_path
         end
@@ -36,11 +36,11 @@ module Jekyll::Minibundle
 
     def self.default_stamp_config
       {
-        'source_path'         => '',
-        'destination_path'    => '',
-        'baseurl'             => '',
-        'destination_baseurl' => '',
-        'use_template'        => false
+        'source_path'          => '',
+        'destination_path'     => '',
+        'baseurl'              => '',
+        'render_basename_only' => false,
+        'use_template'         => false
       }
     end
 
@@ -83,37 +83,36 @@ module Jekyll::Minibundle
     def parse_hash_argument(hash)
       source_path = hash.fetch('source_path', '').to_s
       destination_path = hash.fetch('destination_path', '').to_s
-      destination_baseurl = hash.fetch('destination_baseurl', '').to_s
+      render_basename_only = hash.fetch('render_basename_only', false)
 
       raise ArgumentError, 'Missing asset source path for ministamp tag; specify Hash entry such as "source_path: _assets/site.css"' if source_path.empty?
       raise ArgumentError, 'Missing asset destination path for ministamp tag; specify Hash entry such as "destination_path: assets/site.css"' if destination_path.empty?
 
       {
-        'source_path'         => source_path,
-        'destination_path'    => destination_path,
-        'destination_baseurl' => destination_baseurl,
-        'use_template'        => true
+        'source_path'          => source_path,
+        'destination_path'     => destination_path,
+        'render_basename_only' => render_basename_only,
+        'use_template'         => true
       }
     end
 
     def get_current_stamp_config(context)
       source_path = @local_stamp_config.fetch('source_path')
       destination_path = @local_stamp_config.fetch('destination_path')
-      destination_baseurl = @local_stamp_config.fetch('destination_baseurl')
+      render_basename_only = @local_stamp_config.fetch('render_basename_only')
 
       if @local_stamp_config.fetch('use_template')
         source_path = VariableTemplateRegistry.register_template(source_path).render(context)
         destination_path = VariableTemplateRegistry.register_template(destination_path).render(context)
-        destination_baseurl = VariableTemplateRegistry.register_template(destination_baseurl).render(context)
       end
 
       baseurl, destination_path = normalize_destination_path(destination_path)
 
       {
-        'source_path'         => source_path,
-        'destination_path'    => destination_path,
-        'baseurl'             => baseurl,
-        'destination_baseurl' => destination_baseurl
+        'source_path'          => source_path,
+        'destination_path'     => destination_path,
+        'baseurl'              => baseurl,
+        'render_basename_only' => render_basename_only
       }
     end
 
