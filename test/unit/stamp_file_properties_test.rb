@@ -14,6 +14,14 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_basename
+      assert_equal("screen-#{STAMP_FINGERPRINT}", @@results.fetch(:basename))
+    end
+
+    def test_data
+      assert_equal({}, @@results.fetch(:data))
+    end
+
     def test_defaults
       assert_equal({}, @@results.fetch(:defaults))
     end
@@ -22,20 +30,8 @@ module Jekyll::Minibundle::Test
       assert_equal('assets', @@results.fetch(:destination_rel_dir))
     end
 
-    def test_url
-      assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, @@results.fetch(:url))
-    end
-
-    def test_name
-      assert_equal("screen-#{STAMP_FINGERPRINT}.css", @@results.fetch(:name))
-    end
-
     def test_extname
       assert_equal('.css', @@results.fetch(:extname))
-    end
-
-    def test_basename
-      assert_equal("screen-#{STAMP_FINGERPRINT}", @@results.fetch(:basename))
     end
 
     def test_modified_time
@@ -45,6 +41,10 @@ module Jekyll::Minibundle::Test
     def test_mtime
       mtime = @@results.fetch(:modified_time)
       assert_equal(mtime.to_i, @@results.fetch(:mtime))
+    end
+
+    def test_name
+      assert_equal("screen-#{STAMP_FINGERPRINT}.css", @@results.fetch(:name))
     end
 
     def test_path
@@ -71,12 +71,12 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    def test_data
-      assert_equal({}, @@results.fetch(:data))
-    end
-
     def test_type
       assert_nil(@@results.fetch(:type))
+    end
+
+    def test_url
+      assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, @@results.fetch(:url))
     end
 
     def test_write?
