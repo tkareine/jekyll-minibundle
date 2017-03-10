@@ -60,7 +60,7 @@ Then, instruct Jekyll to load the gem by adding this line to the
 gems: ['jekyll/minibundle']
 ```
 
-An alternative to using the `gems` configuration setting is to add
+An alternative to using the `gems` configuration option is to add
 `_plugins/minibundle.rb` file to your site project with this line:
 
 ``` ruby
@@ -68,7 +68,7 @@ require 'jekyll/minibundle'
 ```
 
 You must allow Jekyll to use custom plugins. That is, do not enable
-Jekyll's `safe` setting.
+Jekyll's `safe` option.
 
 ### Asset fingerprinting
 
@@ -76,7 +76,7 @@ If you just want to have an MD5 fingerprint in your asset's path, use
 `ministamp` [Liquid][Liquid] tag in a Liquid template file. For example:
 
 ``` liquid
-<link rel="stylesheet" href="{{ site.baseurl }}{% ministamp _assets/site.css assets/site.css %}" media="screen, projection">
+<link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _assets/site.css assets/site.css %}" media="screen, projection">
 ```
 
 When it's time to render the `ministamp` tag, the plugin copies the
@@ -87,7 +87,7 @@ fingerprint.
 
 The tag outputs the asset destination path, encoded for HTML, into
 Liquid's template rendering outcome. For example, when `site.baseurl` is
-`/`:
+empty:
 
 ``` html
 <link rel="stylesheet" href="/assets/site-390be921ee0eff063817bb5ef2954300.css" media="screen, projection">
@@ -100,7 +100,7 @@ input files from `_assets/styles/*.scss` and to produce output to
 fingerprint to Jekyll's site destination directory:
 
 ``` liquid
-<link rel="stylesheet" href="{{ site.baseurl }}{% ministamp _tmp/site.css assets/site.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _tmp/site.css assets/site.css %}">
 ```
 
 #### `ministamp` call syntax
@@ -175,7 +175,7 @@ bundle a set of JavaScript sources:
 {% minibundle js %}
 source_dir: _assets/scripts
 destination_path: assets/site
-baseurl: {{ site.baseurl }}
+baseurl: '{{ site.baseurl }}/'
 assets:
   - dependency
   - app
@@ -189,7 +189,7 @@ Then, specify the command for launching your favorite minifier in
 `_config.yml`:
 
 ``` yaml
-baseurl: /
+baseurl: ''
 
 minibundle:
   minifier_commands:
@@ -229,7 +229,7 @@ block:
 {% minibundle css %}
 source_dir: _assets/styles
 destination_path: assets/site
-baseurl: {{ site.baseurl }}
+baseurl: '{{ site.baseurl }}/'
 assets:
   - reset
   - common
@@ -257,8 +257,8 @@ The block contents must be in [YAML][YAML] syntax. The supported keys are:
 | --- | --- | --- | --- | --- |
 | `source_dir` | string | - | `'_assets'` | The source directory of `assets`, relative to the site directory. |
 | `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type extension, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'` implicitly. |
-| `baseurl` | string | `{{ site.baseurl }}` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
-| `destination_baseurl` | string | `'https://cdn.example.com/` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
+| `baseurl` | string | `{{ site.baseurl }}/` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
+| `destination_baseurl` | string | `'{{ site.cdn_baseurl }}/'` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 | `assets` | array of strings | `['dependency', 'app']` | `[]` | Array of the basenames of assets in `source_dir` directory, without type extension. These are the asset files to be bundled, in order, into one bundle destination file. |
 | `attributes` | map of keys to string values | `{id: my-link, media: screen}` | `{}` | Custom HTML element attributes to be added to `minibundle`'s rendered HTML element. |
 
@@ -282,7 +282,7 @@ You can specify minifier commands in three places:
    export JEKYLL_MINIBUNDLE_CMD_JS="node_modules/.bin/uglifyjs -"
    ```
 
-3. inside the minibundle block with `minifier_cmd` setting, allowing
+3. inside the `minibundle` block with `minifier_cmd` option, allowing
    blocks to have different commands from each other:
 
    ``` text
@@ -300,8 +300,8 @@ You can specify minifier commands in three places:
 
 These ways of specification are listed in increasing order of
 specificity. Should multiple commands apply to a block, the most
-specific one wins. For example, the `minifier_cmd` setting inside
-`minibundle js` block overrides the setting in
+specific one wins. For example, the `minifier_cmd` option inside `{%
+minibundle js }%` block overrides the setting in
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable.
 
 ### Recommended directory layout
@@ -315,7 +315,7 @@ asset source to `ministamp` tag:
 
 ``` liquid
 <!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to site destination directory -->
-<link rel="stylesheet" href="{{ site.baseurl }}{% ministamp assets/src.css assets/dest.css %}" media="screen, projection">
+<link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp assets/src.css assets/dest.css %}" media="screen, projection">
 ```
 
 By default, Jekyll includes this file to the site destination
@@ -340,9 +340,9 @@ mode triggers site generation. For Minibundle's functionality, this is
 beneficial: it allows the plugin to check if assets need to be updated
 to the site destination directory.
 
-The `exclude` [Jekyll configuration][JekyllConf] setting affects
-Jekyll's watch mode. Given the recommended directory layout above, if
-you set the following in `_config.yml`:
+The `exclude` [Jekyll configuration][JekyllConf] option affects Jekyll's
+watch mode. Given the recommended directory layout above, if you set the
+following in `_config.yml`:
 
 ``` yaml
 exclude:
@@ -362,11 +362,12 @@ and directories.
 
 If you set `$JEKYLL_MINIBUNDLE_MODE` environment variable to
 `development`, then the plugin will copy asset files as is to Jekyll's
-site destination directory and omit fingerprinting. The
-`destination_path` setting in `minibundle` block sets the destination
-directory for bundled files. This is useful in development workflow,
-where you need the filenames and line numbers of the original asset
-sources.
+site destination directory and omit fingerprinting.
+
+The development mode changes `minibundle` block's `destination_path`
+option to be the base directory for files mentioned in `assets`
+option. This is useful in development workflow, where you need the
+filenames and line numbers of the original asset sources.
 
 ``` bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
@@ -420,13 +421,13 @@ example.
 Example usage, with the following content in `_config.yml`:
 
 ``` yaml
-cdn_baseurl: 'https://cdn.example.com/'
+cdn_baseurl: 'https://cdn.example.com'
 ```
 
 For `ministamp` tag:
 
 ``` liquid
-<link rel="stylesheet" href="{{ site.cdn_baseurl }}css/{% ministamp { source_path: '_tmp/site.css', destination_path: assets/site.css, render_basename_only: true } %}">
+<link rel="stylesheet" href="{{ site.cdn_baseurl }}/css/{% ministamp { source_path: '_tmp/site.css', destination_path: assets/site.css, render_basename_only: true } %}">
 ```
 
 The asset file will be in Jekyll's site destination directory with path
@@ -443,7 +444,7 @@ For `minibundle` block:
 {% minibundle js %}
 source_dir: _assets/scripts
 destination_path: assets/site
-destination_baseurl: '{{ site.cdn_baseurl }}js/'
+destination_baseurl: '{{ site.cdn_baseurl }}/js/'
 assets:
   - dependency
   - app
