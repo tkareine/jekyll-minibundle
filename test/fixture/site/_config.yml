@@ -1,2 +1,3 @@
-gems: ['jekyll/minibundle']
+plugins:
+  - jekyll/minibundle
 safe: false
