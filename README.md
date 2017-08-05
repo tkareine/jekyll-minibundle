@@ -26,10 +26,10 @@ feature.
 
 Asset bundling consists of concatenation and minification. The plugin
 implements concatenation and leaves choosing the minification tool up to
-you. [UglifyJS2][UglifyJS2] is a good and fast minifier, for
-example. The plugin connects to the minifier with standard unix pipe,
-feeding asset file contents to it in desired order via standard input,
-and reads the result from standard output.
+you. [UglifyJS2][UglifyJS] is a good and fast minifier, for example. The
+plugin connects to the minifier with standard unix pipe, feeding asset
+file contents to it in desired order via standard input, and reads the
+result from standard output.
 
 Why is this good? A fingerprint in asset's path is
 the [recommended way][GoogleWebFundamentalsHttpCaching] to handle
@@ -57,7 +57,8 @@ Then, instruct Jekyll to load the gem by adding this line to the
 (`_config.yml`):
 
 ``` yaml
-gems: ['jekyll/minibundle']
+plugins:
+  - jekyll/minibundle
 ```
 
 An alternative to using the `gems` configuration option is to add
@@ -193,7 +194,7 @@ baseurl: ''
 
 minibundle:
   minifier_commands:
-    js: node_modules/.bin/uglifyjs -
+    js: node_modules/.bin/uglifyjs
 ```
 
 When it's time to render the `minibundle` block, the plugin launches the
@@ -492,7 +493,7 @@ The plugin does not work with Jekyll's incremental rebuild feature
 MIT. See `LICENSE.txt`.
 
 [Bundler]: http://bundler.io/
-[GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating-and-updating-cached-responses
+[GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating_and_updating_cached_responses
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
 [Jekyll]: https://jekyllrb.com/
