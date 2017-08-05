@@ -245,7 +245,7 @@ And then specify the minifier command in `_config.yml`:
 minibundle:
   minifier_commands:
     css: _bin/remove_whitespace
-    js: node_modules/.bin/uglifyjs -
+    js: node_modules/.bin/uglifyjs
 ```
 
 #### `minibundle` call syntax
@@ -273,14 +273,14 @@ You can specify minifier commands in three places:
    minibundle:
      minifier_commands:
        css: _bin/remove_whitespace
-       js: node_modules/.bin/uglifyjs -
+       js: node_modules/.bin/uglifyjs
    ```
 
 2. as environment variables:
 
    ``` bash
    export JEKYLL_MINIBUNDLE_CMD_CSS=_bin/remove_whitespace
-   export JEKYLL_MINIBUNDLE_CMD_JS="node_modules/.bin/uglifyjs -"
+   export JEKYLL_MINIBUNDLE_CMD_JS="node_modules/.bin/uglifyjs"
    ```
 
 3. inside the `minibundle` block with `minifier_cmd` option, allowing
@@ -290,7 +290,7 @@ You can specify minifier commands in three places:
    {% minibundle js %}
    source_dir: _assets/scripts
    destination_path: assets/site
-   minifier_cmd: node_modules/.bin/uglifyjs -
+   minifier_cmd: node_modules/.bin/uglifyjs
    assets:
      - dependency
      - app
