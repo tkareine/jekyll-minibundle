@@ -26,7 +26,7 @@ feature.
 
 Asset bundling consists of concatenation and minification. The plugin
 implements concatenation and leaves choosing the minification tool up to
-you. [UglifyJS2][UglifyJS] is a good and fast minifier, for example. The
+you. [UglifyJS][UglifyJS2] is a good and fast minifier, for example. The
 plugin connects to the minifier with standard unix pipe, feeding asset
 file contents to it in desired order via standard input, and reads the
 result from standard output.
