@@ -18,34 +18,39 @@ module Jekyll::Minibundle::Test
     end
 
     def test_raise_exception_if_missing_block_contents
-      rendered = render_template(<<-END)
+      err = assert_raises(ArgumentError) do
+        render_template(<<-END)
 {% minibundle css %}
 
 {% endminibundle %}
         END
-      expected = "Liquid error: Missing configuration for minibundle block; pass configuration in YAML syntax\n"
-      assert_equal(expected, rendered)
+      end
+      assert_equal('Missing configuration for minibundle block; pass configuration in YAML syntax', err.to_s)
     end
 
     def test_raise_exception_if_invalid_block_contents_syntax
-      rendered = render_template(<<-END)
+      err = assert_raises(ArgumentError) do
+        render_template(<<-END)
 {% minibundle css %}
 }
 {% endminibundle %}
         END
+      end
       expected =
-        'Liquid error: Failed parsing minibundle block contents syntax as YAML: "}". ' \
-        "Cause: (<unknown>): did not find expected node content while parsing a block node at line 2 column 1\n"
-      assert_equal(expected, rendered)
+        'Failed parsing minibundle block contents syntax as YAML: "}". ' \
+        'Cause: (<unknown>): did not find expected node content while parsing a block node at line 2 column 1'
+      assert_equal(expected, err.to_s)
     end
 
     def test_raise_exception_if_unsupported_block_contents_type
-      rendered = render_template(<<-END)
+      err = assert_raises(ArgumentError) do
+        render_template(<<-END)
 {% minibundle css %}
 str
 {% endminibundle %}
         END
-      assert_equal("Liquid error: Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n\n", rendered)
+      end
+      assert_equal("Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n", err.to_s)
     end
 
     [
@@ -110,7 +115,7 @@ minifier_cmd: #{minifier_cmd_to_remove_comments}
       compiled = Liquid::Template.parse(template)
       rendered = nil
       capture_io do
-        rendered = compiled.render({}, registers: {site: make_fake_site(site_fixture_path)})
+        rendered = compiled.render!({}, registers: {site: make_fake_site(site_fixture_path)})
       end
       rendered
     end
