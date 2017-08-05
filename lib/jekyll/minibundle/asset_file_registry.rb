@@ -13,7 +13,7 @@ module Jekyll::Minibundle
 
       def clear_unused
         @_files
-          .select { |_, cached| !cached.fetch(:is_used) }
+          .reject { |_, cached| cached.fetch(:is_used) }
           .each do |asset_destination_path, cached|
             cached.fetch(:file).cleanup
             @_files.delete(asset_destination_path)

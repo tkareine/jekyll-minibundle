@@ -96,4 +96,4 @@ end
 
 RuboCop::RakeTask.new
 
-task default: [:test, :rubocop]
+task default: %i{test rubocop}

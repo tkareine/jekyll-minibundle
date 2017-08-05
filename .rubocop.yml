@@ -1,7 +1,15 @@
+# Default config: https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   TargetRubyVersion: 2.0
+Layout/ExtraSpacing:
+  Enabled: false  # does not work with trailing comments
+Layout/IndentHeredoc:
+  Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
 Metrics/AbcSize:
   Max: 50
 Metrics/BlockLength:
@@ -26,11 +34,7 @@ Style/Copyright:
   Enabled: false  # we have copyright in the readme
 Style/Documentation:
   Enabled: false  # we have documentation in the readme
-Style/ExtraSpacing:
-  Enabled: false  # does not work with trailing comments
 Style/NumericPredicate:
   EnforcedStyle: comparison
 Style/PercentLiteralDelimiters:
   Enabled: false  # it's better to use `%w{}` syntax, because the braces are the same as in `%r{}`
-Style/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
