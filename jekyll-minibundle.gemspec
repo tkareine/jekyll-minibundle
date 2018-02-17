@@ -9,13 +9,13 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/tkareine/jekyll-minibundle'
   s.license  = 'MIT'
 
-  s.description = <<-END
+  s.description = <<-TEXT
 A straightforward asset bundling plugin for Jekyll, utilizing external
 minification tool of your choice. It provides asset concatenation for
 bundling and asset fingerprinting with MD5 digest for cache busting.
 There are no other runtime dependencies besides the minification tool
 (not even other gems).
-  END
+  TEXT
 
   s.files = %w{
     CHANGELOG.md
@@ -33,7 +33,7 @@ There are no other runtime dependencies besides the minification tool
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
   s.add_development_dependency 'rake',          '~> 12.0'
-  s.add_development_dependency 'rubocop',       '~> 0.49.1'
+  s.add_development_dependency 'rubocop',       '~> 0.52.1'
 
   s.required_ruby_version = '>= 2.1.0'
 

@@ -78,15 +78,15 @@ module Jekyll::Minibundle::Test
         destination = destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')
         org_mtime = file_mtime_of(destination)
 
-        match_snippet = <<-END
+        match_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
-        END
+        LIQUID
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts2
-        END
+        LIQUID
 
         ensure_file_mtime_changes do
           FileUtils.mv(source_path('_assets/scripts'), source_path('_assets/scripts2'))
@@ -105,16 +105,16 @@ module Jekyll::Minibundle::Test
 
         org_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
 
-        match_snippet = <<-END
+        match_snippet = <<-YAML
     assets:
       - dependency
       - app
-        END
+        YAML
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-YAML
     assets:
       - dependency
-        END
+        YAML
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
@@ -227,19 +227,19 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: '{{ site.baseurl }}/'
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle js %}',
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     baseurl: {{ site.baseurl }}/js
-          END
+          LIQUID
         )
 
         generate_site(:development)
@@ -259,17 +259,17 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: /ignored
     destination_baseurl: {{ site.cdn_baseurl }}css/
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: static
@@ -279,7 +279,7 @@ module Jekyll::Minibundle::Test
       - dependency
       - app
     {% endminibundle %}
-          END
+          LIQUID
         )
 
         generate_site(:development)
@@ -367,10 +367,10 @@ module Jekyll::Minibundle::Test
           find_and_gsub_in_file(
             source_path('_layouts/default.html'),
             '    {% minibundle js %}',
-            <<-END
+            <<-LIQUID
     {% minibundle js %}
     baseurl: /js-root
-            END
+            LIQUID
           )
         end
 
@@ -392,10 +392,10 @@ module Jekyll::Minibundle::Test
           find_and_gsub_in_file(
             source_path('_layouts/default.html'),
             '    {% minibundle js %}',
-            <<-END
+            <<-LIQUID
     {% minibundle js %}
     destination_baseurl: /js-root/
-            END
+            LIQUID
           )
         end
 
@@ -450,17 +450,17 @@ module Jekyll::Minibundle::Test
     end
 
     def change_destination_path_in_minibundle_block(from, to)
-      match_snippet = <<-END
+      match_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: #{from}
-      END
+      LIQUID
 
-      replacement_snippet = <<-END
+      replacement_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: #{to}
-      END
+      LIQUID
 
       find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
     end

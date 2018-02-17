@@ -86,9 +86,9 @@ module Jekyll::Minibundle::Test
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.register_bundle_file(site, second_config)
           end
-          assert_equal(<<-END, err.to_s)
+          assert_equal(<<-MESSAGE, err.to_s)
 Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
-          END
+          MESSAGE
           assert_equal(1, asset_file_registry_size)
           assert_contains_only(site.static_files, [first_file])
         end
@@ -107,9 +107,9 @@ Two or more minibundle blocks with the same destination path "assets/site.js", b
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.register_development_file_collection(site, second_config)
           end
-          assert_equal(<<-END, err.to_s)
+          assert_equal(<<-MESSAGE, err.to_s)
 Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
-          END
+          MESSAGE
           assert_equal(1, asset_file_registry_size)
           assert_contains_only(site.static_files, first_file.files)
         end
@@ -150,9 +150,9 @@ Two or more minibundle blocks with the same destination path "assets/site.js", b
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.send(spec.fetch(:method), site, source_paths[1], 'assets/dest1.css')
           end
-          assert_equal(<<-END, err.to_s)
+          assert_equal(<<-MESSAGE, err.to_s)
 Two or more ministamp tags with the same destination path "assets/dest1.css", but different asset source paths: "#{source_paths[1]}" vs. "#{source_paths[0]}"
-          END
+          MESSAGE
           assert_equal(1, asset_file_registry_size)
           assert_contains_only(site.static_files, [first])
         end

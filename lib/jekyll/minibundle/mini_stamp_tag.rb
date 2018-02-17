@@ -63,7 +63,7 @@ module Jekyll::Minibundle
 
     def parse_structure(args)
       ::SafeYAML.load(args)
-    rescue => e
+    rescue StandardError => e
       raise ArgumentError, "Failed parsing ministamp tag argument syntax as YAML: #{args.inspect}. Cause: #{e}"
     end
 

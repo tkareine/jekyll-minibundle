@@ -19,22 +19,22 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_missing_block_contents
       err = assert_raises(ArgumentError) do
-        render_template(<<-END)
+        render_template(<<-LIQUID)
 {% minibundle css %}
 
 {% endminibundle %}
-        END
+        LIQUID
       end
       assert_equal('Missing configuration for minibundle block; pass configuration in YAML syntax', err.to_s)
     end
 
     def test_raise_exception_if_invalid_block_contents_syntax
       err = assert_raises(ArgumentError) do
-        render_template(<<-END)
+        render_template(<<-LIQUID)
 {% minibundle css %}
 }
 {% endminibundle %}
-        END
+        LIQUID
       end
       expected =
         'Failed parsing minibundle block contents syntax as YAML: "}". ' \
@@ -44,11 +44,11 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_unsupported_block_contents_type
       err = assert_raises(ArgumentError) do
-        render_template(<<-END)
+        render_template(<<-LIQUID)
 {% minibundle css %}
 str
 {% endminibundle %}
-        END
+        LIQUID
       end
       assert_equal("Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n", err.to_s)
     end
@@ -91,7 +91,7 @@ str
       }
     ].each do |spec|
       define_method :"test_normalizing_baseurl_with_#{spec.fetch(:description)}" do
-        actual_output = render_template(<<-END)
+        actual_output = render_template(<<-LIQUID)
 {% minibundle css %}
 source_dir: _assets/styles
 destination_path: assets/site
@@ -101,7 +101,7 @@ assets:
   - common
 minifier_cmd: #{minifier_cmd_to_remove_comments}
 {% endminibundle %}
-        END
+        LIQUID
 
         expected_output = %{<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n}
 

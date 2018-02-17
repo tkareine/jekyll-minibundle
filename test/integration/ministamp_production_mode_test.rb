@@ -239,11 +239,11 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    <link rel="stylesheet" href="{% ministamp _tmp/site.css assets/screen.css %}" media="screen">',
-          <<-END
+          <<-LIQUID
     {% assign stamp_source_filename = 'site' %}
     {% assign stamp_destination_url = 'assets/screen.css' %}
     <link rel="stylesheet" href="{% ministamp { source_path: '_tmp/{{ stamp_source_filename }}.css', destination_path: '{{ stamp_destination_url }}' } %}" media="screen">
-          END
+          LIQUID
         )
 
         generate_site(:production)

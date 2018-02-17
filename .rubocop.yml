@@ -34,6 +34,10 @@ Style/Copyright:
   Enabled: false  # we have copyright in the readme
 Style/Documentation:
   Enabled: false  # we have documentation in the readme
+Style/Encoding:
+  Enabled: false  # we have some sources with non-ascii chars (in utf-8 encoding), we like stating encoding explicitly
+Style/IfUnlessModifier:
+  Enabled: false  # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
 Style/NumericPredicate:
   EnforcedStyle: comparison
 Style/PercentLiteralDelimiters:

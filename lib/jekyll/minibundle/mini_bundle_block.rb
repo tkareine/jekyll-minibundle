@@ -63,7 +63,7 @@ module Jekyll::Minibundle
 
     def parse_structure(contents)
       ::SafeYAML.load(contents)
-    rescue => e
+    rescue StandardError => e
       raise ArgumentError, "Failed parsing minibundle block contents syntax as YAML: #{contents.strip.inspect}. Cause: #{e}"
     end
 

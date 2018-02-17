@@ -15,12 +15,12 @@ module Jekyll::Minibundle
       @minifier_cmd = config.fetch(:minifier_cmd)
 
       unless @minifier_cmd
-        raise <<-END
+        raise <<-MESSAGE
 Missing minification command for bundling #{bundle_destination_path.inspect}. Specify it in
 1) minibundle.minifier_commands.#{@type} setting in _config.yml,
 2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
 3) minifier_cmd setting inside minibundle block.
-        END
+        MESSAGE
       end
 
       @tempfile = Tempfile.new([TEMPFILE_PREFIX, ".#{@type}"])
@@ -72,7 +72,7 @@ Missing minification command for bundling #{bundle_destination_path.inspect}. Sp
       wr.close
       _, status = Process.waitpid2(pid)
       status.exitstatus
-    rescue => e
+    rescue StandardError => e
       raise "Bundling #{bundle_destination_path.inspect} failed: #{e}"
     ensure
       [rd, wr].each { |io| io.close unless io.closed? }

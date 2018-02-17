@@ -27,10 +27,10 @@ module Jekyll::Minibundle
         template_before_pos = @template[0, @position]
         template_after_pos = @template[@position..-1]
 
-        <<-END
+        <<-MESSAGE
 #{@message} at position #{@position} in template (position highlighted with "#{CURSOR}"):
 #{template_before_pos}#{CURSOR}#{template_after_pos}
-        END
+        MESSAGE
       end
     end
 

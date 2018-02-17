@@ -112,7 +112,7 @@ module Jekyll::Minibundle::Test
           begin
             value = file.send(method_name)
             {returned_type: value.class}
-          rescue => e
+          rescue StandardError => e
             {raised: e}
           end
       end

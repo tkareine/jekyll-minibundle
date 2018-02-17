@@ -120,15 +120,15 @@ module Jekyll::Minibundle::Test
 
         org_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
 
-        match_snippet = <<-END
+        match_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
-        END
+        LIQUID
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts2
-        END
+        LIQUID
 
         ensure_file_mtime_changes do
           FileUtils.mv(source_path('_assets/scripts'), source_path('_assets/scripts2'))
@@ -149,16 +149,16 @@ module Jekyll::Minibundle::Test
 
         assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
-        match_snippet = <<-END
+        match_snippet = <<-YAML
     assets:
       - dependency
       - app
-        END
+        YAML
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-YAML
     assets:
       - dependency
-        END
+        YAML
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
@@ -183,16 +183,16 @@ module Jekyll::Minibundle::Test
 
         assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
 
-        match_snippet = <<-END
+        match_snippet = <<-YAML
     assets:
       - dependency
       - app
-        END
+        YAML
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-YAML
     assets:
       - dependency
-        END
+        YAML
 
         old_tempfiles = find_tempfiles('*.js') - other_tempfiles
 
@@ -290,14 +290,14 @@ module Jekyll::Minibundle::Test
         destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         org_mtime = file_mtime_of(destination)
 
-        match_snippet = <<-END
+        match_snippet = <<-LIQUID
     {% minibundle js %}
-        END
+        LIQUID
 
-        replacement_snippet = <<-END
+        replacement_snippet = <<-LIQUID
     {% minibundle js %}
     minifier_cmd: #{minifier_cmd_to_remove_comments_and_count}
-        END
+        LIQUID
 
         ensure_file_mtime_changes do
           find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
@@ -351,19 +351,19 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: '{{ site.baseurl }}/'
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle js %}',
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     baseurl: {{ site.baseurl }}/js
-          END
+          LIQUID
         )
 
         generate_site(:production)
@@ -381,19 +381,19 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: .
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle js %}',
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     baseurl: .
-          END
+          LIQUID
         )
 
         generate_site(:production)
@@ -419,19 +419,19 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: ./
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle js %}',
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     baseurl: ./
-          END
+          LIQUID
         )
 
         generate_site(:production)
@@ -503,17 +503,17 @@ module Jekyll::Minibundle::Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           '    {% minibundle css %}',
-          <<-END
+          <<-LIQUID
     {% minibundle css %}
     baseurl: /ignored
     destination_baseurl: {{ site.cdn_baseurl }}css/
-          END
+          LIQUID
         )
 
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: static
@@ -523,7 +523,7 @@ module Jekyll::Minibundle::Test
       - dependency
       - app
     {% endminibundle %}
-          END
+          LIQUID
         )
 
         generate_site(:production)
@@ -618,10 +618,10 @@ module Jekyll::Minibundle::Test
           find_and_gsub_in_file(
             source_path('_layouts/default.html'),
             '    {% minibundle js %}',
-            <<-END
+            <<-LIQUID
     {% minibundle js %}
     baseurl: /js-root
-            END
+            LIQUID
           )
         end
 
@@ -646,10 +646,10 @@ module Jekyll::Minibundle::Test
           find_and_gsub_in_file(
             source_path('_layouts/default.html'),
             '    {% minibundle js %}',
-            <<-END
+            <<-LIQUID
     {% minibundle js %}
     destination_baseurl: /root/
-            END
+            LIQUID
           )
         end
 
@@ -693,14 +693,14 @@ module Jekyll::Minibundle::Test
 
     def test_minifier_command_in_local_block_overrides_command_from_environment
       with_site_dir do
-        IO.write('test.html', <<-END)
+        IO.write('test.html', <<-YAML)
 ---
 layout: override
 title: Test
 ---
-        END
+        YAML
 
-        IO.write('_layouts/override.html', <<-END)
+        IO.write('_layouts/override.html', <<-LIQUID)
 <!DOCTYPE html>
 <html>
   <body>
@@ -713,7 +713,7 @@ title: Test
     {% endminibundle %}
   </body>
 </html>
-        END
+        LIQUID
 
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count'))
 
@@ -739,7 +739,7 @@ title: Test
         find_and_gsub_in_file(
           source_path('_layouts/default.html'),
           /    #{Regexp.escape('{% minibundle js %}')}.*#{Regexp.escape('{% endminibundle %}')}/m,
-          <<-END
+          <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: 'dst">'
@@ -749,7 +749,7 @@ title: Test
     attributes:
       test: '"/><br>'
     {% endminibundle %}
-          END
+          LIQUID
         )
 
         generate_site(:production)
@@ -790,17 +790,17 @@ title: Test
     end
 
     def change_destination_path_in_minibundle_block(from, to)
-      match_snippet = <<-END
+      match_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: #{from}
-      END
+      LIQUID
 
-      replacement_snippet = <<-END
+      replacement_snippet = <<-LIQUID
     {% minibundle js %}
     source_dir: _assets/scripts
     destination_path: #{to}
-      END
+      LIQUID
 
       find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
     end

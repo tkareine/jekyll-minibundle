@@ -49,10 +49,10 @@ module Jekyll::Minibundle::Test
 
     def test_raise_error_if_unclosed_open_tag
       err = assert_raises(VariableTemplate::SyntaxError) { VariableTemplate.compile('beg{{var}end') }
-      expected = <<-END
+      expected = <<-MESSAGE
 Missing closing tag ("}}") for variable opening tag ("{{") at position 5 in template (position highlighted with "@"):
 beg{{@var}end
-      END
+      MESSAGE
       assert_equal(expected, err.to_s)
     end
 
@@ -85,7 +85,7 @@ beg{{@var}end
     end
 
     def test_generator_escapes_text_token
-      assert_equal('#{}', render('#{}', {}))
+      assert_equal('#{}', render('#{}', {}))  # rubocop:disable Lint/InterpolationCheck
       assert_equal('"hey"', render('"hey"', {}))
       assert_equal("'hey'", render("'hey'", {}))
     end
@@ -94,7 +94,7 @@ beg{{@var}end
       assert_equal('42', render('{{ \\ }}', '\\' => 42))
       assert_equal('42', render("{{ ' }}", "'" => 42))
       assert_equal('42', render('{{ " }}', '"' => 42))
-      assert_equal('42', render('{{ #{} }}', '#{}' => 42))
+      assert_equal('42', render('{{ #{} }}', '#{}' => 42))  # rubocop:disable Lint/InterpolationCheck
       assert_equal("beg'42'end", render("beg'{{ 'var' }}'end", "'var'" => 42))
     end
 
