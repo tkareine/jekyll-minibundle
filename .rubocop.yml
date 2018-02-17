@@ -3,7 +3,7 @@
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.1
 Layout/ExtraSpacing:
   Enabled: false  # does not work with trailing comments
 Layout/IndentHeredoc:

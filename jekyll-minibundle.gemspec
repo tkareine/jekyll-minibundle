@@ -35,7 +35,7 @@ There are no other runtime dependencies besides the minification tool
   s.add_development_dependency 'rake',          '~> 12.0'
   s.add_development_dependency 'rubocop',       '~> 0.49.1'
 
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.1.0'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end
