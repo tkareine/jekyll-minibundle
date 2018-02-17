@@ -1,11 +1,11 @@
 require 'fileutils'
 require 'ostruct'
 require 'tempfile'
-require 'minitest/autorun'
 require 'nokogiri'
-require 'support/assertions'
 require 'jekyll'
 require 'jekyll/minibundle'
+require 'minitest/autorun'
+require 'support/assertions'
 
 module Jekyll::Minibundle::Test
   class TestCase < ::Minitest::Test
