@@ -2,10 +2,11 @@ sudo: false
 cache: bundler
 language: ruby
 rvm:
-  - 2.1
-  - 2.2
+  - 2.1.10
+  - 2.2.9
   - 2.3.4
-  - 2.4.1
+  - 2.4.3
+  - 2.5.0
 before_install:
   - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
   - gem update bundler
