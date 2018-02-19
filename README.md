@@ -262,6 +262,7 @@ The block contents must be in [YAML][YAML] syntax. The supported keys are:
 | `baseurl` | string | `'{{ site.baseurl }}/'` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
 | `destination_baseurl` | string | `'{{ site.cdn_baseurl }}/'` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 | `attributes` | map of keys to string values | `{id: my-link, media: screen}` | `{}` | Custom HTML element attributes to be added to `minibundle`'s rendered HTML element. |
+| `minifier_cmd` | string | `'node_modules/.bin/uglifyjs'` | - | Minifier command specific to this bundle. See [Minifier command specification](#minifier-command-specification) for more. |
 
 ### Minifier command specification
 
