@@ -442,6 +442,70 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_allows_relative_paths_in_asset_source_files
+      with_site_dir do
+        match_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+        LIQUID
+
+        replacement_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets
+    destination_path: assets/site
+    assets:
+      - scripts/dependencies/one
+      - ../app
+        LIQUID
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        FileUtils.mkdir('_assets/scripts/dependencies')
+        FileUtils.mv(source_path('_assets/scripts/dependency.js'), source_path('_assets/scripts/dependencies/one.js'))
+        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('app.js'))
+
+        generate_site(:development)
+
+        assert_equal(['assets/site/scripts/dependencies/one.js', 'assets/site/../app.js'], find_js_paths_from_index)
+        assert(File.file?(destination_path('assets/site/scripts/dependencies/one.js')))
+        assert(File.file?(destination_path('assets/app.js')))
+      end
+    end
+
+    def test_allows_root_dir_as_source_dir
+      with_site_dir do
+        match_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+        LIQUID
+
+        replacement_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: .
+    destination_path: assets/site
+    assets:
+      - _assets/scripts/dependency
+      - _assets/scripts/app
+        LIQUID
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        generate_site(:development)
+
+        assert_equal(%w{dependency app}.map { |p| File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts', "#{p}.js") }, find_js_paths_from_index)
+        assert(File.file?(destination_path(File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts/dependency.js'))))
+        assert(File.file?(destination_path(File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts/app.js'))))
+      end
+    end
+
     private
 
     def find_css_elements_from_index

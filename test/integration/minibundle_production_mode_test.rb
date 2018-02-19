@@ -784,6 +784,68 @@ title: Test
       end
     end
 
+    def test_allows_relative_paths_in_asset_source_files
+      with_site_dir do
+        match_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+        LIQUID
+
+        replacement_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets
+    destination_path: assets/site
+    assets:
+      - scripts/dependencies/one
+      - ../app
+        LIQUID
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        FileUtils.mkdir('_assets/scripts/dependencies')
+        FileUtils.mv(source_path('_assets/scripts/dependency.js'), source_path('_assets/scripts/dependencies/one.js'))
+        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('app.js'))
+
+        generate_site(:production)
+
+        assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+      end
+    end
+
+    def test_allows_root_dir_as_source_dir
+      with_site_dir do
+        match_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: _assets/scripts
+    destination_path: assets/site
+    assets:
+      - dependency
+      - app
+        LIQUID
+
+        replacement_snippet = <<-LIQUID
+    {% minibundle js %}
+    source_dir: .
+    destination_path: assets/site
+    assets:
+      - _assets/scripts/dependency
+      - _assets/scripts/app
+        LIQUID
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        generate_site(:production)
+
+        assert_equal(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH, find_js_path_from_index)
+        assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
+      end
+    end
+
     private
 
     def find_css_element_from_index
