@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
 grep -v '/\*'
+exit 0

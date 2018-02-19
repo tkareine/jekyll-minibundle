@@ -1,3 +1,4 @@
+require 'digest/md5'
 require 'support/test_case'
 require 'support/fixture_config'
 
@@ -757,6 +758,29 @@ title: Test
         assert(File.file?(destination_path(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js})))
         assert_equal(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js}, find_js_path_from_index)
         assert_equal('"/><br>', find_js_element_from_index['test'])
+      end
+    end
+
+    def test_empty_asset_sources_produces_empty_bundle
+      with_site_dir do
+        match_snippet = <<-YAML
+    assets:
+      - dependency
+      - app
+        YAML
+
+        replacement_snippet = <<-YAML
+    assets: []
+        YAML
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        generate_site(:production)
+
+        destination = "assets/site-#{Digest::MD5.hexdigest('')}.js"
+
+        assert_equal(destination, find_js_path_from_index)
+        assert(File.file?(destination_path(destination)))
       end
     end
 

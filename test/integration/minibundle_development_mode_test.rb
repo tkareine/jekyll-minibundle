@@ -422,6 +422,26 @@ module Jekyll::Minibundle::Test
       end
     end
 
+    def test_empty_asset_sources_produces_no_destination_assets
+      with_site_dir do
+        match_snippet = <<-YAML
+    assets:
+      - dependency
+      - app
+        YAML
+
+        replacement_snippet = <<-YAML
+    assets: []
+        YAML
+
+        find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
+
+        generate_site(:development)
+
+        assert_empty([], find_js_paths_from_index)
+      end
+    end
+
     private
 
     def find_css_elements_from_index
