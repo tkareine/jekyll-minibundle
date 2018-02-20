@@ -459,20 +459,20 @@ module Jekyll::Minibundle::Test
     destination_path: assets/site
     assets:
       - scripts/dependencies/one
-      - ../app
+      - ../_app
         LIQUID
 
         find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
 
         FileUtils.mkdir('_assets/scripts/dependencies')
         FileUtils.mv(source_path('_assets/scripts/dependency.js'), source_path('_assets/scripts/dependencies/one.js'))
-        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('app.js'))
+        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('_app.js'))
 
         generate_site(:development)
 
-        assert_equal(['assets/site/scripts/dependencies/one.js', 'assets/site/../app.js'], find_js_paths_from_index)
+        assert_equal(['assets/site/scripts/dependencies/one.js', 'assets/site/../_app.js'], find_js_paths_from_index)
         assert(File.file?(destination_path('assets/site/scripts/dependencies/one.js')))
-        assert(File.file?(destination_path('assets/app.js')))
+        assert(File.file?(destination_path('assets/_app.js')))
       end
     end
 

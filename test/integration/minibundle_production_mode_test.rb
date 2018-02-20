@@ -801,14 +801,14 @@ title: Test
     destination_path: assets/site
     assets:
       - scripts/dependencies/one
-      - ../app
+      - ../_app
         LIQUID
 
         find_and_gsub_in_file(source_path('_layouts/default.html'), match_snippet, replacement_snippet)
 
         FileUtils.mkdir('_assets/scripts/dependencies')
         FileUtils.mv(source_path('_assets/scripts/dependency.js'), source_path('_assets/scripts/dependencies/one.js'))
-        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('app.js'))
+        FileUtils.mv(source_path('_assets/scripts/app.js'), source_path('_app.js'))
 
         generate_site(:production)
 
