@@ -1,5 +1,8 @@
 # Jekyll Minibundle plugin
 
+[![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
+[![Build status](https://travis-ci.org/tkareine/jekyll-minibundle.svg?branch=master)][MinibundleBuild]
+
 A straightforward asset bundling plugin for [Jekyll][Jekyll], utilizing
 external minification tool of your choice. It provides asset
 concatenation for bundling and asset fingerprinting with MD5 digest for
@@ -14,9 +17,6 @@ and later. Ruby 1.8 and 1.9 are *not* supported.
 The plugin works with Jekyll's watch mode (auto-regeneration, Jekyll
 option `--watch`), but not with incremental feature enabled (Jekyll
 option `--incremental`).
-
-[![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
-[![Build status](https://secure.travis-ci.org/tkareine/jekyll-minibundle.svg)][MinibundleBuild]
 
 ## Features
 
