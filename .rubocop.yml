@@ -1,9 +1,11 @@
-# Default config: https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+# Default config: https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
 
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.1
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
 Layout/ExtraSpacing:
   Enabled: false  # does not work with trailing comments
 Layout/IndentHeredoc:
@@ -22,6 +24,8 @@ Metrics/MethodLength:
   Max: 50
 Metrics/ModuleLength:
   Max: 200
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
 Performance/RedundantBlockCall:
   Enabled: false  # prefer named block arguments for documentation
 Style/ClassAndModuleChildren:

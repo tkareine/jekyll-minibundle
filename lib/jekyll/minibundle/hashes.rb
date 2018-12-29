@@ -4,6 +4,7 @@ module Jekyll::Minibundle
       value = obj
       keys.each do |key|
         return nil unless value
+
         value = value[key]
       end
       value

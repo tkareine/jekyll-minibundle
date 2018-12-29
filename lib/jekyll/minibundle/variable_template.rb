@@ -61,7 +61,9 @@ module Jekyll::Minibundle
             tokens << Token.text(text_buffer)
             text_buffer = ''
             close_match = scanner.scan_until(close_regex)
+
             raise SyntaxError.new(%{Missing closing tag ("#{CLOSE_TAG}") for variable opening tag ("#{OPEN_TAG}")}, template, scanner.charpos) unless close_match
+
             tokens << Token.variable(close_match[0..-(CLOSE_TAG.size + 1)].strip)
           end
 
@@ -82,7 +84,7 @@ module Jekyll::Minibundle
       end
 
       def self.make_escape_sequence_or_open_tag_regexp
-        @_escape_sequence_or_open_tag_regexp ||=
+        @_make_escape_sequence_or_open_tag_regexp ||=
           begin
             regexp = [make_escape_sequence_regexp.join('|'), Regexp.escape(OPEN_TAG)].map { |p| "(#{p})" }.join('|')
             Regexp.compile(regexp)
@@ -90,7 +92,7 @@ module Jekyll::Minibundle
       end
 
       def self.make_close_tag_regexp
-        @_close_tag_regexp ||= Regexp.compile(Regexp.escape(CLOSE_TAG))
+        @_make_close_tag_regexp ||= Regexp.compile(Regexp.escape(CLOSE_TAG))
       end
     end
 

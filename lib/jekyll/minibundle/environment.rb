@@ -14,9 +14,11 @@ module Jekyll::Minibundle
 
     def self.find_site_config(site, keys, type)
       value = Hashes.dig(site.config, *keys)
+
       if value && !value.is_a?(type)
         raise "Invalid site configuration for key #{keys.join('.')}; expecting type #{type}"
       end
+
       value
     end
   end

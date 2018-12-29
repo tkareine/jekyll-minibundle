@@ -33,7 +33,7 @@ There are no other runtime dependencies besides the minification tool
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
   s.add_development_dependency 'rake',          '~> 12.0'
-  s.add_development_dependency 'rubocop',       '~> 0.52.1'
+  s.add_development_dependency 'rubocop',       '~> 0.61.1'
 
   s.required_ruby_version = '>= 2.2.0'
 

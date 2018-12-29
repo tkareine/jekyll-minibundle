@@ -9,7 +9,9 @@ module Jekyll::Minibundle
   class MiniBundleBlock < Liquid::Block
     def initialize(tag_name, type, _tokens)
       super
+
       @type = type.strip.downcase.to_sym
+
       raise ArgumentError, "Missing asset type for minibundle block; pass value such as 'css' or 'js' as the argument" if @type.empty?
     end
 
@@ -56,8 +58,11 @@ module Jekyll::Minibundle
 
     def parse_contents(contents)
       raise ArgumentError, 'Missing configuration for minibundle block; pass configuration in YAML syntax' if contents =~ /\A\s+\z/
+
       structure = parse_structure(contents)
+
       raise ArgumentError, "Unsupported minibundle block contents type (#{structure.class}), only Hash is supported: #{contents}" unless structure.is_a?(Hash)
+
       structure
     end
 

@@ -33,11 +33,13 @@ Missing minification command for bundling #{bundle_destination_path.inspect}. Sp
 
     def path
       raise IllegalStateError, 'Cannot get path of closed AssetBundle' unless @tempfile
+
       @tempfile.path
     end
 
     def make_bundle
       raise IllegalStateError, 'Cannot make bundle with closed AssetBundle' unless @tempfile
+
       exit_status = spawn_minifier(@minifier_cmd) do |input|
         $stdout.puts  # place newline after "(Re)generating..." log messages
         Log.info("Bundling #{bundle_destination_path}:")
@@ -47,11 +49,13 @@ Missing minification command for bundling #{bundle_destination_path.inspect}. Sp
           input.puts(';') if @type == :js
         end
       end
+
       if exit_status != 0
         msg = "Bundling #{bundle_destination_path.inspect} failed with exit status #{exit_status}, command: #{@minifier_cmd.inspect}"
         log_minifier_error(msg)
         raise msg
       end
+
       self
     end
 
