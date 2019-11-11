@@ -491,20 +491,21 @@ The plugin does not work with Jekyll's incremental rebuild feature
 
 ## License
 
-MIT. See `LICENSE.txt`.
+MIT. See [LICENSE.txt].
 
-[Bundler]: http://bundler.io/
+[Bundler]: https://bundler.io/
 [GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating_and_updating_cached_responses
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
 [Jekyll]: https://jekyllrb.com/
-[Liquid]: https://shopify.github.io/liquid/
+[LICENSE.txt]: https://raw.githubusercontent.com/tkareine/jekyll-minibundle/master/LICENSE.txt
 [LiquidAssignTag]: https://shopify.github.io/liquid/tags/variable/#assign
 [LiquidCaptureBlock]: https://shopify.github.io/liquid/tags/variable/#capture
+[Liquid]: https://shopify.github.io/liquid/
 [MD5]: https://en.wikipedia.org/wiki/MD5
 [MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
 [MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
 [Mustache]: https://mustache.github.io/
-[Sass]: http://sass-lang.com/
+[Sass]: https://sass-lang.com/
 [UglifyJS2]: https://github.com/mishoo/UglifyJS2
-[YAML]: http://www.yaml.org/
+[YAML]: https://yaml.org/
