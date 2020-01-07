@@ -1,6 +1,6 @@
 # Releasing
 
-1. Check that Travis [build][Travis-build] is green.
+1. Check that [CI] is green.
 
 2. Double check that tests pass:
 
@@ -37,4 +37,4 @@
     gem push jekyll-minibundle-<version>.gem
     ```
 
-[Travis-build]: https://travis-ci.org/tkareine/jekyll-minibundle
+[CI]: https://travis-ci.org/tkareine/jekyll-minibundle
