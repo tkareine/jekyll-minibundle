@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Jekyll::Minibundle
   module Log
-    TOPIC = 'Minibundle:'.freeze
+    TOPIC = 'Minibundle:'
 
     def self.error(msg)
       ::Jekyll.logger.error(TOPIC, msg)

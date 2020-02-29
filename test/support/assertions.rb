@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jekyll::Minibundle::Test
   module Assertions
     def assert_contains_only(collection, expected_elements)

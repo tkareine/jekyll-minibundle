@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jekyll/minibundle/hashes'
 
 module Jekyll::Minibundle

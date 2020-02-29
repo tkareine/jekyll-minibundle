@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'strscan'
 
 module Jekyll::Minibundle
   class VariableTemplate
-    OPEN_TAG = '{{'.freeze
-    CLOSE_TAG = '}}'.freeze
-    ESCAPE_CHAR = '\\'.freeze
+    OPEN_TAG = '{{'
+    CLOSE_TAG = '}}'
+    ESCAPE_CHAR = '\\'
 
     def initialize(interpolation)
       instance_eval("def render(variables) #{interpolation} end", __FILE__, __LINE__)
@@ -15,7 +17,7 @@ module Jekyll::Minibundle
     end
 
     class SyntaxError < ArgumentError
-      CURSOR = '@'.freeze
+      CURSOR = '@'
 
       def initialize(message, template, position)
         @message = message

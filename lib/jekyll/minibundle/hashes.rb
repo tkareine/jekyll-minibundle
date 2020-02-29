@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jekyll::Minibundle
   module Hashes
     def self.dig(obj, *keys)

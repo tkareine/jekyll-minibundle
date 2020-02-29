@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cgi/util'
 require 'jekyll/minibundle/files'
 require 'jekyll/minibundle/asset_file_registry'

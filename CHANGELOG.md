@@ -1,3 +1,7 @@
+# HEAD
+
+* Drop support for Ruby 2.2 (we require Ruby version 2.3 or later).
+
 # 2.2.0 / 2017-03-10
 
 * Treat `ministamp` tag's argument as YAML, resulting either in String

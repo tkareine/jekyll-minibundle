@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest/md5'
 require 'support/test_case'
 require 'support/fixture_config'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jekyll::Minibundle::Test
   module StaticFileConfig
     STATIC_FILE_PROPERTIES = %i{

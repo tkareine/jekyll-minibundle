@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/test_case'
 require 'support/fixture_config'
 
@@ -23,7 +25,7 @@ module Jekyll::Minibundle::Test
     def test_css_assets_have_configured_attributes
       with_precompiled_site(:development) do
         elements = find_css_elements_from_index.map { |el| [el['id'], el['media']] }.uniq
-        assert_equal([['my-styles', 'projection']], elements)
+        assert_equal([%w{my-styles projection}], elements)
       end
     end
 

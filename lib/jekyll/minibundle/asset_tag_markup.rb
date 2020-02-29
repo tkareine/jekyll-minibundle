@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cgi/util'
 
 module Jekyll::Minibundle

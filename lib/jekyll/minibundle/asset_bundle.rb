@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tempfile'
 require 'jekyll/minibundle/exceptions'
 require 'jekyll/minibundle/files'
@@ -5,7 +7,7 @@ require 'jekyll/minibundle/log'
 
 module Jekyll::Minibundle
   class AssetBundle
-    TEMPFILE_PREFIX = 'jekyll-minibundle-'.freeze
+    TEMPFILE_PREFIX = 'jekyll-minibundle-'
 
     def initialize(config)
       @type = config.fetch(:type)

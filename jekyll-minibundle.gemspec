@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'lib/jekyll/minibundle/version'
 
 Gem::Specification.new do |s|
@@ -33,9 +35,9 @@ There are no other runtime dependencies besides the minification tool
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
   s.add_development_dependency 'rake',          '~> 13.0'
-  s.add_development_dependency 'rubocop',       '~> 0.61.1'
+  s.add_development_dependency 'rubocop',       '~> 0.80.1'
 
-  s.required_ruby_version = '>= 2.2.0'
+  s.required_ruby_version = '>= 2.3.0'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end

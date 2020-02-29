@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/test_case'
 require 'support/fixture_config'
 require 'support/static_file_config'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'ostruct'
 require 'tempfile'
@@ -104,7 +106,7 @@ module Jekyll::Minibundle::Test
 
     def generate_site(mode, options = {})
       env = {
-        'JEKYLL_MINIBUNDLE_MODE'    => mode && mode.to_s,
+        'JEKYLL_MINIBUNDLE_MODE'    => mode&.to_s,
         'JEKYLL_MINIBUNDLE_CMD_CSS' => options.fetch(:minifier_cmd_css, minifier_cmd_to_remove_comments),
         'JEKYLL_MINIBUNDLE_CMD_JS'  => options.fetch(:minifier_cmd_js, minifier_cmd_to_remove_comments)
       }

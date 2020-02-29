@@ -3,13 +3,16 @@
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-Layout/AlignHash:
-  EnforcedColonStyle: table
-  EnforcedHashRocketStyle: table
+  TargetRubyVersion: 2.3
 Layout/ExtraSpacing:
   Enabled: false  # does not work with trailing comments
-Layout/IndentHeredoc:
+Layout/HashAlignment:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+Layout/HeredocIndentation:
   Enabled: false
+Layout/LineLength:
+  Max: 200
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 Metrics/AbcSize:
@@ -18,16 +21,12 @@ Metrics/BlockLength:
   Max: 200
 Metrics/ClassLength:
   Enabled: false  # test classes are big
-Metrics/LineLength:
-  Max: 200
 Metrics/MethodLength:
   Max: 50
 Metrics/ModuleLength:
   Max: 200
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: required
-Performance/RedundantBlockCall:
-  Enabled: false  # prefer named block arguments for documentation
 Style/ClassAndModuleChildren:
   Enabled: false  # we use both compact and nested style, preferring compact
 Style/ClassVars:
@@ -40,6 +39,12 @@ Style/Documentation:
   Enabled: false  # we have documentation in the readme
 Style/Encoding:
   Enabled: false  # we have some sources with non-ascii chars (in utf-8 encoding), we like stating encoding explicitly
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Style/IfUnlessModifier:
   Enabled: false  # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
 Style/NumericPredicate:

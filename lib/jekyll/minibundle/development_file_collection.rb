@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jekyll/minibundle/development_file'
 
 module Jekyll::Minibundle

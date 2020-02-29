@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/test_case'
 require 'support/static_file_config'
 require 'jekyll/minibundle/development_file'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(Jekyll::VERSION) &&
    defined?(Gem::Version) &&
    (Gem::Version.create(Jekyll::VERSION) < Gem::Version.create('3.0.0'))

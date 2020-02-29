@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 require 'benchmark/ips'
 require 'jekyll/minibundle/variable_template'
@@ -9,8 +10,8 @@ VARIABLES = {
   'sneaky… \\' => 'clever…'
 }.freeze
 
-TEMPLATE = 'begin… {{ integer }} middle \{{escape}} {{ string }} also {{ sneaky… \\}} end'.freeze
-EXPECTED = 'begin… 42 middle {{escape}} a rather long string also clever… end'.freeze
+TEMPLATE = 'begin… {{ integer }} middle \{{escape}} {{ string }} also {{ sneaky… \\}} end'
+EXPECTED = 'begin… 42 middle {{escape}} a rather long string also clever… end'
 
 raise 'Unexpected template in benchmark' unless Jekyll::Minibundle::VariableTemplate.compile(TEMPLATE).render(VARIABLES) == EXPECTED
 

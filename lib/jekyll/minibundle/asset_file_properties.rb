@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jekyll/minibundle/asset_file_drop'
 
 module Jekyll::Minibundle

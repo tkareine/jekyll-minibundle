@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'jekyll/minibundle/hashes'
 require 'jekyll/minibundle/files'

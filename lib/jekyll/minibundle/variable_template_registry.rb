@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jekyll/minibundle/variable_template'
 
 module Jekyll::Minibundle

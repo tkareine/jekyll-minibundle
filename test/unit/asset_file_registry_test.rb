@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'support/test_case'
 require 'support/fixture_config'
 require 'jekyll/minibundle/asset_file_registry'
