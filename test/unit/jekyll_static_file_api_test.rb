@@ -6,17 +6,19 @@ require 'jekyll/minibundle/stamp_file'
 
 module Jekyll::Minibundle::Test
   class JekyllStaticFileAPITest < TestCase
+    IGNORED_STATIC_FILE_METHODS = %i{cleaned_relative_path}.freeze
+
     include StaticFileConfig
 
-    def test_development_file_has_all_static_file_methods
+    def test_development_file_has_most_static_file_methods
       assert_empty(missing_static_file_methods(DevelopmentFile))
     end
 
-    def test_bundle_file_has_all_static_file_methods
+    def test_bundle_file_has_most_static_file_methods
       assert_empty(missing_static_file_methods(BundleFile))
     end
 
-    def test_stamp_file_has_all_static_file_methods
+    def test_stamp_file_has_most_static_file_methods
       assert_empty(missing_static_file_methods(StampFile))
     end
 
@@ -103,7 +105,7 @@ module Jekyll::Minibundle::Test
     private
 
     def missing_static_file_methods(clazz)
-      Jekyll::StaticFile.public_instance_methods - clazz.public_instance_methods
+      Jekyll::StaticFile.public_instance_methods - IGNORED_STATIC_FILE_METHODS - clazz.public_instance_methods
     end
 
     def response_types_of_methods(file, methods)
