@@ -28,11 +28,11 @@ There are no other runtime dependencies besides the minification tool
   s.test_files = `git ls-files -- test`.split("\n")
 
   s.add_development_dependency 'benchmark-ips', '~> 2.7'
-  s.add_development_dependency 'jekyll',        '~> 3.0'
+  s.add_development_dependency 'jekyll',        '>= 3.0'
   s.add_development_dependency 'minitest',      '~> 5.8'
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
-  s.add_development_dependency 'rake',          '~> 12.0'
+  s.add_development_dependency 'rake',          '~> 13.0'
   s.add_development_dependency 'rubocop',       '~> 0.61.1'
 
   s.required_ruby_version = '>= 2.2.0'
