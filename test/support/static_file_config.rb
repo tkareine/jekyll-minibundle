@@ -2,7 +2,7 @@
 
 module Jekyll::Minibundle::Test
   module StaticFileConfig
-    STATIC_FILE_PROPERTIES = %i{
+    STATIC_FILE_PROPERTIES = %i[
       basename
       data
       defaults
@@ -18,6 +18,6 @@ module Jekyll::Minibundle::Test
       type
       url
       write?
-    }.freeze
+    ].freeze
   end
 end

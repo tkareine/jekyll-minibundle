@@ -10,7 +10,7 @@ module Jekyll::Minibundle
     end
 
     def self.development?(site)
-      mode = ENV['JEKYLL_MINIBUNDLE_MODE'] || Environment.find_site_config(site, %w{minibundle mode}, String)
+      mode = ENV['JEKYLL_MINIBUNDLE_MODE'] || Environment.find_site_config(site, %w[minibundle mode], String)
       mode == 'development'
     end
 

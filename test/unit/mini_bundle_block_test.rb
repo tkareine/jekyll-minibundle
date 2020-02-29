@@ -105,7 +105,7 @@ minifier_cmd: #{minifier_cmd_to_remove_comments}
 {% endminibundle %}
         LIQUID
 
-        expected_output = %{<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n}
+        expected_output = %(<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n)
 
         assert_equal(expected_output, actual_output)
       end

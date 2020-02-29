@@ -6,14 +6,14 @@ module Jekyll::Minibundle
   class AssetFileDrop < ::Liquid::Drop
     extend Forwardable
 
-    KEYS = %w{
+    KEYS = %w[
       name
       extname
       basename
       modified_time
       path
       collection
-    }.freeze
+    ].freeze
 
     def initialize(file)
       @file = file

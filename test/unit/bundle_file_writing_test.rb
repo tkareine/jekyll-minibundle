@@ -20,7 +20,7 @@ module Jekyll::Minibundle::Test
     def test_raise_error_if_asset_source_file_does_not_exist
       err = assert_raises(ArgumentError) do
         with_fake_site do |site|
-          make_bundle_file(site, 'assets' => %w{no-such})
+          make_bundle_file(site, 'assets' => %w[no-such])
         end
       end
       assert_match(%r{\ABundle asset source file does not exist: .+/#{Regexp.escape(JS_BUNDLE_SOURCE_DIR)}/no-such.js\z}, err.to_s)
@@ -141,7 +141,7 @@ module Jekyll::Minibundle::Test
       bundle_config = {
         'type'             => :js,
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-        'assets'           => %w{dependency app},
+        'assets'           => %w[dependency app],
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
         'minifier_cmd'     => minifier_cmd_to_remove_comments_and_count
       }

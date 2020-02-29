@@ -77,7 +77,7 @@ module Jekyll::Minibundle::Test
     end
 
     [
-      {description: 'assets', config_diff: {'assets' => %w{b1 b2}}},
+      {description: 'assets', config_diff: {'assets' => %w[b1 b2]}},
       {description: 'source_directory', config_diff: {'source_dir' => '_assets/src2'}}
     ].each do |spec|
       define_method :"test_raise_exception_if_registering_bundle_file_with_same_destination_path_but_with_different_#{spec.fetch(:description)}" do
@@ -98,7 +98,7 @@ Two or more minibundle blocks with the same destination path "assets/site.js", b
     end
 
     [
-      {description: 'assets', config_diff: {'assets' => %w{b1 b2}}},
+      {description: 'assets', config_diff: {'assets' => %w[b1 b2]}},
       {description: 'source_directory', config_diff: {'source_dir' => '_assets/src2'}}
     ].each do |spec|
       define_method :"test_raise_exception_if_registering_development_file_collection_with_same_destination_path_but_with_different_#{spec.fetch(:description)}" do
@@ -144,7 +144,7 @@ Two or more minibundle blocks with the same destination path "assets/site.js", b
 
       define_method :"test_raise_exception_if_registering_#{spec.fetch(:description)}s_with_different_source_and_same_destination_paths" do
         with_fake_site do |site|
-          source_paths = %w{src1.css src2.css}.map do |file|
+          source_paths = %w[src1.css src2.css].map do |file|
             File.join(CSS_BUNDLE_SOURCE_DIR, file)
           end
           source_paths.each { |path| FileUtils.touch(path) }
@@ -229,7 +229,7 @@ Two or more ministamp tags with the same destination path "assets/dest1.css", bu
       {
         'type'             => :js,
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-        'assets'           => %w{dependency app},
+        'assets'           => %w[dependency app],
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
         'minifier_cmd'     => 'unused_minifier_cmd'
       }

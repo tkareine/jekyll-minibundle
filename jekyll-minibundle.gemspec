@@ -19,13 +19,13 @@ There are no other runtime dependencies besides the minification tool
 (not even other gems).
   TEXT
 
-  s.files = %w{
+  s.files = %w[
     CHANGELOG.md
     LICENSE.txt
     README.md
     Rakefile
     jekyll-minibundle.gemspec
-  } + `git ls-files -- lib`.split("\n")
+  ] + `git ls-files -- lib`.split("\n")
 
   s.test_files = `git ls-files -- test`.split("\n")
 

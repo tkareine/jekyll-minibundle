@@ -5,7 +5,7 @@ AllCops:
   DisplayStyleGuide: true
   TargetRubyVersion: 2.3
 Layout/ExtraSpacing:
-  Enabled: false  # does not work with trailing comments
+  AllowBeforeTrailingComments: true
 Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
@@ -33,12 +33,8 @@ Style/ClassVars:
   Enabled: false  # it's ok when knowing it's limitations, easy to access from class instance scope
 Style/CollectionMethods:
   Enabled: true
-Style/Copyright:
-  Enabled: false  # we have copyright in the readme
 Style/Documentation:
   Enabled: false  # we have documentation in the readme
-Style/Encoding:
-  Enabled: false  # we have some sources with non-ascii chars (in utf-8 encoding), we like stating encoding explicitly
 Style/HashEachMethods:
   Enabled: true
 Style/HashTransformKeys:
@@ -49,5 +45,3 @@ Style/IfUnlessModifier:
   Enabled: false  # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
 Style/NumericPredicate:
   EnforcedStyle: comparison
-Style/PercentLiteralDelimiters:
-  Enabled: false  # it's better to use `%w{}` syntax, because the braces are the same as in `%r{}`

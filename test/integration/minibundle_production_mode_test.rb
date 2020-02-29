@@ -71,7 +71,7 @@ module Jekyll::Minibundle::Test
 
     def test_minifies_css_asset_bundle
       with_precompiled_site(:production) do
-        source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w{reset common}, 'css')
+        source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w[reset common], 'css')
         destination_contents_size = File.read(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)).size
         assert_operator(destination_contents_size, :<, source_contents_size)
       end
@@ -79,7 +79,7 @@ module Jekyll::Minibundle::Test
 
     def test_minifies_js_asset_bundle
       with_precompiled_site(:production) do
-        source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w{dependency app}, 'js')
+        source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w[dependency app], 'js')
         destination_contents_size = File.read(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)).size
         assert_operator(destination_contents_size, :<, source_contents_size)
       end
@@ -757,8 +757,8 @@ title: Test
 
         generate_site(:production)
 
-        assert(File.file?(destination_path(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js})))
-        assert_equal(%{dst">-#{JS_BUNDLE_FINGERPRINT}.js}, find_js_path_from_index)
+        assert(File.file?(destination_path(%(dst">-#{JS_BUNDLE_FINGERPRINT}.js))))
+        assert_equal(%(dst">-#{JS_BUNDLE_FINGERPRINT}.js), find_js_path_from_index)
         assert_equal('"/><br>', find_js_element_from_index['test'])
       end
     end

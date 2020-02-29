@@ -8,7 +8,7 @@ require 'jekyll/minibundle/stamp_file'
 
 module Jekyll::Minibundle::Test
   class JekyllStaticFileAPITest < TestCase
-    IGNORED_STATIC_FILE_METHODS = %i{cleaned_relative_path}.freeze
+    IGNORED_STATIC_FILE_METHODS = %i[cleaned_relative_path].freeze
 
     include StaticFileConfig
 
@@ -46,7 +46,7 @@ module Jekyll::Minibundle::Test
 
         return_type_diff = diff_non_nil_response_types_of_static_file_properties(
           make_static_file(site, 'static.txt'),
-          make_bundle_file(site, %w{dependency app})
+          make_bundle_file(site, %w[dependency app])
         )
 
         assert_empty(return_type_diff)
@@ -86,7 +86,7 @@ module Jekyll::Minibundle::Test
         FileUtils.touch('app.js')
 
         expected_keys = make_static_file(site, 'static.txt').to_liquid.keys.sort
-        actual_keys = make_bundle_file(site, %w{dependency app}).to_liquid.keys.sort
+        actual_keys = make_bundle_file(site, %w[dependency app]).to_liquid.keys.sort
 
         assert_equal(expected_keys, actual_keys)
       end

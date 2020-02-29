@@ -99,7 +99,7 @@ module Jekyll::Minibundle::Test
       {
         'type'             => :js,
         'source_dir'       => JS_BUNDLE_SOURCE_DIR,
-        'assets'           => %w{dependency app},
+        'assets'           => %w[dependency app],
         'destination_path' => JS_BUNDLE_DESTINATION_PATH,
         'minifier_cmd'     => minifier_cmd
       }

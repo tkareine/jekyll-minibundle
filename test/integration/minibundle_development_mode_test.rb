@@ -7,8 +7,8 @@ module Jekyll::Minibundle::Test
   class MinibundleDevelopmentModeTest < TestCase
     include FixtureConfig
 
-    CSS_ASSET_DESTINATION_PATHS = %w{reset common}.map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }
-    JS_ASSET_DESTINATION_PATHS = %w{dependency app}.map { |f| File.join(JS_BUNDLE_DESTINATION_PATH, "#{f}.js") }
+    CSS_ASSET_DESTINATION_PATHS = %w[reset common].map { |f| File.join(CSS_BUNDLE_DESTINATION_PATH, "#{f}.css") }
+    JS_ASSET_DESTINATION_PATHS = %w[dependency app].map { |f| File.join(JS_BUNDLE_DESTINATION_PATH, "#{f}.js") }
 
     def test_css_assets_have_tags_in_configured_order
       with_precompiled_site(:development) do
@@ -25,7 +25,7 @@ module Jekyll::Minibundle::Test
     def test_css_assets_have_configured_attributes
       with_precompiled_site(:development) do
         elements = find_css_elements_from_index.map { |el| [el['id'], el['media']] }.uniq
-        assert_equal([%w{my-styles projection}], elements)
+        assert_equal([%w[my-styles projection]], elements)
       end
     end
 
@@ -502,7 +502,7 @@ module Jekyll::Minibundle::Test
 
         generate_site(:development)
 
-        assert_equal(%w{dependency app}.map { |p| File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts', "#{p}.js") }, find_js_paths_from_index)
+        assert_equal(%w[dependency app].map { |p| File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts', "#{p}.js") }, find_js_paths_from_index)
         assert(File.file?(destination_path(File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts/dependency.js'))))
         assert(File.file?(destination_path(File.join(JS_BUNDLE_DESTINATION_PATH, '_assets/scripts/app.js'))))
       end

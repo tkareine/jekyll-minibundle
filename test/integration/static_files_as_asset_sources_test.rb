@@ -19,7 +19,7 @@ module Jekyll::Minibundle::Test
       end
     end
 
-    %i{development production}.each do |env|
+    %i[development production].each do |env|
       define_method :"test_ministamp_allows_using_static_file_as_asset_source_in_#{env}_mode" do
         with_site_dir do
           contents = 'h2 {}'

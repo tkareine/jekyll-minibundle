@@ -10,9 +10,9 @@ module Jekyll::Minibundle
 
       case type
       when :js
-        %{<script type="text/javascript" src="#{url_str}"#{attributes_str}></script>}
+        %(<script type="text/javascript" src="#{url_str}"#{attributes_str}></script>)
       when :css
-        %{<link rel="stylesheet" href="#{url_str}"#{attributes_str}>}
+        %(<link rel="stylesheet" href="#{url_str}"#{attributes_str}>)
       else
         raise ArgumentError, "Unknown type for generating bundle markup: #{type}, #{url}"
       end
@@ -24,9 +24,9 @@ module Jekyll::Minibundle
 
     def self.make_attribute(name, value)
       if value.nil?
-        %{ #{name}}
+        %( #{name})
       else
-        %{ #{name}="#{CGI.escape_html(value.to_s)}"}
+        %( #{name}="#{CGI.escape_html(value.to_s)}")
       end
     end
   end
