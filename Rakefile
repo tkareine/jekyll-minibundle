@@ -84,7 +84,7 @@ task :test do
 end
 
 namespace :fixture do
-  CLEAN.include 'test/fixture/site/_site'
+  CLOBBER.include 'test/fixture/site/_site', 'test/fixture/site/.jekyll-cache'
 
   desc 'Generate fixture site (tests use it, this task allows manual inspection)'
   task :build do
