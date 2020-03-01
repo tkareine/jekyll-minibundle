@@ -1,5 +1,5 @@
 /*.gem
 /.bundle/
-/Gemfile.lock
-/node_modules/
+/test/fixture/site/.jekyll-cache/
 /test/fixture/site/_site/
+/vendor/

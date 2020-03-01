@@ -79,13 +79,14 @@ task :test do
 
   extra_opts = ENV['DEBUG'] ? '-w -rpp -rpry ' : ''
 
+  puts "Jekyll version: #{Gem::Specification.find_by_name('jekyll').version}"
   sh "ruby -I lib:test #{extra_opts}#{run_selected_or_all}"
 end
 
 namespace :fixture do
   CLEAN.include 'test/fixture/site/_site'
 
-  desc 'Generate fixture site'
+  desc 'Generate fixture site (tests use it, this task allows manual inspection)'
   task :build do
     run_jekyll_in_fixture_site('build')
   end
