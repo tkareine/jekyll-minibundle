@@ -47,7 +47,7 @@ The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
 1. Add the following line to the [Gemfile] of your site:
 
-   ```
+   ``` ruby
    gem 'jekyll-minibundle'
    ```
 
