@@ -3,10 +3,9 @@
 [![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
 [![Build status](https://travis-ci.org/tkareine/jekyll-minibundle.svg?branch=master)][MinibundleBuild]
 
-A straightforward asset bundling plugin for [Jekyll][Jekyll], utilizing
-external minification tool of your choice. It provides asset
-concatenation for bundling and asset fingerprinting with MD5 digest for
-cache busting.
+A straightforward asset bundling plugin for [Jekyll], utilizing external
+minification tool of your choice. It provides asset concatenation for
+bundling and asset fingerprinting with MD5 digest for cache busting.
 
 There are no runtime dependencies, except for the minification tool used
 for bundling (fingerprinting has no dependencies).
@@ -46,22 +45,25 @@ sources makes asset sizes smaller and thus faster to load over network.
 
 The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
-``` bash
-$ gem install jekyll-minibundle
-```
+1. Add the following line to the [Gemfile] of your site:
 
-(You should use [Bundler][Bundler] to manage the gems in your project.)
+   ```
+   gem 'jekyll-minibundle'
+   ```
 
-Then, instruct Jekyll to load the gem by adding this line to the
-[configuration file][JekyllConf] of your Jekyll site project
-(`_config.yml`):
+2. Run `bundle install`.
 
-``` yaml
-plugins:
-  - jekyll/minibundle
-```
+3. Instruct Jekyll to load the gem by adding this line to the
+[configuration file][JekyllConf] of your site (`_config.yml`):
 
-An alternative to using the `gems` configuration option is to add
+   ``` yaml
+   plugins:
+     - jekyll/minibundle
+   ```
+
+   (Use the `gems` key instead of `plugins` for Jekyll older than v3.5.0.)
+
+An alternative to using the `plugins` configuration option is to add
 `_plugins/minibundle.rb` file to your site project with this line:
 
 ``` ruby
@@ -69,12 +71,12 @@ require 'jekyll/minibundle'
 ```
 
 You must allow Jekyll to use custom plugins. That is, do not enable
-Jekyll's `safe` option.
+Jekyll's `safe` configuration option.
 
 ### Asset fingerprinting
 
 If you just want to have an MD5 fingerprint in your asset's path, use
-`ministamp` [Liquid][Liquid] tag in a Liquid template file. For example:
+`ministamp` [Liquid] tag in a Liquid template file. For example:
 
 ``` liquid
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _assets/site.css assets/site.css %}" media="screen, projection">
@@ -95,8 +97,8 @@ empty:
 ```
 
 This feature is useful when combined with asset generation tools
-external to Jekyll. For example, you can configure [Sass][Sass] to take
-input files from `_assets/styles/*.scss` and to produce output to
+external to Jekyll. For example, you can configure [Sass] to take input
+files from `_assets/styles/*.scss` and to produce output to
 `_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
 fingerprint to Jekyll's site destination directory:
 
@@ -106,11 +108,11 @@ fingerprint to Jekyll's site destination directory:
 
 #### `ministamp` call syntax
 
-The argument for `ministamp` tag must be in [YAML][YAML] syntax, and
-parsing the argument as YAML must result either in a String or a
-Hash. What you saw previously was the argument being parsed as a String;
-it's effectively a shorthand version of passing the argument as a Hash
-with certain keys. That is, in the following call:
+The argument for `ministamp` tag must be in [YAML] syntax, and parsing
+the argument as YAML must result either in a String or a Hash. What you
+saw previously was the argument being parsed as a String; it's
+effectively a shorthand version of passing the argument as a Hash with
+certain keys. That is, in the following call:
 
 ``` liquid
 {% ministamp _tmp/site.css assets/site.css %}
@@ -167,10 +169,10 @@ appear. The markup tag contains the path to the bundle file, and the
 Jekyll's site destination directory will have the bundle file at that
 path. The path will contain an MD5 fingerprint.
 
-Place `minibundle` [Liquid][Liquid] block into the Liquid template file
-where you want the block's generated markup to appear. Write bundling
-configuration inside the block in [YAML][YAML] syntax. For example, to
-bundle a set of JavaScript sources:
+Place `minibundle` [Liquid] block into the Liquid template file where
+you want the block's generated markup to appear. Write bundling
+configuration inside the block in [YAML] syntax. For example, to bundle
+a set of JavaScript sources:
 
 ``` text
 {% minibundle js %}
@@ -252,7 +254,7 @@ minibundle:
 
 Use `css` or `js` as the argument to the opening tag, for example `{% minibundle css %}`.
 
-The block contents must be in [YAML][YAML] syntax. The supported keys are:
+The block contents must be in [YAML] syntax. The supported keys are:
 
 | Key | Value type | Value example | Default value | Description |
 | --- | --- | --- | --- | --- |
@@ -387,10 +389,10 @@ Should both be defined, the setting from the environment variable wins.
 ### Variable templating
 
 The template engine used by `ministamp` tag's Hash argument has syntax
-resembling the ones of [Liquid][Liquid] and [Mustache][Mustache], with
-`{{` and `}}` tags surrounding the variable to be substituted into the
-output string. For example, given Liquid variable `var = 'foo'`, the
-template `begin{{ var }}end` results in `beginfooend`.
+resembling the ones of [Liquid] and [Mustache], with `{{` and `}}` tags
+surrounding the variable to be substituted into the output string. For
+example, given Liquid variable `var = 'foo'`, the template `begin{{ var
+}}end` results in `beginfooend`.
 
 The engine supports variable substitution only. It does not support
 other expressions. If you need to, you can write complex expressions in
@@ -493,7 +495,7 @@ The plugin does not work with Jekyll's incremental rebuild feature
 
 MIT. See [LICENSE.txt].
 
-[Bundler]: https://bundler.io/
+[Gemfile]: https://bundler.io/gemfile.html
 [GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating_and_updating_cached_responses
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
