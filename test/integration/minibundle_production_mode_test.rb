@@ -696,26 +696,26 @@ module Jekyll::Minibundle::Test
 
     def test_minifier_command_in_local_block_overrides_command_from_environment
       with_site_dir do
-        IO.write('test.html', <<-YAML)
----
-layout: override
-title: Test
----
+        IO.write('test.html', <<~YAML)
+          ---
+          layout: override
+          title: Test
+          ---
         YAML
 
-        IO.write('_layouts/override.html', <<-LIQUID)
-<!DOCTYPE html>
-<html>
-  <body>
-    {% minibundle js %}
-    source_dir: _assets/scripts
-    destination_path: assets/deps
-    assets:
-      - dependency
-    minifier_cmd: #{minifier_cmd_to_remove_comments_and_count('minifier_cmd_local_count')}
-    {% endminibundle %}
-  </body>
-</html>
+        IO.write('_layouts/override.html', <<~LIQUID)
+          <!DOCTYPE html>
+          <html>
+            <body>
+              {% minibundle js %}
+              source_dir: _assets/scripts
+              destination_path: assets/deps
+              assets:
+                - dependency
+              minifier_cmd: #{minifier_cmd_to_remove_comments_and_count('minifier_cmd_local_count')}
+              {% endminibundle %}
+            </body>
+          </html>
         LIQUID
 
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count('minifier_cmd_global_count'))

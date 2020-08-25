@@ -49,9 +49,9 @@ module Jekyll::Minibundle::Test
 
     def test_raise_error_if_unclosed_open_tag
       err = assert_raises(VariableTemplate::SyntaxError) { VariableTemplate.compile('beg{{var}end') }
-      expected = <<-MESSAGE
-Missing closing tag ("}}") for variable opening tag ("{{") at position 5 in template (position highlighted with "@"):
-beg{{@var}end
+      expected = <<~MESSAGE
+        Missing closing tag ("}}") for variable opening tag ("{{") at position 5 in template (position highlighted with "@"):
+        beg{{@var}end
       MESSAGE
       assert_equal(expected, err.to_s)
     end

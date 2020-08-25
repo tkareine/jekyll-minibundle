@@ -11,12 +11,12 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/tkareine/jekyll-minibundle'
   s.license  = 'MIT'
 
-  s.description = <<-TEXT
-A straightforward asset bundling plugin for Jekyll, utilizing external
-minification tool of your choice. It provides asset concatenation for
-bundling and asset fingerprinting with MD5 digest for cache busting.
-There are no other runtime dependencies besides the minification tool
-(not even other gems).
+  s.description = <<~TEXT
+    A straightforward asset bundling plugin for Jekyll, utilizing external
+    minification tool of your choice. It provides asset concatenation for
+    bundling and asset fingerprinting with MD5 digest for cache busting.
+    There are no other runtime dependencies besides the minification tool
+    (not even other gems).
   TEXT
 
   s.files = %w[
@@ -35,9 +35,9 @@ There are no other runtime dependencies besides the minification tool
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
   s.add_development_dependency 'rake',          '~> 13.0'
-  s.add_development_dependency 'rubocop',       '~> 0.80.1'
+  s.add_development_dependency 'rubocop',       '~> 0.89.1'
 
-  s.required_ruby_version = '>= 2.3.0'
+  s.required_ruby_version = '>= 2.4.0'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end

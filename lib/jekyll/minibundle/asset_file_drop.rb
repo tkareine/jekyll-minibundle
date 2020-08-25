@@ -16,6 +16,7 @@ module Jekyll::Minibundle
     ].freeze
 
     def initialize(file)
+      super()
       @file = file
     end
 

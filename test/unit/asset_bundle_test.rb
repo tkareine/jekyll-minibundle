@@ -17,10 +17,10 @@ module Jekyll::Minibundle::Test
       _, actual_stderr = capture_io do
         assert_raises(RuntimeError) { make_bundle(cmd) }
       end
-      expected_stderr = <<-MESSAGE
-Minibundle: Bundling "assets/site.js" failed with exit status 1, command: #{cmd.inspect}, last 16 bytes of minifier output:
-Minibundle: line 1\\x07
-Minibundle: line 2\\xa4
+      expected_stderr = <<~MESSAGE
+        Minibundle: Bundling "assets/site.js" failed with exit status 1, command: #{cmd.inspect}, last 16 bytes of minifier output:
+        Minibundle: line 1\\x07
+        Minibundle: line 2\\xa4
       MESSAGE
       assert_equal(expected_stderr, actual_stderr.gsub(/\e\[\d+m/, '').gsub(/^ +/, ''))
     end
@@ -32,11 +32,11 @@ Minibundle: line 2\\xa4
 
     def test_raise_exception_if_bundle_command_not_configured
       err = assert_raises(RuntimeError) { make_bundle(nil) }
-      expected_errmsg = <<-MESSAGE
-Missing minification command for bundling "assets/site.js". Specify it in
-1) minibundle.minifier_commands.js setting in _config.yml,
-2) $JEKYLL_MINIBUNDLE_CMD_JS environment variable, or
-3) minifier_cmd setting inside minibundle block.
+      expected_errmsg = <<~MESSAGE
+        Missing minification command for bundling "assets/site.js". Specify it in
+        1) minibundle.minifier_commands.js setting in _config.yml,
+        2) $JEKYLL_MINIBUNDLE_CMD_JS environment variable, or
+        3) minifier_cmd setting inside minibundle block.
       MESSAGE
       assert_equal(expected_errmsg, err.to_s)
     end

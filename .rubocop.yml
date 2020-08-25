@@ -3,14 +3,13 @@
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
-  TargetRubyVersion: 2.3
+  NewCops: enable
+  TargetRubyVersion: 2.4
 Layout/ExtraSpacing:
   AllowBeforeTrailingComments: true
 Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
-Layout/HeredocIndentation:
-  Enabled: false
 Layout/LineLength:
   Max: 200
 Layout/SpaceInsideHashLiteralBraces:
@@ -31,16 +30,8 @@ Style/ClassAndModuleChildren:
   Enabled: false  # we use both compact and nested style, preferring compact
 Style/ClassVars:
   Enabled: false  # it's ok when knowing it's limitations, easy to access from class instance scope
-Style/CollectionMethods:
-  Enabled: true
 Style/Documentation:
   Enabled: false  # we have documentation in the readme
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
 Style/IfUnlessModifier:
   Enabled: false  # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
 Style/NumericPredicate:

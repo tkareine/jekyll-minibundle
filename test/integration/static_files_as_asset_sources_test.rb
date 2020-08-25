@@ -28,7 +28,7 @@ module Jekyll::Minibundle::Test
 
           generate_site(env)
 
-          asset_files = Dir[destination_path('assets') + '/screen*.css']
+          asset_files = Dir["#{destination_path('assets')}/screen*.css"]
 
           assert_equal(1, asset_files.size)
           assert_equal(contents, File.read(destination_path('assets/shared.css')))

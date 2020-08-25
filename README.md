@@ -1,7 +1,7 @@
 # Jekyll Minibundle plugin
 
 [![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
-[![Build status](https://travis-ci.org/tkareine/jekyll-minibundle.svg?branch=master)][MinibundleBuild]
+[![CI](https://github.com/tkareine/jekyll-minibundle/workflows/CI/badge.svg)][MinibundleCI]
 
 A straightforward asset bundling plugin for [Jekyll], utilizing external
 minification tool of your choice. It provides asset concatenation for
@@ -11,7 +11,7 @@ There are no runtime dependencies, except for the minification tool used
 for bundling (fingerprinting has no dependencies).
 
 The plugin requires Jekyll version 3 or 4. It is tested with Ruby MRI
-2.3 and later.
+2.4 and later.
 
 The plugin works with Jekyll's watch mode (auto-regeneration, Jekyll
 option `--watch`), but not with incremental feature enabled (Jekyll
@@ -505,7 +505,7 @@ MIT. See [LICENSE.txt].
 [LiquidCaptureBlock]: https://shopify.github.io/liquid/tags/variable/#capture
 [Liquid]: https://shopify.github.io/liquid/
 [MD5]: https://en.wikipedia.org/wiki/MD5
-[MinibundleBuild]: https://travis-ci.org/tkareine/jekyll-minibundle
+[MinibundleCI]: https://github.com/tkareine/jekyll-minibundle/actions?workflow=CI
 [MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
 [Mustache]: https://mustache.github.io/
 [Sass]: https://sass-lang.com/

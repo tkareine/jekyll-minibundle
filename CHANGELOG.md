@@ -1,6 +1,7 @@
 # HEAD
 
-* Drop support for Ruby 2.2 (we require Ruby version 2.3 or later).
+* Drop support for Ruby 2.2 and 2.3 (we require Ruby version 2.4 or
+  later).
 
 # 2.2.0 / 2017-03-10
 

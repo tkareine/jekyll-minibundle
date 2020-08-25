@@ -68,8 +68,8 @@ module Jekyll::Minibundle
           end
 
           if cached_is_used
-            raise <<-MESSAGE
-Two or more minibundle blocks with the same destination path #{asset_destination_path.inspect}, but having different asset configuration: #{bundle_config.inspect} vs. #{cached_config.inspect}
+            raise <<~MESSAGE
+              Two or more minibundle blocks with the same destination path #{asset_destination_path.inspect}, but having different asset configuration: #{bundle_config.inspect} vs. #{cached_config.inspect}
             MESSAGE
           end
 
@@ -109,8 +109,8 @@ Two or more minibundle blocks with the same destination path #{asset_destination
           end
 
           if cached_is_used
-            raise <<-MESSAGE
-Two or more ministamp tags with the same destination path #{asset_destination_path.inspect}, but different asset source paths: #{asset_source_path.inspect} vs. #{cached_config.inspect}
+            raise <<~MESSAGE
+              Two or more ministamp tags with the same destination path #{asset_destination_path.inspect}, but different asset source paths: #{asset_source_path.inspect} vs. #{cached_config.inspect}
             MESSAGE
           end
 

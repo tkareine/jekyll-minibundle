@@ -20,6 +20,7 @@ module Jekyll::Minibundle
       CURSOR = '@'
 
       def initialize(message, template, position)
+        super()
         @message = message
         @template = template
         @position = position
@@ -29,15 +30,14 @@ module Jekyll::Minibundle
         template_before_pos = @template[0, @position]
         template_after_pos = @template[@position..-1]
 
-        <<-MESSAGE
-#{@message} at position #{@position} in template (position highlighted with "#{CURSOR}"):
-#{template_before_pos}#{CURSOR}#{template_after_pos}
+        <<~MESSAGE
+          #{@message} at position #{@position} in template (position highlighted with "#{CURSOR}"):
+          #{template_before_pos}#{CURSOR}#{template_after_pos}
         MESSAGE
       end
     end
 
     module Parser
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def self.parse(template)
         raise ArgumentError, 'Nil template' if template.nil?
 
@@ -77,7 +77,6 @@ module Jekyll::Minibundle
 
         tokens
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       def self.make_escape_sequence_regexp
         escape_chars = (OPEN_TAG + CLOSE_TAG).chars.uniq

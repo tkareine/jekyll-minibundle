@@ -21,10 +21,10 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_missing_block_contents
       err = assert_raises(ArgumentError) do
-        render_template(<<-LIQUID)
-{% minibundle css %}
+        render_template(<<~LIQUID)
+          {% minibundle css %}
 
-{% endminibundle %}
+          {% endminibundle %}
         LIQUID
       end
       assert_equal('Missing configuration for minibundle block; pass configuration in YAML syntax', err.to_s)
@@ -32,10 +32,10 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_invalid_block_contents_syntax
       err = assert_raises(ArgumentError) do
-        render_template(<<-LIQUID)
-{% minibundle css %}
-}
-{% endminibundle %}
+        render_template(<<~LIQUID)
+          {% minibundle css %}
+          }
+          {% endminibundle %}
         LIQUID
       end
       expected =
@@ -46,10 +46,10 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_unsupported_block_contents_type
       err = assert_raises(ArgumentError) do
-        render_template(<<-LIQUID)
-{% minibundle css %}
-str
-{% endminibundle %}
+        render_template(<<~LIQUID)
+          {% minibundle css %}
+          str
+          {% endminibundle %}
         LIQUID
       end
       assert_equal("Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n", err.to_s)
@@ -93,16 +93,16 @@ str
       }
     ].each do |spec|
       define_method :"test_normalizing_baseurl_with_#{spec.fetch(:description)}" do
-        actual_output = render_template(<<-LIQUID)
-{% minibundle css %}
-source_dir: _assets/styles
-destination_path: assets/site
-#{spec.fetch(:baseurl_config)}
-assets:
-  - reset
-  - common
-minifier_cmd: #{minifier_cmd_to_remove_comments}
-{% endminibundle %}
+        actual_output = render_template(<<~LIQUID)
+          {% minibundle css %}
+          source_dir: _assets/styles
+          destination_path: assets/site
+          #{spec.fetch(:baseurl_config)}
+          assets:
+            - reset
+            - common
+          minifier_cmd: #{minifier_cmd_to_remove_comments}
+          {% endminibundle %}
         LIQUID
 
         expected_output = %(<link rel="stylesheet" href="#{spec.fetch(:expected_asset_url)}">\n)

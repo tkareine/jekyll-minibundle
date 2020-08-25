@@ -1,0 +1,44 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    name: Test with MRI ${{ matrix.ruby }}, Gemfile-${{ matrix.gemfile }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - 2.4
+          - 2.5
+          - 2.6
+          - 2.7
+        gemfile:
+          - jekyll3
+          - jekyll4
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Cache vendor/bundle-${{ matrix.gemfile }}
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle-${{ matrix.gemfile }}
+          key: ${{ runner.os }}-gems-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
+          restore-keys: |
+            ${{ runner.os }}-gems-${{ matrix.gemfile }}-
+      - name: Install gem dependencies
+        run: |
+          echo 'gem: --no-document' > ~/.gemrc
+          gem update --system >/dev/null
+          gem --version
+          bundle config --local gemfile Gemfile-${{ matrix.gemfile }}
+          bundle config --local path vendor/bundle-${{ matrix.gemfile }}
+          bundle install --jobs 4 --retry 3
+      - name: Run tests
+        run: bundle exec rake

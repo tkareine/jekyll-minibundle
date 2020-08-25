@@ -17,11 +17,11 @@ module Jekyll::Minibundle
       @minifier_cmd = config.fetch(:minifier_cmd)
 
       unless @minifier_cmd
-        raise <<-MESSAGE
-Missing minification command for bundling #{bundle_destination_path.inspect}. Specify it in
-1) minibundle.minifier_commands.#{@type} setting in _config.yml,
-2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
-3) minifier_cmd setting inside minibundle block.
+        raise <<~MESSAGE
+          Missing minification command for bundling #{bundle_destination_path.inspect}. Specify it in
+          1) minibundle.minifier_commands.#{@type} setting in _config.yml,
+          2) $JEKYLL_MINIBUNDLE_CMD_#{@type.to_s.upcase} environment variable, or
+          3) minifier_cmd setting inside minibundle block.
         MESSAGE
       end
 
@@ -46,7 +46,7 @@ Missing minification command for bundling #{bundle_destination_path.inspect}. Sp
         $stdout.puts  # place newline after "(Re)generating..." log messages
         Log.info("Bundling #{bundle_destination_path}:")
         @asset_paths.each do |asset|
-          Log.info(' ' + relative_path_from(asset, @site_dir))
+          Log.info(" #{relative_path_from(asset, @site_dir)}")
           IO.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
@@ -92,7 +92,7 @@ Missing minification command for bundling #{bundle_destination_path.inspect}. Sp
       Log.error("#{message}, last #{last_bytes.size} bytes of minifier output:")
 
       last_bytes
-        .gsub(/[^[:print:]\t\n]/) { |ch| '\x' + ch.unpack('H2').first }
+        .gsub(/[^[:print:]\t\n]/) { |ch| "\\x#{ch.unpack1('H2')}" }
         .split("\n")
         .each { |line| Log.error(line) }
     end
