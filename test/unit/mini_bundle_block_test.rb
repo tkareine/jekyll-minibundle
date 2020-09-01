@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'support/test_case'
-require 'support/fixture_config'
+require_relative '../support/test_case'
+require_relative '../support/fixture_config'
 require 'jekyll/minibundle/mini_bundle_block'
 
 module Jekyll::Minibundle::Test

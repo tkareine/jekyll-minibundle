@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'support/test_case'
+require_relative '../support/test_case'
 require 'jekyll/minibundle/asset_tag_markup'
 
 module Jekyll::Minibundle::Test

@@ -7,7 +7,7 @@ require 'nokogiri'
 require 'jekyll'
 require 'jekyll/minibundle'
 require 'minitest/autorun'
-require 'support/assertions'
+require_relative 'assertions'
 
 module Jekyll::Minibundle::Test
   class TestCase < ::Minitest::Test

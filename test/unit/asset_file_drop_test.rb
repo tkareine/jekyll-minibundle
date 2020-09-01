@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'support/test_case'
-require 'support/fixture_config'
+require_relative '../support/test_case'
+require_relative '../support/fixture_config'
 require 'jekyll/minibundle/asset_file_drop'
 require 'jekyll/minibundle/stamp_file'
 

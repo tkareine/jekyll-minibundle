@@ -69,18 +69,19 @@ task :test do
       name_opt = ENV.key?('NAME') ? " -n #{ENV['NAME']}" : ''
       "#{rb_file}#{name_opt}"
     else
+      pwd = Dir.pwd
+      eval = "-e 'ARGV.each { |f| require \"#{pwd}/test/\#{f}\" }'"
       requirable_files =
         Dir['test/{unit,integration}/*_test.rb']
         .map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }
         .shelljoin
-      eval = "-e 'ARGV.each { |f| require f }'"
       "#{eval} #{requirable_files}"
     end
 
   extra_opts = ENV['DEBUG'] ? '-w -rpp -rpry ' : ''
 
   puts "Jekyll version: #{Gem::Specification.find_by_name('jekyll').version}"
-  sh "ruby -I lib:test #{extra_opts}#{run_selected_or_all}"
+  sh "ruby -I lib #{extra_opts}#{run_selected_or_all}"
 end
 
 namespace :fixture do
