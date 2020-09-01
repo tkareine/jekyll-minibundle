@@ -21,22 +21,22 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Setup Ruby
+      - name: Setup MRI ${{ matrix.ruby }}
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - name: Cache vendor/bundle-${{ matrix.gemfile }}
+      - name: Cache vendor/bundle-${{ matrix.gemfile }} for MRI ${{ matrix.ruby }}
         uses: actions/cache@v2
         with:
           path: vendor/bundle-${{ matrix.gemfile }}
-          key: ${{ runner.os }}-gems-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
+          key: ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
           restore-keys: |
-            ${{ runner.os }}-gems-${{ matrix.gemfile }}-
+            ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-
       - name: Install gem dependencies
         run: |
           echo 'gem: --no-document' > ~/.gemrc
           gem update --system >/dev/null
-          gem --version
+          echo "Using RubyGems $(gem --version)"
           bundle config --local gemfile Gemfile-${{ matrix.gemfile }}
           bundle config --local path vendor/bundle-${{ matrix.gemfile }}
           bundle install --jobs 4 --retry 3
