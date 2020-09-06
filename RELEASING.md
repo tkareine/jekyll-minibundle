@@ -5,7 +5,8 @@
 2. Double check that tests pass:
 
     ``` shell
-    bundle exec rake
+    BUNDLE_GEMFILE=Gemfile-jekyll4 bundle exec rake
+    BUNDLE_GEMFILE=Gemfile-jekyll3 bundle exec rake
     ```
 
 3. Update `Jekyll::Minibundle::VERSION`:
@@ -32,9 +33,9 @@
 6. Build the gem, push commits and tags, publish the gem:
 
     ``` shell
-    bundle exec rake gem:build
-    git push --tags origin master
-    gem push jekyll-minibundle-<version>.gem
+    BUNDLE_GEMFILE=Gemfile-jekyll4 bundle exec rake gem:build
+    git push origin master v$version
+    gem push jekyll-minibundle-$version.gem
     ```
 
-[CI]: https://travis-ci.org/tkareine/jekyll-minibundle
+[CI]: https://github.com/tkareine/jekyll-minibundle/actions?workflow=CI
