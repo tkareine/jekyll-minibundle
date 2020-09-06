@@ -22,7 +22,11 @@ def run_jekyll_in_fixture_site(command)
   sh env, jekyll_cmd
 end
 
-desc 'Run benchmarks; BM=<benchmark_suite_path>'
+desc <<~TEXT
+  Run benchmarks. Supported options from environment variables:
+
+  BM=<benchmark_suite_path>
+TEXT
 task :benchmark do
   run_single_bm = ENV.key?('BM')
 
@@ -59,18 +63,23 @@ namespace :gem do
   end
 end
 
-desc 'Run tests; TEST=<test_suite_path>, NAME=<test_name_pattern>, DEBUG=1 to require Pry, PP, enable warnings'
-task :test do
-  run_single_test = ENV.key?('TEST')
+desc <<~TEXT
+  Run tests. Supported options from environment variables:
 
+  TEST=<test_suite_path>
+  NAME=<test_name_pattern>
+  DEBUG=1                     Require Pry, PP, enable warnings
+  SEED=n                      Set the random seed
+  TEST_OPTS='-v'              Enable other minitest options
+TEXT
+task :test do
   run_selected_or_all =
-    if run_single_test
-      rb_file = ENV['TEST']
-      name_opt = ENV.key?('NAME') ? " -n #{ENV['NAME']}" : ''
-      "#{rb_file}#{name_opt}"
+    if ENV.key?('TEST')
+      test_file = ENV['TEST']
+      minitest_opts = "#{ENV.key?('NAME') ? "-n #{ENV['NAME']} " : ''}#{ENV.fetch('TEST_OPTS', '')}"
+      "#{test_file} #{minitest_opts}"
     else
-      pwd = Dir.pwd
-      eval = "-e 'ARGV.each { |f| require \"#{pwd}/test/\#{f}\" }'"
+      eval = "-e 'ARGV.each { |f| require \"#{Dir.pwd}/test/\#{f}\" }'"
       requirable_files =
         Dir['test/{unit,integration}/*_test.rb']
         .map { |file| %r{^test/(.+)\.rb$}.match(file)[1] }
@@ -78,10 +87,10 @@ task :test do
       "#{eval} #{requirable_files}"
     end
 
-  extra_opts = ENV['DEBUG'] ? '-w -rpp -rpry ' : ''
+  ruby_opts = "-I lib#{ENV['DEBUG'] ? ' -w -rpp -rpry' : ''}"
 
   puts "Jekyll version: #{Gem::Specification.find_by_name('jekyll').version}"
-  sh "ruby -I lib #{extra_opts}#{run_selected_or_all}"
+  sh "ruby #{ruby_opts} #{run_selected_or_all}"
 end
 
 namespace :fixture do
