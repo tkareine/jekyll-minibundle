@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll-minibundle (2.2.0)
+    jekyll-minibundle (3.0.0)
 
 GEM
   remote: https://rubygems.org/

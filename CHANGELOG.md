@@ -4,10 +4,23 @@ This project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [v3.0.0] - 2020-09-06
+
+No functional changes, only minor refactorings since v2.2.0. Dropping
+support for Ruby MRI < 2.4 causes major version bump.
+
+### Added
+
+* Increase test coverage.
+
+### Changed
+
+* Hygienic refactorings: use frozen string literals, prefer squiggly
+  heredocs over non-squiggly ones, adhere to the RuboCop linter.
+
 ### Removed
 
-* Drop support for Ruby 2.2 and 2.3 (we require Ruby version 2.4 or
-  later).
+* Drop support for Ruby MRI versions below 2.4.
 
 ## [v2.2.0] - 2017-03-10
 
@@ -286,8 +299,9 @@ This project adheres to [Semantic Versioning].
 * Add `ministamp` tag and `minibundle` block for Jekyll.
 * First release.
 
-[Unreleased]: https://github.com/tkareine/jekyll-minibundle/compare/v2.2.0...HEAD
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
+[Unreleased]: https://github.com/tkareine/jekyll-minibundle/compare/v3.0.0...HEAD
+[v3.0.0]: https://github.com/tkareine/jekyll-minibundle/compare/v2.2.0...v3.0.0
 [v2.2.0]: https://github.com/tkareine/jekyll-minibundle/compare/v2.1.2...v2.2.0
 [v2.1.2]: https://github.com/tkareine/jekyll-minibundle/compare/v2.1.1...v2.1.2
 [v2.1.1]: https://github.com/tkareine/jekyll-minibundle/compare/v2.1.0...v2.1.1
