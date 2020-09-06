@@ -95,12 +95,7 @@ module Jekyll::Minibundle::Test
           assert_contains_only(site.static_files, [first_file])
         end
       end
-    end
 
-    [
-      {description: 'assets', config_diff: {'assets' => %w[b1 b2]}},
-      {description: 'source_directory', config_diff: {'source_dir' => '_assets/src2'}}
-    ].each do |spec|
       define_method :"test_raise_exception_if_registering_development_file_collection_with_same_destination_path_but_with_different_#{spec.fetch(:description)}" do
         with_fake_site do |site|
           first_config = bundle_config
