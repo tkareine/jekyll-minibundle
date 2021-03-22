@@ -9,10 +9,10 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 2.4
-          - 2.5
-          - 2.6
-          - 2.7
+          - "2.5"
+          - "2.6"
+          - "2.7"
+          - "3.0"
         gemfile:
           - jekyll3
           - jekyll4
@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Setup MRI ${{ matrix.ruby }}
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Cache vendor/bundle-${{ matrix.gemfile }} for MRI ${{ matrix.ruby }}
