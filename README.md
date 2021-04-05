@@ -30,12 +30,12 @@ plugin connects to the minifier with standard unix pipe, feeding asset
 file contents to it in desired order via standard input, and reads the
 result from standard output.
 
-Why is this good? A fingerprint in asset's path is
-the [recommended way][GoogleWebFundamentalsHttpCaching] to handle
-caching of static resources, because you can allow browsers and
-intermediate proxies to cache the asset for a very long
-time. Calculating MD5 digest over the contents of the asset is fast and
-the resulting digest is reasonably unique to be generated automatically.
+Why is this good? A fingerprint in asset's path is the [recommended
+way][GoogleWebDevHttpCache] to handle caching of static resources,
+because you can allow browsers and intermediate proxies to cache the
+asset for a very long time. Calculating MD5 digest over the contents of
+the asset is fast and the resulting digest is reasonably unique to be
+generated automatically.
 
 Asset bundling is good for reducing the number of requests to the
 backend upon page load. The minification of stylesheets and JavaScript
@@ -97,10 +97,12 @@ empty:
 <link rel="stylesheet" href="/assets/site-390be921ee0eff063817bb5ef2954300.css" media="screen, projection">
 ```
 
-Another example, this time fingerprinting an image:
+Another example, this time fingerprinting an image and using the
+[absolute_url][JekyllLiquidFilters] Liquid filter of Jekyll to render
+the absolute URL of the image in the `src` attribute:
 
 ``` liquid
-<img src="{{ site.baseurl }}{% ministamp _assets/dog.jpg assets/dog.jpg %}" alt="My dog smiling to the camera" title="A photo of my dog" width="195" height="258" />
+<img src="{{ "/" | absolute_url }}{% ministamp _assets/dog.jpg assets/dog.jpg %}" alt="My dog smiling to the camera" title="A photo of my dog" width="195" height="258" />
 ```
 
 This feature can be combined with asset generation tools external to
@@ -503,8 +505,9 @@ The plugin does not work with Jekyll's incremental rebuild feature
 MIT. See [LICENSE.txt].
 
 [Gemfile]: https://bundler.io/gemfile.html
-[GoogleWebFundamentalsHttpCaching]: https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#invalidating_and_updating_cached_responses
+[GoogleWebDevHttpCache]: https://web.dev/http-cache/
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
+[JekyllLiquidFilters]: https://jekyllrb.com/docs/liquid/filters/
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
 [Jekyll]: https://jekyllrb.com/
 [LICENSE.txt]: https://raw.githubusercontent.com/tkareine/jekyll-minibundle/master/LICENSE.txt
