@@ -63,7 +63,7 @@ The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
    (Use the `gems` key instead of `plugins` for Jekyll older than v3.5.0.)
 
-An alternative to using the `plugins` configuration option is to add
+An alternative to using the `plugins` configuration option is to add the
 `_plugins/minibundle.rb` file to your site project with this line:
 
 ``` ruby
@@ -76,7 +76,8 @@ Jekyll's `safe` configuration option.
 ### Asset fingerprinting
 
 If you just want to have an MD5 fingerprint in your asset's path, use
-`ministamp` [Liquid] tag in a Liquid template file. For example:
+the `ministamp` [Liquid] tag in a Liquid template file. For example,
+fingerprinting CSS styles:
 
 ``` liquid
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _assets/site.css assets/site.css %}" media="screen, projection">
@@ -96,11 +97,17 @@ empty:
 <link rel="stylesheet" href="/assets/site-390be921ee0eff063817bb5ef2954300.css" media="screen, projection">
 ```
 
-This feature is useful when combined with asset generation tools
-external to Jekyll. For example, you can configure [Sass] to take input
-files from `_assets/styles/*.scss` and to produce output to
-`_tmp/site.css`. Then, you use `ministamp` tag to copy the file with a
-fingerprint to Jekyll's site destination directory:
+Another example, this time fingerprinting an image:
+
+``` liquid
+<img src="{{ site.baseurl }}{% ministamp _assets/dog.jpg assets/dog.jpg %}" alt="My dog smiling to the camera" title="A photo of my dog" width="195" height="258" />
+```
+
+This feature can be combined with asset generation tools external to
+Jekyll. For example, you can configure [Sass] to take input files from
+`_assets/styles/*.scss` and to produce output to `_tmp/site.css`. Then,
+you use the `ministamp` tag to copy the file with a fingerprint to
+Jekyll's site destination directory:
 
 ``` liquid
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _tmp/site.css assets/site.css %}">
@@ -108,18 +115,18 @@ fingerprint to Jekyll's site destination directory:
 
 #### `ministamp` call syntax
 
-The argument for `ministamp` tag must be in [YAML] syntax, and parsing
-the argument as YAML must result either in a String or a Hash. What you
-saw previously was the argument being parsed as a String; it's
-effectively a shorthand version of passing the argument as a Hash with
-certain keys. That is, in the following call:
+The argument for the `ministamp` tag must be in [YAML] syntax, and
+parsing the argument as YAML must result either in a String or a
+Hash. What you saw previously was the argument being parsed as a String;
+it's effectively a shorthand version of passing the argument as a Hash
+with certain keys. That is, in the following call:
 
 ``` liquid
 {% ministamp _tmp/site.css assets/site.css %}
 ```
 
 the argument is a String: `"_tmp/site.css assets/site.css"`. The call is
-equivalent to the following call with Hash argument:
+equivalent to the following call with a Hash argument:
 
 ``` liquid
 {% ministamp { source_path: _tmp/site.css, destination_path: assets/site.css } %}
@@ -136,7 +143,7 @@ The supported keys for the Hash argument are:
 | `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `render_basename_only` is `false`, `ministamp`'s output will begin with `/`. |
 | `render_basename_only` | no | boolean | `true` | `false` | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 
-With Hash argument, the plugin processes `source_path` and
+With a Hash argument, the plugin processes `source_path` and
 `destination_path` values through a tiny template engine. This allows
 you to use Liquid's variables as input to `ministamp` tag. An example
 with Liquid's [`assign`][LiquidAssignTag] tag:
@@ -169,8 +176,8 @@ appear. The markup tag contains the path to the bundle file, and the
 Jekyll's site destination directory will have the bundle file at that
 path. The path will contain an MD5 fingerprint.
 
-Place `minibundle` [Liquid] block into the Liquid template file where
-you want the block's generated markup to appear. Write bundling
+Place the `minibundle` [Liquid] block into the Liquid template file
+where you want the block's generated markup to appear. Write bundling
 configuration inside the block in [YAML] syntax. For example, to bundle
 a set of JavaScript sources:
 
@@ -222,7 +229,7 @@ above, to the generated markup with `attributes` map inside the
 
 As shown above for the `baseurl` key, you can use Liquid template syntax
 inside the contents of the block. Liquid renders block contents before
-`minibundle` block gets the turn to render itself. Just ensure that
+the `minibundle` block gets the turn to render itself. Just ensure that
 block contents will result in valid YAML.
 
 For bundling CSS assets, use `css` as the argument to the `minibundle`
@@ -270,7 +277,7 @@ The block contents must be in [YAML] syntax. The supported keys are:
 
 You can specify minifier commands in three places:
 
-1. in `_config.yml` (as shown earlier):
+1. In `_config.yml` (as shown earlier):
 
    ``` yaml
    minibundle:
@@ -279,14 +286,14 @@ You can specify minifier commands in three places:
        js: node_modules/.bin/uglifyjs
    ```
 
-2. as environment variables:
+2. As environment variables:
 
    ``` bash
    export JEKYLL_MINIBUNDLE_CMD_CSS=_bin/remove_whitespace
    export JEKYLL_MINIBUNDLE_CMD_JS="node_modules/.bin/uglifyjs"
    ```
 
-3. inside the `minibundle` block with `minifier_cmd` option, allowing
+3. Inside the `minibundle` block with `minifier_cmd` option, allowing
    blocks to have different commands from each other:
 
    ``` text
@@ -304,8 +311,8 @@ You can specify minifier commands in three places:
 
 These ways of specification are listed in increasing order of
 specificity. Should multiple commands apply to a block, the most
-specific one wins. For example, the `minifier_cmd` option inside `{%
-minibundle js }%` block overrides the setting in
+specific one wins. For example, the `minifier_cmd` option inside the `{%
+minibundle js }%` block overrides the setting in the
 `$JEKYLL_MINIBUNDLE_CMD_JS` environment variable.
 
 ### Recommended directory layout
@@ -356,7 +363,7 @@ exclude:
 
 Then Jekyll won't see if files inside those directories have changed and
 the plugin won't get the chance to update assets to the site destination
-directory. So, don't explicitly exclude `_assets` and `_tmp`
+directory. So, don't explicitly exclude the `_assets` and `_tmp`
 directories.
 
 See [Jekyll configuration][JekyllConf] for more about excluding files
@@ -364,12 +371,12 @@ and directories.
 
 ### Development mode
 
-If you set `$JEKYLL_MINIBUNDLE_MODE` environment variable to
+If you set the `$JEKYLL_MINIBUNDLE_MODE` environment variable to
 `development`, then the plugin will copy asset files as is to Jekyll's
 site destination directory and omit fingerprinting.
 
 The development mode changes `minibundle` block's `destination_path`
-option to be the base directory for files mentioned in `assets`
+option to be the base directory for files mentioned in the `assets`
 option. This is useful in development workflow, where you need the
 filenames and line numbers of the original asset sources.
 
@@ -416,9 +423,9 @@ named `nosuch`.
 
 ### Separating asset destination path from generated URL
 
-Use `render_basename_only: true` option of `ministamp` tag and
-`destination_baseurl` option of `minibundle` block to separate the
-destination path of the asset file from the generated URL of the
+Use the `render_basename_only: true` option of the `ministamp` tag and
+the `destination_baseurl` option of the `minibundle` block to separate
+the destination path of the asset file from the generated URL of the
 asset. This allows you to serve the asset from a separate domain, for
 example.
 
@@ -428,7 +435,7 @@ Example usage, with the following content in `_config.yml`:
 cdn_baseurl: 'https://cdn.example.com'
 ```
 
-For `ministamp` tag:
+For the `ministamp` tag:
 
 ``` liquid
 <link rel="stylesheet" href="{{ site.cdn_baseurl }}/css/{% ministamp { source_path: '_tmp/site.css', destination_path: assets/site.css, render_basename_only: true } %}">
@@ -442,7 +449,7 @@ rendering will result in:
 <link rel="stylesheet" href="https://cdn.example.com/css/site-ff9c63f843b11f9c3666fe46caaddea8.css">
 ```
 
-For `minibundle` block:
+For the `minibundle` block:
 
 ``` liquid
 {% minibundle js %}
