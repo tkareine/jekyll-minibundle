@@ -19,9 +19,9 @@ option `--incremental`).
 
 ## Features
 
-There are two features: asset fingerprinting with [MD5 digest][MD5] over
-the contents of the asset, and asset bundling combined with the first
-feature.
+There are two features: fingerprinting with [MD5 digest][MD5] over the
+contents of the asset file (any type of file will do), and asset
+bundling combined with the first feature.
 
 Asset bundling consists of concatenation and minification. The plugin
 implements concatenation and leaves choosing the minification tool up to
@@ -34,7 +34,7 @@ Why is this good? A fingerprint in asset's path is the [recommended
 way][GoogleWebDevHttpCache] to handle caching of static resources,
 because you can allow browsers and intermediate proxies to cache the
 asset for a very long time. Calculating MD5 digest over the contents of
-the asset is fast and the resulting digest is reasonably unique to be
+the file is fast and the resulting digest is reasonably unique to be
 generated automatically.
 
 Asset bundling is good for reducing the number of requests to the
@@ -171,8 +171,8 @@ template syntax.
 ### Asset bundling
 
 This is a straightforward way to bundle assets with any minification
-tool that supports reading input from STDIN and writing the output to
-STDOUT. You write the configuration for input sources directly into the
+tool that supports reading input from stdin and writing the output to
+stdout. You write the configuration for input sources directly into the
 content file where you want the markup tag for the bundle file to
 appear. The markup tag contains the path to the bundle file, and the
 Jekyll's site destination directory will have the bundle file at that
@@ -211,9 +211,9 @@ minibundle:
 When it's time to render the `minibundle` block, the plugin launches the
 minifier and connects to it with a Unix pipe. The plugin feeds the
 contents of the asset files in `source_dir` directory as input to the
-minifier (STDIN). The feeding order is the order of the files in the
+minifier (stdin). The feeding order is the order of the files in the
 `assets` key in the block configuration. The plugin expects the minifier
-to produce output (STDOUT) and writes it to the file at
+to produce output (stdout) and writes it to the file at
 `destination_path` in Jekyll's site destination directory. The filename
 will contain a fingerprint.
 
