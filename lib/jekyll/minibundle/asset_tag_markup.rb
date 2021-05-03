@@ -19,7 +19,7 @@ module Jekyll::Minibundle
     end
 
     def self.make_attributes(attributes)
-      attributes.map { |name, value| make_attribute(name, value) }.join('')
+      attributes.map { |name, value| make_attribute(name, value) }.join
     end
 
     def self.make_attribute(name, value)

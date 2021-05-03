@@ -4,7 +4,7 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   NewCops: enable
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 Layout/ExtraSpacing:
   AllowBeforeTrailingComments: true
 Layout/HashAlignment:
@@ -19,7 +19,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 200
 Metrics/ClassLength:
-  Enabled: false  # test classes are big
+  Enabled: false # test classes are big
 Metrics/MethodLength:
   Max: 50
 Metrics/ModuleLength:
@@ -27,12 +27,12 @@ Metrics/ModuleLength:
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: required
 Style/ClassAndModuleChildren:
-  Enabled: false  # we use both compact and nested style, preferring compact
+  Enabled: false # we use both compact and nested style, preferring compact
 Style/ClassVars:
-  Enabled: false  # it's ok when knowing it's limitations, easy to access from class instance scope
+  Enabled: false # it's ok when knowing it's limitations, easy to access from class instance scope
 Style/Documentation:
-  Enabled: false  # we have documentation in the readme
+  Enabled: false # we have documentation in the readme
 Style/IfUnlessModifier:
-  Enabled: false  # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
+  Enabled: false # we like to use if/unless blocks for single-line expressions or statements that are long, avoiding making the line even longer with trailing if/unless modifier
 Style/NumericPredicate:
   EnforcedStyle: comparison

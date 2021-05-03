@@ -9,7 +9,9 @@ module Jekyll::Minibundle
     ESCAPE_CHAR = '\\'
 
     def initialize(interpolation)
+      # rubocop:disable Style/DocumentDynamicEvalDefinition
       instance_eval("def render(variables) #{interpolation} end", __FILE__, __LINE__)
+      # rubocop:enable Style/DocumentDynamicEvalDefinition
     end
 
     def self.compile(template)

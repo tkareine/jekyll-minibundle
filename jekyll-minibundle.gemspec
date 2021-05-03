@@ -35,9 +35,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'nokogiri',      '~> 1.6'
   s.add_development_dependency 'pry',           '~> 0.10'
   s.add_development_dependency 'rake',          '~> 13.0'
-  s.add_development_dependency 'rubocop',       '~> 0.90.0'
+  s.add_development_dependency 'rubocop',       '~> 1.13'
 
-  s.required_ruby_version = '>= 2.4.0'
+  s.required_ruby_version = '>= 2.5.0'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end

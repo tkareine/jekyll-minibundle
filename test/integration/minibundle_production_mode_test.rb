@@ -873,7 +873,7 @@ module Jekyll::Minibundle::Test
     def source_assets_size(source_subdir, assets, type)
       assets
         .map { |f| File.read(site_fixture_path(source_subdir, "#{f}.#{type}")) }
-        .join('')
+        .join
         .size
     end
 
