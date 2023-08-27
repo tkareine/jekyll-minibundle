@@ -5,5 +5,11 @@ source 'https://rubygems.org/'
 gemspec
 
 group :development do
-  gem 'jekyll', '~> 3.0'
+  gem 'benchmark-ips', '~> 2.7'
+  gem 'jekyll',        '~> 3.0'
+  gem 'minitest',      '~> 5.8'
+  gem 'nokogiri',      '~> 1.6'
+  gem 'pry',           '~> 0.10'
+  gem 'rake',          '~> 13.0'
+  gem 'rubocop',       '~> 1.13'
 end

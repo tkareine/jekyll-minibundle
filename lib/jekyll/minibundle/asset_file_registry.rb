@@ -137,6 +137,6 @@ module Jekyll::Minibundle
   end
 end
 
-::Jekyll::Hooks.register(:site, :post_write) do
-  ::Jekyll::Minibundle::AssetFileRegistry.clear_unused
+Jekyll::Hooks.register(:site, :post_write) do
+  Jekyll::Minibundle::AssetFileRegistry.clear_unused
 end

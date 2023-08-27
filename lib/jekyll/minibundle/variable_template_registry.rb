@@ -16,6 +16,6 @@ module Jekyll::Minibundle
   end
 end
 
-::Jekyll::Hooks.register(:site, :post_write) do
-  ::Jekyll::Minibundle::VariableTemplateRegistry.clear
+Jekyll::Hooks.register(:site, :post_write) do
+  Jekyll::Minibundle::VariableTemplateRegistry.clear
 end

@@ -12,4 +12,4 @@ count =
 
 File.write(filename, "#{count + 1}\n")
 
-exec(*ARGV[1..-1])
+exec(*ARGV[1..])

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require 'ostruct'
 require 'tempfile'
 require 'nokogiri'
 require 'jekyll'
@@ -13,6 +12,8 @@ module Jekyll::Minibundle::Test
   class TestCase < ::Minitest::Test
     include Assertions
     include ::Jekyll::Minibundle
+
+    FakeSite = Struct.new('FakeSite', :config, :source, :static_files)
 
     FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))
 
@@ -39,7 +40,7 @@ module Jekyll::Minibundle::Test
     end
 
     def merge_to_yaml_file(file, hash)
-      IO.write(file, YAML.load_file(file).merge(hash).to_yaml)
+      File.write(file, YAML.load_file(file).merge(hash).to_yaml)
     end
 
     def file_mtime_of(path)
@@ -53,7 +54,7 @@ module Jekyll::Minibundle::Test
     def with_env(env)
       org_env = {}
       env.each do |k, v|
-        org_env[k] = ENV[k]
+        org_env[k] = ENV.fetch(k, nil)
         ENV[k] = v
       end
       yield
@@ -83,7 +84,11 @@ module Jekyll::Minibundle::Test
     end
 
     def make_fake_site(dir)
-      OpenStruct.new(source: dir, static_files: [])
+      site = FakeSite.new
+      site.config = {}
+      site.source = dir
+      site.static_files = []
+      site
     end
 
     def make_real_site(dir = Dir.pwd)

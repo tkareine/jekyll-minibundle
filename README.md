@@ -11,7 +11,7 @@ There are no runtime dependencies, except for the minification tool used
 for bundling (fingerprinting has no dependencies).
 
 The plugin requires Jekyll version 3 or 4. It is tested with Ruby MRI
-2.5 and later.
+2.7 and later.
 
 The plugin works with Jekyll's watch mode (auto-regeneration, Jekyll
 option `--watch`), but not with incremental feature enabled (Jekyll

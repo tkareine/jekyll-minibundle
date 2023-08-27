@@ -23,7 +23,9 @@ module Jekyll::Minibundle::Test
     private
 
     def make_site(config = {})
-      OpenStruct.new(config: config)
+      site = FakeSite.new
+      site.config = config
+      site
     end
   end
 end

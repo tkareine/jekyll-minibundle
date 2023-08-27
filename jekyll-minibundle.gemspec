@@ -19,6 +19,10 @@ Gem::Specification.new do |s|
     (not even other gems).
   TEXT
 
+  s.metadata = {
+    'rubygems_mfa_required' => 'true'
+  }
+
   s.files = %w[
     CHANGELOG.md
     LICENSE.txt
@@ -27,17 +31,7 @@ Gem::Specification.new do |s|
     jekyll-minibundle.gemspec
   ] + `git ls-files -- lib`.split("\n")
 
-  s.test_files = `git ls-files -- test`.split("\n")
-
-  s.add_development_dependency 'benchmark-ips', '~> 2.7'
-  s.add_development_dependency 'jekyll',        '>= 3.0'
-  s.add_development_dependency 'minitest',      '~> 5.8'
-  s.add_development_dependency 'nokogiri',      '~> 1.6'
-  s.add_development_dependency 'pry',           '~> 0.10'
-  s.add_development_dependency 'rake',          '~> 13.0'
-  s.add_development_dependency 'rubocop',       '~> 1.13'
-
-  s.required_ruby_version = '>= 2.5.0'
+  s.required_ruby_version = '>= 2.7.0'
 
   s.rdoc_options << '--line-numbers' << '--title' << s.name << '--exclude' << 'test'
 end

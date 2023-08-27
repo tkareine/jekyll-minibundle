@@ -47,7 +47,7 @@ module Jekyll::Minibundle
         Log.info("Bundling #{bundle_destination_path}:")
         @asset_paths.each do |asset|
           Log.info(" #{relative_path_from(asset, @site_dir)}")
-          IO.foreach(asset) { |line| input.write(line) }
+          File.foreach(asset) { |line| input.write(line) }
           input.puts(';') if @type == :js
         end
       end

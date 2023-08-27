@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning].
 
 ### Removed
 
-* Drop support for Ruby MRI versions below 2.5.
+* Drop support for Ruby MRI versions below 2.7.
 
 ## [v3.0.0] - 2020-09-06
 

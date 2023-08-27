@@ -32,7 +32,7 @@ task :benchmark do
 
   bm_sources =
     if run_single_bm
-      [ENV['BM']]
+      [ENV.fetch('BM')]
     else
       Dir['benchmark/*_bm.rb']
     end
