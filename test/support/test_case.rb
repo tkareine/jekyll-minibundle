@@ -15,7 +15,7 @@ module Jekyll::Minibundle::Test
 
     FakeSite = Struct.new('FakeSite', :config, :source, :static_files)
 
-    FIXTURE_DIR = File.expand_path(File.join(File.dirname(__FILE__), '../fixture'))
+    FIXTURE_DIR = File.expand_path('../fixture', File.dirname(__FILE__))
 
     def site_fixture_path(*args)
       File.join(FIXTURE_DIR, 'site', *args)

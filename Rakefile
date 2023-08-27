@@ -11,11 +11,11 @@ def run_jekyll_in_fixture_site(command)
   Dir.chdir('test/fixture/site')
   FileUtils.rm_rf('_site')
 
-  minifier_cmd = File.expand_path(File.join(File.dirname(__FILE__), 'test/fixture/site/_bin/remove_comments'))
+  minifier_cmd = File.expand_path('test/fixture/site/_bin/remove_comments', File.dirname(__FILE__))
   env = {
     'JEKYLL_MINIBUNDLE_CMD_JS'  => minifier_cmd,
     'JEKYLL_MINIBUNDLE_CMD_CSS' => minifier_cmd,
-    'RUBYLIB'                   => File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
+    'RUBYLIB'                   => File.expand_path('lib', File.dirname(__FILE__))
   }
   jekyll_cmd = "jekyll #{command}"
 
