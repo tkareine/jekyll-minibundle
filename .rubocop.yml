@@ -1,4 +1,9 @@
-# Default config: https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
+# Default config: https://github.com/rubocop/rubocop/blob/master/config/default.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+    - Include
 
 require:
   - rubocop-minitest
@@ -7,6 +12,10 @@ require:
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
+  Exclude:
+    - "**/Gemfile-*.lock"
+  Include:
+    - "**/Gemfile-*"
   NewCops: enable
   TargetRubyVersion: 2.7
 Layout/ExtraSpacing:
