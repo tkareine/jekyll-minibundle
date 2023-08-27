@@ -185,7 +185,7 @@ module Jekyll::Minibundle::Test
       methods.each_with_object({}) do |method_name, acc|
         acc[method_name] =
           begin
-            value = file.send(method_name)
+            value = file.public_send(method_name)
             {returned_type: value.class}
           rescue StandardError => e
             {raised: e}

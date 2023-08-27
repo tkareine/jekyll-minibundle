@@ -127,8 +127,8 @@ module Jekyll::Minibundle::Test
     ].each do |spec|
       define_method :"test_register_returns_same_#{spec.fetch(:description)}_for_same_source_and_destination_paths" do
         with_fake_site do |site|
-          first = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
-          second = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
+          first = AssetFileRegistry.public_send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
+          second = AssetFileRegistry.public_send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
 
           assert_same(first, second)
           assert_equal(1, asset_file_registry_size)
@@ -138,8 +138,8 @@ module Jekyll::Minibundle::Test
 
       define_method :"test_register_returns_different_#{spec.fetch(:description)}s_for_different_source_and_destination_paths" do
         with_fake_site do |site|
-          first = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
-          second = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest2.css')
+          first = AssetFileRegistry.public_send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
+          second = AssetFileRegistry.public_send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest2.css')
 
           refute_same first, second
           assert_equal(2, asset_file_registry_size)
@@ -153,9 +153,9 @@ module Jekyll::Minibundle::Test
             File.join(CSS_BUNDLE_SOURCE_DIR, file)
           end
           source_paths.each { |path| FileUtils.touch(path) }
-          first = AssetFileRegistry.send(spec.fetch(:method), site, source_paths[0], 'assets/dest1.css')
+          first = AssetFileRegistry.public_send(spec.fetch(:method), site, source_paths[0], 'assets/dest1.css')
           err = assert_raises(RuntimeError) do
-            AssetFileRegistry.send(spec.fetch(:method), site, source_paths[1], 'assets/dest1.css')
+            AssetFileRegistry.public_send(spec.fetch(:method), site, source_paths[1], 'assets/dest1.css')
           end
 
           assert_equal(<<~MESSAGE, err.to_s)
@@ -201,7 +201,7 @@ module Jekyll::Minibundle::Test
     ].each do |spec|
       define_method :"test_remove_unused_#{spec.fetch(:description)}" do
         with_fake_site do |site|
-          AssetFileRegistry.send(spec.fetch(:method), site, bundle_config)
+          AssetFileRegistry.public_send(spec.fetch(:method), site, bundle_config)
           AssetFileRegistry.clear_unused
 
           assert_equal(1, asset_file_registry_size)
@@ -219,7 +219,7 @@ module Jekyll::Minibundle::Test
     ].each do |spec|
       define_method :"test_remove_unused_#{spec.fetch(:description)}" do
         with_fake_site do |site|
-          AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
+          AssetFileRegistry.public_send(spec.fetch(:method), site, STAMP_SOURCE_PATH, STAMP_DESTINATION_PATH)
           AssetFileRegistry.clear_unused
 
           assert_equal(1, asset_file_registry_size)
