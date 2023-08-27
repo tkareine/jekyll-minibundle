@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org/'
-
-gemspec
+instance_eval(File.read(File.expand_path('Gemfile-common', File.dirname(__FILE__))))
 
 group :development do
-  gem 'benchmark-ips',    '~> 2.7'
   gem 'jekyll',           '~> 4.0'
-  gem 'minitest',         '~> 5.8'
-  gem 'nokogiri',         '~> 1.6'
-  gem 'pry',              '~> 0.10'
-  gem 'rake',             '~> 13.0'
-  gem 'rubocop',          '~> 1.13'
-  gem 'rubocop-minitest', '~> 0.31', require: false
-  gem 'rubocop-rake',     '~> 0.6',  require: false
 end
