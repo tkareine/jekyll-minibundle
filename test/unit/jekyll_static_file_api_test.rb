@@ -46,7 +46,7 @@ module Jekyll::Minibundle::Test
 
         return_type_diff = diff_non_nil_response_types_of_static_file_properties(
           make_static_file(site, 'static.txt'),
-          make_bundle_file(site, %w[dependency app])
+          make_bundle_file(site, 'assets' => %w[dependency app])
         )
 
         assert_empty(return_type_diff)
@@ -86,7 +86,7 @@ module Jekyll::Minibundle::Test
         FileUtils.touch('app.js')
 
         expected_keys = make_static_file(site, 'static.txt').to_liquid.keys.sort
-        actual_keys = make_bundle_file(site, %w[dependency app]).to_liquid.keys.sort
+        actual_keys = make_bundle_file(site, 'assets' => %w[dependency app]).to_liquid.keys.sort
 
         assert_equal(expected_keys, actual_keys)
       end
@@ -101,6 +101,77 @@ module Jekyll::Minibundle::Test
         actual_keys = make_stamp_file(site, 'stamp.js').to_liquid.keys.sort
 
         assert_equal(expected_keys, actual_keys)
+      end
+    end
+
+    def test_development_file_destination
+      with_fake_site do |site|
+        FileUtils.touch('dev.js')
+
+        assert_equal(
+          File.join(current_site_destination_dir, 'dev.js'),
+          make_development_file(site, 'dev.js').destination(current_site_destination_dir)
+        )
+
+        assert_equal(
+          File.join(current_site_destination_dir, 'dev.js'),
+          make_development_file(site, '/dev.js').destination(current_site_destination_dir)
+        )
+      end
+
+      with_fake_site do |site|
+        FileUtils.mkdir('~')
+        FileUtils.touch('~/dev.js')
+
+        assert_equal(
+          File.join(current_site_destination_dir, '~/dev.js'),
+          make_development_file(site, '~/dev.js').destination(current_site_destination_dir)
+        )
+      end
+    end
+
+    def test_bundle_file_destination
+      with_fake_site do |site|
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/bundle-[a-z0-9]{32}\.js},
+          make_bundle_file(site).destination(current_site_destination_dir)
+        )
+
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/bundle-[a-z0-9]{32}\.js},
+          make_bundle_file(site, 'destination_path' => '/bundle').destination(current_site_destination_dir)
+        )
+
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/~/bundle-[a-z0-9]{32}\.js},
+          make_bundle_file(site, 'destination_path' => '~/bundle').destination(current_site_destination_dir)
+        )
+      end
+    end
+
+    def test_stamp_file_destination
+      with_fake_site do |site|
+        FileUtils.touch('stamp.js')
+
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/stamp-[a-z0-9]{32}\.js},
+          make_stamp_file(site, 'stamp.js').destination(current_site_destination_dir)
+        )
+
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/stamp-[a-z0-9]{32}\.js},
+          make_stamp_file(site, '/stamp.js').destination(current_site_destination_dir)
+        )
+      end
+
+      with_fake_site do |site|
+        FileUtils.mkdir('~')
+        FileUtils.touch('~/stamp.js')
+
+        assert_match(
+          %r{#{Regexp.escape(current_site_destination_dir)}/~/stamp-[a-z0-9]{32}\.js},
+          make_stamp_file(site, '~/stamp.js').destination(current_site_destination_dir)
+        )
       end
     end
 
@@ -154,19 +225,23 @@ module Jekyll::Minibundle::Test
       DevelopmentFile.new(site, filename, filename)
     end
 
-    def make_bundle_file(site, assets)
-      BundleFile.new(
-        site,
+    def make_bundle_file(site, config = {})
+      bundle_config = {
         'type'             => :js,
         'source_dir'       => '',
-        'assets'           => assets,
-        'destination_path' => 'bundle.js',
+        'assets'           => [],
+        'destination_path' => 'bundle',
         'minifier_cmd'     => 'false'
-      )
+      }
+      BundleFile.new(site, bundle_config.merge(config))
     end
 
     def make_stamp_file(site, filename)
       StampFile.new(site, filename, filename)
+    end
+
+    def current_site_destination_dir
+      File.join(Dir.pwd, '_site')
     end
   end
 end
