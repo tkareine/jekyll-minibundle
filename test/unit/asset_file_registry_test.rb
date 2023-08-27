@@ -16,6 +16,7 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         first = AssetFileRegistry.register_bundle_file(site, bundle_config)
         second = AssetFileRegistry.register_bundle_file(site, bundle_config)
+
         assert_same(first, second)
         assert_equal(1, asset_file_registry_size)
         assert_contains_only(site.static_files, [first])
@@ -26,6 +27,7 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         first = AssetFileRegistry.register_development_file_collection(site, bundle_config)
         second = AssetFileRegistry.register_development_file_collection(site, bundle_config)
+
         assert_same(first, second)
         assert_equal(1, asset_file_registry_size)
         assert_contains_only(site.static_files, first.files)
@@ -36,6 +38,7 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         first = AssetFileRegistry.register_bundle_file(site, bundle_config.merge('destination_path' => 'assets/dest1'))
         second = AssetFileRegistry.register_bundle_file(site, bundle_config.merge('destination_path' => 'assets/dest2'))
+
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
         assert_contains_only(site.static_files, [first, second])
@@ -46,6 +49,7 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         first = AssetFileRegistry.register_development_file_collection(site, bundle_config.merge('destination_path' => 'assets/dest1'))
         second = AssetFileRegistry.register_development_file_collection(site, bundle_config.merge('destination_path' => 'assets/dest2'))
+
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
         assert_contains_only(site.static_files, (first.files + second.files))
@@ -58,6 +62,7 @@ module Jekyll::Minibundle::Test
         FileUtils.touch(File.join(JS_BUNDLE_SOURCE_DIR, 'app.css'))
         first = AssetFileRegistry.register_bundle_file(site, bundle_config.merge('type' => :css))
         second = AssetFileRegistry.register_bundle_file(site, bundle_config.merge('type' => :js))
+
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
         assert_contains_only(site.static_files, [first, second])
@@ -70,6 +75,7 @@ module Jekyll::Minibundle::Test
         FileUtils.touch(File.join(JS_BUNDLE_SOURCE_DIR, 'app.css'))
         first = AssetFileRegistry.register_development_file_collection(site, bundle_config.merge('type' => :css))
         second = AssetFileRegistry.register_development_file_collection(site, bundle_config.merge('type' => :js))
+
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
         assert_contains_only(site.static_files, (first.files + second.files))
@@ -88,6 +94,7 @@ module Jekyll::Minibundle::Test
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.register_bundle_file(site, second_config)
           end
+
           assert_equal(<<~MESSAGE, err.to_s)
             Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
           MESSAGE
@@ -104,6 +111,7 @@ module Jekyll::Minibundle::Test
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.register_development_file_collection(site, second_config)
           end
+
           assert_equal(<<~MESSAGE, err.to_s)
             Two or more minibundle blocks with the same destination path "assets/site.js", but having different asset configuration: #{second_config.inspect} vs. #{first_config.inspect}
           MESSAGE
@@ -121,6 +129,7 @@ module Jekyll::Minibundle::Test
         with_fake_site do |site|
           first = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
           second = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
+
           assert_same(first, second)
           assert_equal(1, asset_file_registry_size)
           assert_contains_only(site.static_files, [first])
@@ -131,6 +140,7 @@ module Jekyll::Minibundle::Test
         with_fake_site do |site|
           first = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest1.css')
           second = AssetFileRegistry.send(spec.fetch(:method), site, STAMP_SOURCE_PATH, 'assets/dest2.css')
+
           refute_same first, second
           assert_equal(2, asset_file_registry_size)
           assert_contains_only(site.static_files, [first, second])
@@ -147,6 +157,7 @@ module Jekyll::Minibundle::Test
           err = assert_raises(RuntimeError) do
             AssetFileRegistry.send(spec.fetch(:method), site, source_paths[1], 'assets/dest1.css')
           end
+
           assert_equal(<<~MESSAGE, err.to_s)
             Two or more ministamp tags with the same destination path "assets/dest1.css", but different asset source paths: "#{source_paths[1]}" vs. "#{source_paths[0]}"
           MESSAGE
@@ -163,6 +174,7 @@ module Jekyll::Minibundle::Test
         err = assert_raises(RuntimeError) do
           AssetFileRegistry.register_stamp_file(site, '_assets/src.js', 'assets/dest.js')
         end
+
         assert_equal('ministamp tag has the same destination path as a minibundle block: assets/dest.js', err.to_s)
         assert_equal(1, asset_file_registry_size)
         assert_contains_only(site.static_files, [file])
@@ -176,6 +188,7 @@ module Jekyll::Minibundle::Test
         err = assert_raises(RuntimeError) do
           AssetFileRegistry.register_bundle_file(site, bundle_config.merge('destination_path' => 'assets/dest'))
         end
+
         assert_equal('minibundle block has the same destination path as a ministamp tag: assets/dest.js', err.to_s)
         assert_equal(1, asset_file_registry_size)
         assert_contains_only(site.static_files, [file])

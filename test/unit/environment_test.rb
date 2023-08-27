@@ -17,6 +17,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(RuntimeError) do
         Environment.find_site_config(make_site(top: {leaf: '1'}), %i[top leaf], Integer)
       end
+
       assert_equal('Invalid site configuration for key top.leaf; expecting type Integer', err.to_s)
     end
 

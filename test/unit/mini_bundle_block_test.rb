@@ -16,6 +16,7 @@ module Jekyll::Minibundle::Test
       err = assert_raises(ArgumentError) do
         Liquid::Template.parse('{% minibundle %} {% endminibundle %}')
       end
+
       assert_equal("Missing asset type for minibundle block; pass value such as 'css' or 'js' as the argument", err.to_s)
     end
 
@@ -27,6 +28,7 @@ module Jekyll::Minibundle::Test
           {% endminibundle %}
         LIQUID
       end
+
       assert_equal('Missing configuration for minibundle block; pass configuration in YAML syntax', err.to_s)
     end
 
@@ -41,6 +43,7 @@ module Jekyll::Minibundle::Test
       expected =
         'Failed parsing minibundle block contents syntax as YAML: "}". ' \
         'Cause: (<unknown>): did not find expected node content while parsing a block node at line 2 column 1'
+
       assert_equal(expected, err.to_s)
     end
 
@@ -52,6 +55,7 @@ module Jekyll::Minibundle::Test
           {% endminibundle %}
         LIQUID
       end
+
       assert_equal("Unsupported minibundle block contents type (String), only Hash is supported: \nstr\n", err.to_s)
     end
 

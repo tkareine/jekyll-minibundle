@@ -25,6 +25,7 @@ module Jekyll::Minibundle::Test
     def test_css_assets_have_configured_attributes
       with_precompiled_site(:development) do
         elements = find_css_elements_from_index.map { |el| [el['id'], el['media']] }.uniq
+
         assert_equal([%w[my-styles projection]], elements)
       end
     end
@@ -32,6 +33,7 @@ module Jekyll::Minibundle::Test
     def test_js_assets_have_configured_attributes
       with_precompiled_site(:development) do
         elements = find_js_elements_from_index.map { |el| [el['id'], el['async']] }.uniq
+
         assert_equal([['my-scripts', '']], elements)
       end
     end
@@ -127,6 +129,7 @@ module Jekyll::Minibundle::Test
         assert_equal([File.join(JS_BUNDLE_DESTINATION_PATH, 'dependency.js')], find_js_paths_from_index)
 
         new_mtime = file_mtime_of(destination_path(JS_BUNDLE_DESTINATION_PATH, 'dependency.js'))
+
         assert_operator(new_mtime, :>, org_mtime)
       end
     end
@@ -307,9 +310,11 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         css_ids = find_css_elements_from_index.map { |el| el['id'] }.uniq
+
         assert_equal(['my-styles2'], css_ids)
 
         js_ids = find_js_elements_from_index.map { |el| el['id'] }.uniq
+
         assert_equal(['my-scripts2'], js_ids)
       end
     end
@@ -412,6 +417,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         merge_to_yaml_file('_config.yml', 'minibundle' => {'mode' => 'development'})
         generate_site(nil)
+
         assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')))
       end
     end
@@ -420,6 +426,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         merge_to_yaml_file('_config.yml', 'minibundle' => {'mode' => 'production'})
         generate_site(:development)
+
         assert(File.file?(destination_path(JS_BUNDLE_DESTINATION_PATH, 'app.js')))
       end
     end

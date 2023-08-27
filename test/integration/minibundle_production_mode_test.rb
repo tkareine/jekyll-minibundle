@@ -23,6 +23,7 @@ module Jekyll::Minibundle::Test
     def test_css_asset_bundle_has_configured_attributes
       with_precompiled_site(:production) do
         element = find_css_element_from_index
+
         assert_equal('my-styles', element['id'])
         assert_equal('projection', element['media'])
       end
@@ -31,6 +32,7 @@ module Jekyll::Minibundle::Test
     def test_js_asset_bundle_has_configured_attributes
       with_precompiled_site(:production) do
         element = find_js_element_from_index
+
         assert_equal('my-scripts', element['id'])
         assert_equal('', element['async'])
       end
@@ -51,6 +53,7 @@ module Jekyll::Minibundle::Test
     def test_concatenates_css_asset_bundle_in_configured_order
       with_precompiled_site(:production) do
         bundle = File.read(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
         assert_operator(bundle.index('html { margin: 0; }'), :<, bundle.index('p { margin: 0; }'))
       end
     end
@@ -58,6 +61,7 @@ module Jekyll::Minibundle::Test
     def test_concatenates_js_asset_bundle_in_configured_order
       with_precompiled_site(:production) do
         bundle = File.read(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
         assert_operator(bundle.index('root.dependency = {};'), :<, bundle.index('root.app = {};'))
       end
     end
@@ -65,6 +69,7 @@ module Jekyll::Minibundle::Test
     def test_inserts_semicolons_between_js_assets
       with_precompiled_site(:production) do
         bundle = File.read(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH))
+
         assert_match(/}\)\(window\)\n;\n\(function/, bundle)
       end
     end
@@ -73,6 +78,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:production) do
         source_contents_size = source_assets_size(CSS_BUNDLE_SOURCE_DIR, %w[reset common], 'css')
         destination_contents_size = File.read(destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH)).size
+
         assert_operator(destination_contents_size, :<, source_contents_size)
       end
     end
@@ -81,6 +87,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:production) do
         source_contents_size = source_assets_size(JS_BUNDLE_SOURCE_DIR, %w[dependency app], 'js')
         destination_contents_size = File.read(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)).size
+
         assert_operator(destination_contents_size, :<, source_contents_size)
       end
     end
@@ -207,7 +214,7 @@ module Jekyll::Minibundle::Test
 
         refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert(File.file?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js')))
-        assert((find_tempfiles('*.js') & old_tempfiles).empty?)
+        assert_empty((find_tempfiles('*.js') & old_tempfiles))
       end
     end
 
@@ -250,7 +257,7 @@ module Jekyll::Minibundle::Test
 
         refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert(File.file?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js")))
-        assert((find_tempfiles('*.js') & old_tempfiles).empty?)
+        assert_empty((find_tempfiles('*.js') & old_tempfiles))
       end
     end
 
@@ -559,6 +566,7 @@ module Jekyll::Minibundle::Test
     def test_bundles_assets_only_once_at_startup
       with_site_dir do
         generate_site(:production, minifier_cmd_js: minifier_cmd_to_remove_comments_and_count)
+
         assert_equal(1, get_minifier_cmd_count)
       end
     end
@@ -732,6 +740,7 @@ module Jekyll::Minibundle::Test
       with_site_dir do
         with_umask(0o027) do
           generate_site(:production)
+
           assert_equal(0o640, file_permissions_of(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         end
       end

@@ -14,6 +14,7 @@ module Jekyll::Minibundle::Test
           make_bundle_file(site, 'source_dir' => STAMP_SOURCE_PATH)
         end
       end
+
       assert_match(%r{\ABundle source directory does not exist: .+/#{Regexp.escape(STAMP_SOURCE_PATH)}\z}, err.to_s)
     end
 
@@ -23,6 +24,7 @@ module Jekyll::Minibundle::Test
           make_bundle_file(site, 'assets' => %w[no-such])
         end
       end
+
       assert_match(%r{\ABundle asset source file does not exist: .+/#{Regexp.escape(JS_BUNDLE_SOURCE_DIR)}/no-such.js\z}, err.to_s)
     end
 
@@ -122,15 +124,15 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         bundle_file = make_bundle_file(site)
 
-        refute(bundle_file.modified?)
+        refute_predicate(bundle_file, :modified?)
         refute(write_file(bundle_file))
 
         capture_io { bundle_file.destination_path_for_markup }
 
-        assert(bundle_file.modified?)
+        assert_predicate(bundle_file, :modified?)
         assert(write_file(bundle_file))
 
-        refute(bundle_file.modified?)
+        refute_predicate(bundle_file, :modified?)
         refute(write_file(bundle_file))
       end
     end

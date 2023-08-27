@@ -14,6 +14,7 @@ module Jekyll::Minibundle::Test
           StampFile.new(site, '_tmp', STAMP_DESTINATION_PATH)
         end
       end
+
       assert_match(%r{\AStamp source file does not exist: .+/_tmp\z}, err.to_s)
     end
 
@@ -104,15 +105,15 @@ module Jekyll::Minibundle::Test
       with_fake_site do |site|
         stamp_file = make_stamp_file(site)
 
-        refute(stamp_file.modified?)
+        refute_predicate(stamp_file, :modified?)
         refute(write_file(stamp_file))
 
         stamp_file.destination_path_for_markup
 
-        assert(stamp_file.modified?)
+        assert_predicate(stamp_file, :modified?)
         assert(write_file(stamp_file))
 
-        refute(stamp_file.modified?)
+        refute_predicate(stamp_file, :modified?)
         refute(write_file(stamp_file))
       end
     end

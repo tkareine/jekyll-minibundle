@@ -13,6 +13,7 @@ module Jekyll::Minibundle::Test
 
     def test_dig_returns_same_found_object
       leaf_obj = {leaf: 1}
+
       assert_same(leaf_obj, Hashes.dig({top: {middle: leaf_obj}}, :top, :middle))
     end
 
@@ -31,8 +32,8 @@ module Jekyll::Minibundle::Test
     end
 
     def test_pick_returns_hash_with_specified_keys
-      assert_equal({}, Hashes.pick(a: 1, 'b' => 2, 'c' => 3))
-      assert_equal({}, Hashes.pick({}))
+      assert_empty(Hashes.pick(a: 1, 'b' => 2, 'c' => 3))
+      assert_empty(Hashes.pick({}))
       assert_equal({a: 1, 'c' => 3}, Hashes.pick({a: 1, 'b' => 2, 'c' => 3}, :a, 'c'))
     end
 

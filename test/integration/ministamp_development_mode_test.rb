@@ -18,6 +18,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:development) do
         source_contents = File.read(site_fixture_path(STAMP_SOURCE_PATH))
         destination_contents = File.read(destination_path(STAMP_DESTINATION_PATH))
+
         assert_equal(source_contents, destination_contents)
       end
     end
@@ -32,6 +33,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_PATH))
+
         assert_operator(new_mtime, :>, org_mtime)
       end
     end
@@ -46,6 +48,7 @@ module Jekyll::Minibundle::Test
         generate_site(:development, clear_cache: false)
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_PATH))
+
         assert_operator(new_mtime, :>, org_mtime)
       end
     end

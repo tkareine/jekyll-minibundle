@@ -44,6 +44,7 @@ module Jekyll::Minibundle::Test
 
     def test_raise_error_if_nil_template
       err = assert_raises(ArgumentError) { VariableTemplate.compile(nil) }
+
       assert_equal('Nil template', err.to_s)
     end
 
@@ -58,6 +59,7 @@ module Jekyll::Minibundle::Test
 
     def test_application_to_same_compiled_template_many_times
       template = VariableTemplate.compile('the answer is {{var}}, obviously')
+
       assert_equal('the answer is 42, obviously', template.render('var' => 42))
       assert_equal('the answer is 21, obviously', template.render('var' => 21))
     end
@@ -69,6 +71,7 @@ module Jekyll::Minibundle::Test
       }
       actual = render('begin… {{ …first }} middle {{yötön yö}} …end', variables)
       expected = 'begin… after first… middle yö …end'
+
       assert_equal(expected, actual)
     end
 

@@ -1,5 +1,8 @@
 # Default config: https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
 
+require:
+  - rubocop-minitest
+
 AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
@@ -24,6 +27,8 @@ Metrics/MethodLength:
   Max: 50
 Metrics/ModuleLength:
   Max: 200
+Minitest/MultipleAssertions:
+  Enabled: false
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: required
 Style/ClassAndModuleChildren:

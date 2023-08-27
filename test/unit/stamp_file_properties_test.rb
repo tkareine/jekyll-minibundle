@@ -21,11 +21,11 @@ module Jekyll::Minibundle::Test
     end
 
     def test_data
-      assert_equal({}, @@results.fetch(:data))
+      assert_empty(@@results.fetch(:data))
     end
 
     def test_defaults
-      assert_equal({}, @@results.fetch(:defaults))
+      assert_empty(@@results.fetch(:defaults))
     end
 
     def test_destination_rel_dir
@@ -42,6 +42,7 @@ module Jekyll::Minibundle::Test
 
     def test_mtime
       mtime = @@results.fetch(:modified_time)
+
       assert_equal(mtime.to_i, @@results.fetch(:mtime))
     end
 
@@ -54,7 +55,7 @@ module Jekyll::Minibundle::Test
     end
 
     def test_placeholders
-      assert_equal({}, @@results.fetch(:placeholders))
+      assert_empty(@@results.fetch(:placeholders))
     end
 
     def test_relative_path
@@ -64,6 +65,7 @@ module Jekyll::Minibundle::Test
     def test_to_liquid
       with_stamp_file do |file|
         drop = file.to_liquid
+
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", drop.name)
         assert_equal('.css', drop.extname)
         assert_equal("screen-#{STAMP_FINGERPRINT}", drop.basename)

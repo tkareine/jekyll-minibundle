@@ -18,6 +18,7 @@ module Jekyll::Minibundle::Test
       with_precompiled_site(:production) do
         source_contents = File.read(site_fixture_path(STAMP_SOURCE_PATH))
         destination_contents = File.read(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+
         assert_equal(source_contents, destination_contents)
       end
     end
@@ -50,6 +51,7 @@ module Jekyll::Minibundle::Test
         assert_equal(STAMP_DESTINATION_FINGERPRINT_PATH, find_css_path_from_index)
 
         new_mtime = file_mtime_of(destination_path(STAMP_DESTINATION_FINGERPRINT_PATH))
+
         assert_operator(new_mtime, :>, org_mtime)
       end
     end

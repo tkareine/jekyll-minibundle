@@ -15,6 +15,7 @@ module Jekyll::Minibundle::Test
           destination_path(CSS_BUNDLE_DESTINATION_FINGERPRINT_PATH),
           destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
         ].sort
+
         assert_equal(expected, actual)
       end
     end

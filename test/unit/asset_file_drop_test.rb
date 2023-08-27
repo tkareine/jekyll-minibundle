@@ -30,6 +30,7 @@ module Jekyll::Minibundle::Test
     def test_to_h
       with_drop do |drop|
         hash = drop.to_h
+
         assert_equal(AssetFileDrop::KEYS.sort, hash.keys.sort)
         assert_equal("screen-#{STAMP_FINGERPRINT}.css", hash['name'])
         assert_equal('.css', hash['extname'])

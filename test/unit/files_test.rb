@@ -10,6 +10,7 @@ module Jekyll::Minibundle::Test
         File.write('foo', 'content')
         Files.copy_p('foo', 'bar/zap')
         copied = File.read('bar/zap')
+
         assert_equal('content', copied)
       end
     end

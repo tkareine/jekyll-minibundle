@@ -8,6 +8,7 @@ module Jekyll::Minibundle::Test
     def test_raise_exception_if_bundle_command_fails
       capture_io do
         err = assert_raises(RuntimeError) { make_bundle('read _ignore ; false') }
+
         assert_equal('Bundling "assets/site.js" failed with exit status 1, command: "read _ignore ; false"', err.to_s)
       end
     end
@@ -27,6 +28,7 @@ module Jekyll::Minibundle::Test
 
     def test_raise_exception_if_bundle_command_not_found
       err = assert_raises(RuntimeError) { make_bundle('no-such-jekyll-minibundle-cmd') }
+
       assert_equal('Bundling "assets/site.js" failed: No such file or directory - no-such-jekyll-minibundle-cmd', err.to_s)
     end
 

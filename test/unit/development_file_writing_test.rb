@@ -14,6 +14,7 @@ module Jekyll::Minibundle::Test
           DevelopmentFile.new(site, '_tmp', STAMP_DESTINATION_PATH)
         end
       end
+
       assert_match(%r{\ADevelopment source file does not exist: .+/_tmp\z}, err.to_s)
     end
 
@@ -22,17 +23,17 @@ module Jekyll::Minibundle::Test
         dev_file = make_development_file(site)
         source = source_path(STAMP_SOURCE_PATH)
 
-        assert(dev_file.modified?)
+        assert_predicate(dev_file, :modified?)
         assert(write_file(dev_file))
 
         ensure_file_mtime_changes do
           FileUtils.touch(source)
         end
 
-        assert(dev_file.modified?)
+        assert_predicate(dev_file, :modified?)
         assert(write_file(dev_file))
 
-        refute(dev_file.modified?)
+        refute_predicate(dev_file, :modified?)
         refute(write_file(dev_file))
       end
     end

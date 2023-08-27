@@ -18,7 +18,7 @@ module Jekyll::Minibundle::Test
         remaining.delete_at(index) if index
       end
 
-      assert(remaining.empty?, lambda do
+      assert_empty(remaining, lambda do
         "Expected\n\n#{mu_pp(collection)}\n\nto include only\n\n#{mu_pp(expected_elements)}"
       end)
     end
