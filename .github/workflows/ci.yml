@@ -1,6 +1,7 @@
 name: CI
 
-on: [push]
+on:
+  - push
 
 jobs:
   test:
@@ -18,7 +19,7 @@ jobs:
           - jekyll4
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
       - name: Setup MRI ${{ matrix.ruby }}
