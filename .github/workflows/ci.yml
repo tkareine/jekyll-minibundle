@@ -17,6 +17,9 @@ jobs:
         gemfile:
           - jekyll3
           - jekyll4
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile-${{ matrix.gemfile }}
+      BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle-${{ matrix.gemfile }}
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v4
@@ -35,11 +38,9 @@ jobs:
             ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-
       - name: Install gem dependencies
         run: |
-          echo 'gem: --no-document' > ~/.gemrc
-          gem update --system >/dev/null
           echo "Using RubyGems $(gem --version)"
-          bundle config --local gemfile Gemfile-${{ matrix.gemfile }}
-          bundle config --local path vendor/bundle-${{ matrix.gemfile }}
+          echo "Using $(bundle --version)"
+          echo 'gem: --no-document' > ~/.gemrc
           bundle install --jobs 4 --retry 3
       - name: Run tests
         run: bundle exec rake
