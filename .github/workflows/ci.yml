@@ -31,7 +31,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Cache vendor/bundle-${{ matrix.gemfile }} for MRI ${{ matrix.ruby }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor/bundle-${{ matrix.gemfile }}
           key: ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
