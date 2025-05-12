@@ -4,8 +4,9 @@
 [![CI](https://github.com/tkareine/jekyll-minibundle/workflows/CI/badge.svg)][MinibundleCI]
 
 A straightforward asset bundling plugin for [Jekyll], utilizing external
-minification tool of your choice. It provides asset concatenation for
-bundling and asset fingerprinting with MD5 digest for cache busting.
+asset conversion/minification tool of your choice. The plugin provides
+asset concatenation for bundling and asset fingerprinting with [MD5]
+digest for cache busting.
 
 There are no runtime dependencies, except for the minification tool used
 for bundling (fingerprinting has no dependencies).
@@ -16,6 +17,10 @@ The plugin requires Jekyll version 3 or 4. It is tested with Ruby MRI
 The plugin works with Jekyll's watch mode (auto-regeneration, Jekyll
 option `--watch`), but not with incremental feature enabled (Jekyll
 option `--incremental`).
+
+Minibundle plugin does not affect the behavior of Jekyll's [built-in
+asset conversion][JekyllBuiltInAssets]. The plugin is designed to
+incorporate the results produced by external asset tools only.
 
 ## Features
 
@@ -506,6 +511,7 @@ MIT. See [LICENSE.txt].
 
 [Gemfile]: https://bundler.io/gemfile.html
 [GoogleWebDevHttpCache]: https://web.dev/http-cache/
+[JekyllBuiltInAssets]: https://jekyllrb.com/docs/assets/
 [JekyllConf]: https://jekyllrb.com/docs/configuration/
 [JekyllLiquidFilters]: https://jekyllrb.com/docs/liquid/filters/
 [JekyllMinibundleExampleSite]: https://github.com/tkareine/jekyll-minibundle-example
