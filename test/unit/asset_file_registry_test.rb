@@ -52,7 +52,7 @@ module Jekyll::Minibundle::Test
 
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
-        assert_contains_only(site.static_files, (first.files + second.files))
+        assert_contains_only(site.static_files, first.files + second.files)
       end
     end
 
@@ -78,7 +78,7 @@ module Jekyll::Minibundle::Test
 
         refute_same first, second
         assert_equal(2, asset_file_registry_size)
-        assert_contains_only(site.static_files, (first.files + second.files))
+        assert_contains_only(site.static_files, first.files + second.files)
       end
     end
 

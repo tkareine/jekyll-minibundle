@@ -5,7 +5,7 @@ inherit_mode:
     - Exclude
     - Include
 
-require:
+plugins:
   - rubocop-minitest
   - rubocop-rake
 

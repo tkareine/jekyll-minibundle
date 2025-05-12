@@ -214,7 +214,7 @@ module Jekyll::Minibundle::Test
 
         refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert(File.file?(destination_path('assets/site-71042d0b7c86c04e015fde694dd9f409.js')))
-        assert_empty((find_tempfiles('*.js') & old_tempfiles))
+        assert_empty(find_tempfiles('*.js') & old_tempfiles)
       end
     end
 
@@ -257,7 +257,7 @@ module Jekyll::Minibundle::Test
 
         refute(File.file?(destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)))
         assert(File.file?(destination_path("assets/site2-#{JS_BUNDLE_FINGERPRINT}.js")))
-        assert_empty((find_tempfiles('*.js') & old_tempfiles))
+        assert_empty(find_tempfiles('*.js') & old_tempfiles)
       end
     end
 

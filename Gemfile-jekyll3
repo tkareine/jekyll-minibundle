@@ -5,5 +5,6 @@ instance_eval(File.read(File.expand_path('Gemfile-common', File.dirname(__FILE__
 group :development do
   gem 'jekyll', '~> 3.0'
   gem 'base64', '~> 0.2'
+  gem 'bigdecimal', '~> 3.0'
   gem 'csv', '~> 3.3'
 end

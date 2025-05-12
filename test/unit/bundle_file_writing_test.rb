@@ -33,7 +33,7 @@ module Jekyll::Minibundle::Test
         bundle_file = make_bundle_file(site)
         source = source_path(JS_BUNDLE_SOURCE_DIR, 'app.js')
         old_destination = destination_path(JS_BUNDLE_DESTINATION_FINGERPRINT_PATH)
-        org_markup_path, last_markup_path = nil
+        org_markup_path = nil
 
         # the call to destination_path_for_markup determines the
         # fingerprint
