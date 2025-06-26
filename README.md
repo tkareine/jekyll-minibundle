@@ -1,7 +1,7 @@
 # Jekyll Minibundle plugin
 
 [![Gem version](https://badge.fury.io/rb/jekyll-minibundle.svg)][MinibundleGem]
-[![CI](https://github.com/tkareine/jekyll-minibundle/workflows/CI/badge.svg)][MinibundleCI]
+[![CI](https://github.com/tkareine/jekyll-minibundle/actions/workflows/ci.yml/badge.svg)][MinibundleCI]
 
 A straightforward asset bundling plugin for [Jekyll], utilizing external
 asset conversion/minification tool of your choice. The plugin provides
@@ -521,7 +521,7 @@ MIT. See [LICENSE.txt].
 [LiquidCaptureBlock]: https://shopify.github.io/liquid/tags/variable/#capture
 [Liquid]: https://shopify.github.io/liquid/
 [MD5]: https://en.wikipedia.org/wiki/MD5
-[MinibundleCI]: https://github.com/tkareine/jekyll-minibundle/actions?workflow=CI
+[MinibundleCI]: https://github.com/tkareine/jekyll-minibundle/actions/workflows/ci.yml
 [MinibundleGem]: https://rubygems.org/gems/jekyll-minibundle
 [Mustache]: https://mustache.github.io/
 [Sass]: https://sass-lang.com/

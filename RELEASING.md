@@ -38,4 +38,4 @@
     gem push jekyll-minibundle-$version.gem
     ```
 
-[CI]: https://github.com/tkareine/jekyll-minibundle/actions?workflow=CI
+[CI]: https://github.com/tkareine/jekyll-minibundle/actions/workflows/ci.yml
