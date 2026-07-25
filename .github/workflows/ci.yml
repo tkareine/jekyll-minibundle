@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Test with MRI ${{ matrix.ruby }}, Gemfile-${{ matrix.gemfile }}
+    name: Test with CRuby ${{ matrix.ruby }}, Gemfile-${{ matrix.gemfile }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
-      - name: Setup MRI ${{ matrix.ruby }}
+      - name: Setup CRuby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
