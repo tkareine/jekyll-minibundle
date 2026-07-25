@@ -140,9 +140,7 @@ module Jekyll::Minibundle::Test
     end
 
     def get_send_results(obj, method_names)
-      method_names.each_with_object({}) do |method_name, acc|
-        acc[method_name] = obj.public_send(method_name)
-      end
+      method_names.to_h { |method_name| [method_name, obj.public_send(method_name)] }
     end
 
     private

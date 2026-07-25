@@ -182,14 +182,15 @@ module Jekyll::Minibundle::Test
     end
 
     def response_types_of_methods(file, methods)
-      methods.each_with_object({}) do |method_name, acc|
-        acc[method_name] =
+      methods.to_h do |method_name|
+        method_response =
           begin
             value = file.public_send(method_name)
             {returned_type: value.class}
           rescue StandardError => e
             {raised: e}
           end
+        [method_name, method_response]
       end
     end
 

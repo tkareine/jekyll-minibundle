@@ -59,6 +59,8 @@ module Jekyll::Minibundle
 
     # allows writing destination only after
     # `destination_path_for_markup` has been called
+    #
+    # rubocop:disable Naming/PredicateMethod
     def write(site_destination_dir)
       if modified?
         Files.copy_p(path, destination(site_destination_dir))
@@ -68,6 +70,7 @@ module Jekyll::Minibundle
         false
       end
     end
+    # rubocop:enable Naming/PredicateMethod
 
     private
 

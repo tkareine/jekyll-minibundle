@@ -37,6 +37,7 @@ module Jekyll::Minibundle
       stamped_at != mtime
     end
 
+    # rubocop:disable Naming/PredicateMethod
     def write(site_destination_dir)
       if modified?
         @stamped_at = mtime
@@ -46,5 +47,6 @@ module Jekyll::Minibundle
         false
       end
     end
+    # rubocop:enable Naming/PredicateMethod
   end
 end

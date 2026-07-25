@@ -29,9 +29,7 @@ module Jekyll::Minibundle
     end
 
     def to_h
-      keys.each_with_object({}) do |key, acc|
-        acc[key] = self[key]
-      end
+      keys.to_h { |key| [key, self[key]] }
     end
 
     alias to_hash to_h
