@@ -52,16 +52,16 @@ The plugin ships as a [RubyGem][MinibundleGem]. To install:
 
 1. Add the following line to the [Gemfile] of your site:
 
-   ``` ruby
+   ```ruby
    gem 'jekyll-minibundle'
    ```
 
 2. Run `bundle install`.
 
 3. Instruct Jekyll to load the gem by adding this line to the
-[configuration file][JekyllConf] of your site (`_config.yml`):
+   [configuration file][JekyllConf] of your site (`_config.yml`):
 
-   ``` yaml
+   ```yaml
    plugins:
      - jekyll/minibundle
    ```
@@ -71,7 +71,7 @@ The plugin ships as a [RubyGem][MinibundleGem]. To install:
 An alternative to using the `plugins` configuration option is to add the
 `_plugins/minibundle.rb` file to your site project with this line:
 
-``` ruby
+```ruby
 require 'jekyll/minibundle'
 ```
 
@@ -84,7 +84,7 @@ If you just want to have an MD5 fingerprint in your asset's path, use
 the `ministamp` [Liquid] tag in a Liquid template file. For example,
 fingerprinting CSS styles:
 
-``` liquid
+```liquid
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _assets/site.css assets/site.css %}" media="screen, projection">
 ```
 
@@ -98,15 +98,15 @@ The tag outputs the asset destination path, encoded for HTML, into
 Liquid's template rendering outcome. For example, when `site.baseurl` is
 empty:
 
-``` html
-<link rel="stylesheet" href="/assets/site-390be921ee0eff063817bb5ef2954300.css" media="screen, projection">
+```html
+<link rel="stylesheet" href="/assets/site-390be921ee0eff063817bb5ef2954300.css" media="screen, projection" />
 ```
 
 Another example, this time fingerprinting an image and using the
 [absolute_url][JekyllLiquidFilters] Liquid filter of Jekyll to render
 the absolute URL of the image in the `src` attribute:
 
-``` liquid
+```liquid
 <img src="{{ "/" | absolute_url }}{% ministamp _assets/dog.jpg assets/dog.jpg %}" alt="My dog smiling to the camera" title="A photo of my dog" width="195" height="258" />
 ```
 
@@ -116,7 +116,7 @@ Jekyll. For example, you can configure [Sass] to take input files from
 you use the `ministamp` tag to copy the file with a fingerprint to
 Jekyll's site destination directory:
 
-``` liquid
+```liquid
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp _tmp/site.css assets/site.css %}">
 ```
 
@@ -128,14 +128,14 @@ Hash. What you saw previously was the argument being parsed as a String;
 it's effectively a shorthand version of passing the argument as a Hash
 with certain keys. That is, in the following call:
 
-``` liquid
+```liquid
 {% ministamp _tmp/site.css assets/site.css %}
 ```
 
 the argument is a String: `"_tmp/site.css assets/site.css"`. The call is
 equivalent to the following call with a Hash argument:
 
-``` liquid
+```liquid
 {% ministamp { source_path: _tmp/site.css, destination_path: assets/site.css } %}
 ```
 
@@ -144,18 +144,18 @@ The Hash argument allows expressing more options and quoting
 
 The supported keys for the Hash argument are:
 
-| Key | Required? | Value type | Value example | Default value | Description |
-| --- | --- | --- | --- | --- | --- |
-| `source_path` | yes | string | `'_tmp/site.css'` | - | The source path of the asset file, relative to the site directory. |
-| `destination_path` | yes | string | `'assets/site.css'` | - | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `render_basename_only` is `false`, `ministamp`'s output will begin with `/`. |
-| `render_basename_only` | no | boolean | `true` | `false` | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
+| Key                    | Required? | Value type | Value example       | Default value | Description                                                                                                                                                                                                           |
+| ---------------------- | --------- | ---------- | ------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source_path`          | yes       | string     | `'_tmp/site.css'`   | -             | The source path of the asset file, relative to the site directory.                                                                                                                                                    |
+| `destination_path`     | yes       | string     | `'assets/site.css'` | -             | The destination path of the asset file, relative to Jekyll's site destination directory. If the value begins with `/` and `render_basename_only` is `false`, `ministamp`'s output will begin with `/`.                |
+| `render_basename_only` | no        | boolean    | `true`              | `false`       | If `true`, `ministamp`'s rendered URL will be the basename of the asset destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
 
 With a Hash argument, the plugin processes `source_path` and
 `destination_path` values through a tiny template engine. This allows
 you to use Liquid's variables as input to `ministamp` tag. An example
 with Liquid's [`assign`][LiquidAssignTag] tag:
 
-``` liquid
+```liquid
 {% assign asset_dir = 'assets' %}
 <link rel="stylesheet" href="{% ministamp { source_path: _tmp/site.css, destination_path: '{{ asset_dir }}/site.css' } %}">
 ```
@@ -188,7 +188,7 @@ where you want the block's generated markup to appear. Write bundling
 configuration inside the block in [YAML] syntax. For example, to bundle
 a set of JavaScript sources:
 
-``` text
+```text
 {% minibundle js %}
 source_dir: _assets/scripts
 destination_path: assets/site
@@ -205,8 +205,8 @@ attributes:
 Then, specify the command for launching your favorite minifier in
 `_config.yml`:
 
-``` yaml
-baseurl: ''
+```yaml
+baseurl: ""
 
 minibundle:
   minifier_commands:
@@ -226,7 +226,7 @@ The block outputs `<link>` (for `css` type) or `<script>` (for `js`
 type) HTML element into Liquid's template rendering outcome. Continuing
 the example above, the block's output will be:
 
-``` html
+```html
 <script src="/assets/site-8e764372a0dbd296033cb2a416f064b5.js" type="text/javascript" id="my-scripts" async></script>
 ```
 
@@ -242,7 +242,7 @@ block contents will result in valid YAML.
 For bundling CSS assets, use `css` as the argument to the `minibundle`
 block:
 
-``` text
+```text
 {% minibundle css %}
 source_dir: _assets/styles
 destination_path: assets/site
@@ -257,7 +257,7 @@ attributes:
 
 And then specify the minifier command in `_config.yml`:
 
-``` yaml
+```yaml
 minibundle:
   minifier_commands:
     css: _bin/remove_whitespace
@@ -270,15 +270,15 @@ Use `css` or `js` as the argument to the opening tag, for example `{% minibundle
 
 The block contents must be in [YAML] syntax. The supported keys are:
 
-| Key | Value type | Value example | Default value | Description |
-| --- | --- | --- | --- | --- |
-| `source_dir` | string | - | `'_assets'` | The source directory of `assets`, relative to the site directory. You can use period (`.`) to select the site directory itself. |
-| `assets` | array of strings | `['deps/one', 'deps/two', 'app']` | `[]` | Array of assets relative to `source_dir` directory, without type extension. These are the asset files to be bundled, in order, into one bundle destination file. |
-| `destination_path` | string | - | `'assets/site'` | The destination path of the bundle file, without type extension, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'` implicitly. |
-| `baseurl` | string | `'{{ site.baseurl }}/'` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty. |
-| `destination_baseurl` | string | `'{{ site.cdn_baseurl }}/'` | `''` | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
-| `attributes` | map of keys to string values | `{id: my-link, media: screen}` | `{}` | Custom HTML element attributes to be added to `minibundle`'s rendered HTML element. |
-| `minifier_cmd` | string | `'node_modules/.bin/uglifyjs'` | - | Minifier command specific to this bundle. See [Minifier command specification](#minifier-command-specification) for more. |
+| Key                   | Value type                   | Value example                     | Default value   | Description                                                                                                                                                                                                                                                                                  |
+| --------------------- | ---------------------------- | --------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source_dir`          | string                       | -                                 | `'_assets'`     | The source directory of `assets`, relative to the site directory. You can use period (`.`) to select the site directory itself.                                                                                                                                                              |
+| `assets`              | array of strings             | `['deps/one', 'deps/two', 'app']` | `[]`            | Array of assets relative to `source_dir` directory, without type extension. These are the asset files to be bundled, in order, into one bundle destination file.                                                                                                                             |
+| `destination_path`    | string                       | -                                 | `'assets/site'` | The destination path of the bundle file, without type extension, relative to Jekyll's site destination directory. If the value begins with `/` and `baseurl` is empty, `baseurl` will be set to `'/'` implicitly.                                                                            |
+| `baseurl`             | string                       | `'{{ site.baseurl }}/'`           | `''`            | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the destination path of the bundle file. Ignored if `destination_baseurl` is nonempty.                                                                                   |
+| `destination_baseurl` | string                       | `'{{ site.cdn_baseurl }}/'`       | `''`            | If nonempty, the bundle destination URL inside `minibundle`'s rendered HTML element will be this value prepended to the basename of the bundle destination path. See [Separating asset destination path from generated URL](#separating-asset-destination-path-from-generated-url) for more. |
+| `attributes`          | map of keys to string values | `{id: my-link, media: screen}`    | `{}`            | Custom HTML element attributes to be added to `minibundle`'s rendered HTML element.                                                                                                                                                                                                          |
+| `minifier_cmd`        | string                       | `'node_modules/.bin/uglifyjs'`    | -               | Minifier command specific to this bundle. See [Minifier command specification](#minifier-command-specification) for more.                                                                                                                                                                    |
 
 ### Minifier command specification
 
@@ -286,7 +286,7 @@ You can specify minifier commands in three places:
 
 1. In `_config.yml` (as shown earlier):
 
-   ``` yaml
+   ```yaml
    minibundle:
      minifier_commands:
        css: _bin/remove_whitespace
@@ -295,7 +295,7 @@ You can specify minifier commands in three places:
 
 2. As environment variables:
 
-   ``` bash
+   ```bash
    export JEKYLL_MINIBUNDLE_CMD_CSS=_bin/remove_whitespace
    export JEKYLL_MINIBUNDLE_CMD_JS="node_modules/.bin/uglifyjs"
    ```
@@ -303,7 +303,7 @@ You can specify minifier commands in three places:
 3. Inside the `minibundle` block with `minifier_cmd` option, allowing
    blocks to have different commands from each other:
 
-   ``` text
+   ```text
    {% minibundle js %}
    source_dir: _assets/scripts
    destination_path: assets/site
@@ -331,7 +331,7 @@ site destination directory.
 For example, in the following snippet we're using `assets/src.css` as
 asset source to `ministamp` tag:
 
-``` liquid
+```liquid
 <!-- BAD: unless assets dir is excluded, both src.css and dest.css will be copied to site destination directory -->
 <link rel="stylesheet" href="{{ site.baseurl }}/{% ministamp assets/src.css assets/dest.css %}" media="screen, projection">
 ```
@@ -346,11 +346,11 @@ Because Jekyll's site generation excludes underscore directories (that
 is, directories whose name begins with underscore character), consider
 using the following directory layout:
 
-* `_assets/` for JavaScript and CSS assets handled by the plugin that
+- `_assets/` for JavaScript and CSS assets handled by the plugin that
   are in version control
-* `_tmp/` for temporary JavaScript and CSS assets handled by the plugin
+- `_tmp/` for temporary JavaScript and CSS assets handled by the plugin
   that are not in version control (for example, Sass output files)
-* `assets/` for images and other assets handled by Jekyll directly
+- `assets/` for images and other assets handled by Jekyll directly
 
 However, Jekyll's watch mode (auto-regeneration) does monitor files
 inside underscore directories. If such a file is modified, the watch
@@ -362,7 +362,7 @@ The `exclude` [Jekyll configuration][JekyllConf] option affects Jekyll's
 watch mode. Given the recommended directory layout above, if you set the
 following in `_config.yml`:
 
-``` yaml
+```yaml
 exclude:
   - _assets
   - _tmp
@@ -387,13 +387,13 @@ option to be the base directory for files mentioned in the `assets`
 option. This is useful in development workflow, where you need the
 filenames and line numbers of the original asset sources.
 
-``` bash
+```bash
 $ JEKYLL_MINIBUNDLE_MODE=development jekyll serve --watch
 ```
 
 Alternatively, you can enable development mode from `_config.yml`:
 
-``` yaml
+```yaml
 minibundle:
   mode: development
 ```
@@ -438,13 +438,13 @@ example.
 
 Example usage, with the following content in `_config.yml`:
 
-``` yaml
-cdn_baseurl: 'https://cdn.example.com'
+```yaml
+cdn_baseurl: "https://cdn.example.com"
 ```
 
 For the `ministamp` tag:
 
-``` liquid
+```liquid
 <link rel="stylesheet" href="{{ site.cdn_baseurl }}/css/{% ministamp { source_path: '_tmp/site.css', destination_path: assets/site.css, render_basename_only: true } %}">
 ```
 
@@ -452,13 +452,13 @@ The asset file will be in Jekyll's site destination directory with path
 `assets/site-ff9c63f843b11f9c3666fe46caaddea8.css`, and Liquid's
 rendering will result in:
 
-``` html
-<link rel="stylesheet" href="https://cdn.example.com/css/site-ff9c63f843b11f9c3666fe46caaddea8.css">
+```html
+<link rel="stylesheet" href="https://cdn.example.com/css/site-ff9c63f843b11f9c3666fe46caaddea8.css" />
 ```
 
 For the `minibundle` block:
 
-``` liquid
+```liquid
 {% minibundle js %}
 source_dir: _assets/scripts
 destination_path: assets/site
@@ -473,7 +473,7 @@ The bundle file will be in Jekyll's site destination directory with path
 `assets/site-4782a1f67803038d4f8351051e67deb8.js`, and Liquid's
 rendering will result in:
 
-``` html
+```html
 <script type="text/javascript" src="https://cdn.example.com/js/site-4782a1f67803038d4f8351051e67deb8.js"></script>
 ```
 
@@ -485,15 +485,15 @@ process the string as you like.
 
 For example:
 
-``` liquid
+```liquid
 {% capture site_css %}{% ministamp _assets/site.css assets/site.css %}{% endcapture %}
 <link rel="stylesheet" href="{{ site_css | remove_first: "assets/" }}">
 ```
 
 Liquid's rendering outcome:
 
-``` html
-<link rel="stylesheet" href="site-390be921ee0eff063817bb5ef2954300.css">
+```html
+<link rel="stylesheet" href="site-390be921ee0eff063817bb5ef2954300.css" />
 ```
 
 ## Example site
