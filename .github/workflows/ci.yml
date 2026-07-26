@@ -34,13 +34,13 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - name: Cache vendor/bundle-${{ matrix.gemfile }} for MRI ${{ matrix.ruby }}
+      - name: Cache vendor/bundle-${{ matrix.gemfile }} for CRuby ${{ matrix.ruby }}
         uses: actions/cache@v6
         with:
           path: vendor/bundle-${{ matrix.gemfile }}
-          key: ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
+          key: ${{ runner.os }}-cruby-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-${{ hashFiles(format('Gemfile-{0}', matrix.gemfile)) }}
           restore-keys: |
-            ${{ runner.os }}-mri-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-
+            ${{ runner.os }}-cruby-${{ matrix.ruby }}-bundle-${{ matrix.gemfile }}-
       - name: Install gem dependencies
         run: |
           echo "Using RubyGems $(gem --version)"
