@@ -1,8 +1,5 @@
 name: CI
 
-permissions:
-  contents: read
-
 on:
   - push
 
@@ -10,6 +7,8 @@ jobs:
   test:
     name: Test with CRuby ${{ matrix.ruby }}, Gemfile-${{ matrix.gemfile }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         ruby:
