@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'bundler/gem_helper'
 require 'fileutils'
 require 'rake/clean'
 require 'shellwords'
@@ -39,27 +40,6 @@ task :benchmark do
 
   bm_sources.each do |bm_source|
     sh "ruby -I lib #{bm_source}"
-  end
-end
-
-namespace :gem do
-  gem_name = 'jekyll-minibundle'
-
-  CLEAN.include "#{gem_name}-*.gem"
-
-  desc 'Package the software as a gem'
-  task build: :default do
-    sh "gem build #{gem_name}.gemspec"
-  end
-
-  desc 'Install the software as a gem'
-  task :install do
-    sh "gem install #{gem_name}-#{Jekyll::Minibundle::VERSION}.gem"
-  end
-
-  desc 'Uninstall the gem'
-  task uninstall: :clean do
-    sh "gem uninstall #{gem_name}"
   end
 end
 
@@ -106,6 +86,8 @@ namespace :fixture do
     run_jekyll_in_fixture_site('build --watch')
   end
 end
+
+Bundler::GemHelper.install_tasks
 
 RuboCop::RakeTask.new
 

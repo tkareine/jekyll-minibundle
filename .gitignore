@@ -1,5 +1,6 @@
 /*.gem
 /.bundle/
+/pkg/
 /test/fixture/site/.jekyll-cache/
 /test/fixture/site/_site/
 /vendor/

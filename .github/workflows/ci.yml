@@ -3,6 +3,9 @@ name: CI
 on:
   - push
 
+env:
+  RUBY_VERSION_FOR_RELEASE: "4.0"
+
 jobs:
   test:
     name: Test with CRuby ${{ matrix.ruby }}, Gemfile-${{ matrix.gemfile }}
@@ -49,3 +52,57 @@ jobs:
           bundle install --jobs 4 --retry 3
       - name: Run tests
         run: bundle exec rake
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    needs:
+      - test
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile-jekyll4
+      BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle-jekyll4
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: Setup CRuby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION_FOR_RELEASE }}
+      - name: Check that git tag, Gem version, and Gem versions in Gemfiles match
+        run: |
+          set -euo pipefail
+
+          has_errors=''
+
+          gem_version=$(ruby -e "require_relative('lib/jekyll/minibundle/version.rb'); puts Jekyll::Minibundle::VERSION")
+          git_tag_version="${GITHUB_REF_NAME:1}"
+
+          if [[ "$gem_version" != "$git_tag_version" ]]; then
+              echo "::error::Gem version and git tag differ: gem_version=$gem_version git_tag_version=$git_tag_version" >&2
+              has_errors=1
+          fi
+
+          for gemfile in Gemfile-jekyll4 Gemfile-jekyll3; do
+              gemfile_version=$(grep -m1 '^ *jekyll-minibundle (' "$gemfile.lock" | sed 's/.*(\(.*\))/\1/')
+              if [[ "$gem_version" != "$gemfile_version" ]]; then
+                  echo "::error::Gem version and the Gem version in $gemfile.lock differ: gem_version=$gem_version gemfile_version=$gemfile_version" >&2
+                  has_errors=1
+              fi
+          done
+
+          [[ -z $has_errors ]]
+      - name: Install gem dependencies
+        run: |
+          echo "Using RubyGems $(gem --version)"
+          echo "Using $(bundle --version)"
+          echo 'gem: --no-document' > ~/.gemrc
+          bundle install --jobs 4 --retry 3
+      # Use trusted publishing; see https://guides.rubygems.org/trusted-publishing/
+      - name: Release Gem
+        uses: rubygems/release-gem@v1
