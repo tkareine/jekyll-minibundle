@@ -9,13 +9,13 @@
    BUNDLE_GEMFILE=Gemfile-jekyll3 bundle exec rake
    ```
 
-3. Update version number in `Jekyll::Minibundle::VERSION`:
+3. Update the version number in `Jekyll::Minibundle::VERSION`:
 
    ```shell
    $EDITOR lib/jekyll/minibundle/version.rb
    ```
 
-4. Update gem version in Gemfile locks:
+4. Update the Gem version in Gemfile lock files:
 
    ```shell
    BUNDLE_GEMFILE=Gemfile-jekyll4 bundle install
@@ -38,9 +38,9 @@
    ```
 
    Make sure that the version string in
-   `lib/jekyll/minibundle/version.rb` and the git tag name match. Note
-   that the git tag name uses the `v` prefix.
+   `lib/jekyll/minibundle/version.rb` and the Git tag name match. Note
+   that the Git tag name uses the `v` prefix.
 
-   After pushing, the [CI] publishes npm package automatically.
+   After pushing, the [CI] publishes the Gem automatically.
 
 [CI]: https://github.com/tkareine/jekyll-minibundle/actions/workflows/ci.yml

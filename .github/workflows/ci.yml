@@ -29,7 +29,7 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile-${{ matrix.gemfile }}
       BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle-${{ matrix.gemfile }}
     steps:
-      - name: Checkout git repository
+      - name: Checkout Git repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
@@ -66,7 +66,7 @@ jobs:
       BUNDLE_GEMFILE: ${{ github.workspace }}/Gemfile-jekyll4
       BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle-jekyll4
     steps:
-      - name: Checkout git repository
+      - name: Checkout Git repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
@@ -74,7 +74,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION_FOR_RELEASE }}
-      - name: Check that git tag, Gem version, and Gem versions in Gemfiles match
+      - name: Check that Git tag, Gem version, and Gem versions in Gemfiles match
         run: |
           set -euo pipefail
 
@@ -84,7 +84,7 @@ jobs:
           git_tag_version="${GITHUB_REF_NAME:1}"
 
           if [[ "$gem_version" != "$git_tag_version" ]]; then
-              echo "::error::Gem version and git tag differ: gem_version=$gem_version git_tag_version=$git_tag_version" >&2
+              echo "::error::Gem version and Git tag differ: gem_version=$gem_version git_tag_version=$git_tag_version" >&2
               has_errors=1
           fi
 
