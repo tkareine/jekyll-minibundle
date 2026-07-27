@@ -4,9 +4,15 @@ This project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [v4.0.0] - 2026-07-27
+
+### Changed
+
+- Small refactorings
+
 ### Removed
 
-- Drop support for Ruby MRI versions below 2.7.
+- Drop support for CRuby versions below 2.7.
 
 ## [v3.0.0] - 2020-09-06
 
@@ -305,7 +311,8 @@ support for Ruby MRI < 2.4 causes major version bump.
 - First release.
 
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://github.com/tkareine/jekyll-minibundle/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/tkareine/jekyll-minibundle/compare/v4.0.0...HEAD
+[v4.0.0]: https://github.com/tkareine/jekyll-minibundle/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/tkareine/jekyll-minibundle/compare/v2.2.0...v3.0.0
 [v2.2.0]: https://github.com/tkareine/jekyll-minibundle/compare/v2.1.2...v2.2.0
 [v2.1.2]: https://github.com/tkareine/jekyll-minibundle/compare/v2.1.1...v2.1.2
